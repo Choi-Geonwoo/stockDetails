@@ -1,0 +1,25 @@
+<!--resources/templates/thymeleafEx.html-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주식 거래내역</title>
+</head>
+<body>
+  
+    <label th:text="${title}"></label>  
+    <br><br><br><br><br>
+    <table>
+        <tr th:each="slist : ${sList}">
+
+            <td th:text="${slist.registration_order}">오류</td>
+            <td th:text="${slist.stock_name}">오류</td>
+            <td th:text="${slist.shares}">오류</td>
+            <td th:text="${slist.stock_dividends}">오류</td>
+            <td th:text="${slist.dividends}">오류</td>
+            <td th:text="${slist.registration_date}">오류</td>
+        </tr>
+    </table>
+</body>
+</html>
