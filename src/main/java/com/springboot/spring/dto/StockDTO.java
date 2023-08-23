@@ -1,9 +1,9 @@
-package com.springboot.spring.vo;
+package com.springboot.spring.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-public class StockVO {
+@Data
+public class StockDTO {
     private String registration_order = "";    //순번
     private String stock_name = "";    //주식명
     private String shares = "";    //주식수

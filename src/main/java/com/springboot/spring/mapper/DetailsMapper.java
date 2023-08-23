@@ -1,23 +1,26 @@
-package com.springboot.spring.service;
+package com.springboot.spring.mapper;
 
 import java.util.List;
-import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
+import com.springboot.spring.dto.StockDTO;
 import com.springboot.spring.vo.StockVO;
 
-public interface DetailsService {
-    
+@Mapper
+public interface DetailsMapper {
+
     // 주식 거래내역
     public List<StockVO>  stockDetailsList();
+
     
     // 주식 거래내역 수정
-    public int  detailsUpdate(Map<String, Object> map);
+    public int  detailsUpdate(StockDTO stockDTO);
 
     
     // 주식 거래내역 등록
-    public int  detailsInsert(Map<String, Object> map);
+    public int  detailsInsert(StockDTO stockDTO);
 
     // 주식 거랙내역 삭제
     public int detailsDelete(int registration_order);
-
 }

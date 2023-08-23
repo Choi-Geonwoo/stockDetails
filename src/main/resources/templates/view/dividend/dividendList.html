@@ -1,0 +1,112 @@
+<!--resources/templates/thymeleafEx.html-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배당 거래내역</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
+  <style>
+  table{
+  display:flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  overflow-x: auto;
+  overflow-y: hidden;
+  }
+tbody {
+  display:flex;
+  }
+th,td{
+  height: 30px;
+    display:block;
+  }
+  </style>
+
+  <script th:inline="javascript">
+
+  window.onload = function(){
+
+    const data = /*[[${dList}]]*/;
+    const yearmonth = /*[[${yearmonth}]]*/;
+    console.log("yearmonth " + yearmonth );
+	  dividendList(data);
+    yearselect(yearmonth);
+  }
+
+  
+ 
+  </script>
+</head>
+<body>
+  
+    <label th:text="${title}"></label> 
+    
+    <br><br><br>
+    <div>
+      <a href="/">홈</a>
+      <a href="/dividend/dividendList">배당화면</a>
+      <a href="/clndr/dvdndClndr">일정관리</a>
+      <br><br><br>
+  </div>
+  
+  <div>
+    <form th:action="@{/dividend/dividendList}" method="get">
+
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;년월 
+      <select name="yearmonth" title="전체"  id="yearmonth">
+        <option value = "total">전체</option>
+      </select>
+      &nbsp;항목 <input type="text" name="category" th:value="${category}"> 
+      &nbsp;&nbsp;<button type="submit">검색</button>
+
+    </form>
+  </div>
+  <br>
+  <table>
+    <thead>
+      <tr>
+          <th>등록년월</th>
+          <th>항목</th>
+          <th>1월</th>
+          <th>2월</th>
+          <th>3월</th>
+          <th>4월</th>
+          <th>5월</th>
+          <th>6월</th>
+          <th>7월</th>
+          <th>8월</th>
+          <th>9월</th>
+          <th>10월</th>
+          <th>11월</th>
+          <th>12월</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr th:each="dlist : ${dList}">
+      <!--등록년월--><th ><input type="text" th:value="${dlist.yearmonth}" readonly></th>
+      <!--항목--><td ><input type="text" th:value="${dlist.category}" ></td>
+      <!--1월--><td ><input type="text" th:value="${dlist.january}" ></td>
+      <!--2월--><td ><input type="text" th:value="${dlist.february}" ></td>
+      <!--3월--><td ><input type="text" th:value="${dlist.march}" ></td>
+      <!--4월--><td ><input type="text" th:value="${dlist.april}" ></td>
+      <!--5월--><td ><input type="text" th:value="${dlist.may}" ></td>
+      <!--6월--><td ><input type="text" th:value="${dlist.june}" ></td>
+      <!--7월--><td ><input type="text" th:value="${dlist.july}" ></td>
+      <!--8월--><td ><input type="text" th:value="${dlist.august}" ></td>
+      <!--9월--><td ><input type="text" th:value="${dlist.september}" ></td>
+      <!--10월--><td ><input type="text" th:value="${dlist.october}" ></td>
+      <!--11월--><td ><input type="text" th:value="${dlist.november}" ></td>
+      <!--12월--><td ><input type="text" th:value="${dlist.december}" ></td>
+    </tr>
+  </tbody>
+  </table>
+  <br>
+  <div style="width: 50%;">
+
+    <canvas id="bar_chart"></canvas>
+
+</div>
+</body>
+</html>

@@ -5,21 +5,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>주식 거래내역</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script type="text/javascript" th:src="@{/JS/details/details.js}"></script>
+  <script th:inline="javascript">
+
+    window.onload = function(){
+        const data = /*[[${sList}]]*/;
+        let x = [];
+        let y = [];
+        //alert(data);
+        for(let i =0; i < data.length; i++){
+            x.push(data[i].stock_name);
+            y.push(data[i].shares);
+        }
+        myChart(x,y);
+}
+
+
+  </script>
 </head>
 <body>
   
-    <label th:text="${title}"></label>  
-    <br><br><br><br><br>
-    <table>
-        <tr th:each="slist : ${sList}">
+    <label th:text="${title}"></label> 
 
-            <td th:text="${slist.registration_order}">오류</td>
-            <td th:text="${slist.stock_name}">오류</td>
-            <td th:text="${slist.shares}">오류</td>
-            <td th:text="${slist.stock_dividends}">오류</td>
-            <td th:text="${slist.dividends}">오류</td>
-            <td th:text="${slist.registration_date}">오류</td>
-        </tr>
+    <br><br><br>
+    <div>
+        <a href="/">홈</a>
+        <a href="/dividend/dividendList">배당화면</a>
+        <a href="/">홈</a>
+        <a href="/clndr/dvdndClndr">일정관리</a>
+    </div>
+    <br><br><br>
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>주식명</th>
+                <th>주식수</th>
+                <th>배당주기</th>
+                <th>매입금</th>
+                <th>배당금</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+                <td ><input type="text" ></td><!--주식명-->
+                <td ><input type="text" ></td><!--주식수-->
+                <td ><input type="text" ></td><!--배당 주기-->
+                <td ><input type="text" ></td><!--매입금-->
+                <td ><input type="text" ></td><!--배당금-->
+                <td ><button onclick="detailsInsert(this);">등록</button></td><!--배당금-->
+            </tr>
+        </tbody>
     </table>
+    <br><br><br>
+    <div style="float:left;">
+
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>순번</th>
+                    <th>주식명</th>
+                    <th>주식수</th>
+                    <th>배당주기</th>
+                    <th>매입금</th>
+                    <th>배당금</th>
+                    <th>등록일자</th>
+                    <th>구분</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="slist : ${sList}">
+                    <td ><input type="text" th:value="${slist.registration_order}" readonly></td><!--순번-->
+                    <td ><input type="text" th:value="${slist.stock_name}"></td><!--주식명-->
+                    <td ><input type="text" th:value="${slist.shares}"></td><!--주식수-->
+                    <td ><input type="text" th:value="${slist.stock_dividends}"></td><!--배당 주기-->
+                    <td ><input type="text" th:value="${slist.maeipkkeum}"></td><!--매입금-->
+                    <td ><input type="text" th:value="${slist.dividends}"></td><!--배당금-->
+                    <td ><input type="text" th:value="${slist.registration_date}" readonly></td><!--등록일자-->
+                    <td>
+                        <button onclick="detailsUpdate(this);">수정</button>
+                        /
+                        <button onclick="detailsDelete(this);">삭제</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div style="width: 30%; float:left;">
+
+            <canvas id="myChart"></canvas>
+
+	</div>
 </body>
 </html>
