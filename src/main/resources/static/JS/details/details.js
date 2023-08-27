@@ -19,13 +19,13 @@ function detailsUpdate(button) {
                 "Content-Type" : "application/json",
             },
             body : JSON.stringify({
-                registration_order :    order,
-                stock_name         :    name,
-                shares             :    shares,
-                stock_dividends    :    stock_dividends,
-                maeipkkeum         :    maeipkkeum,
-                dividends          :    dividends,
-                registration_date  :    date
+                no  :    order,
+                stockName           : name,
+                stockQuantity       : shares,
+                dividendCycle       : stock_dividends,
+                purchasePrice       : maeipkkeum,
+                dividendAmount      : dividends,
+                clscd               : 'Y'
             }),
         })
         .then((response) => {
@@ -43,7 +43,7 @@ function detailsUpdate(button) {
         });
 };
 
-
+// 등록
 function detailsInsert(button) {
     const row               = button.parentElement.parentElement;
     const columns           = row.getElementsByTagName('td');
@@ -63,11 +63,11 @@ function detailsInsert(button) {
                 "Content-Type" : "application/json",
             },
             body : JSON.stringify({
-                stock_name : name,
-                shares : shares,
-                stock_dividends : stock_dividends,
-                maeipkkeum : maeipkkeum,
-                dividends : dividends
+                stockName : name,
+                stockQuantity : shares,
+                dividendCycle : stock_dividends,
+                purchasePrice : maeipkkeum,
+                dividendAmount : dividends
             }),
         })
         .then((response) => {
@@ -85,7 +85,7 @@ function detailsInsert(button) {
         });
 }
 
-
+// 삭제
 function detailsDelete(button) {
     const row               = button.parentElement.parentElement;
     const columns           = row.getElementsByTagName('td');
@@ -195,3 +195,40 @@ function detailsDelete(button) {
       ,"rgba(35, 210, 150, 0.3)"
       ,"rgba(65, 110, 235, 0.9)"  
         ]
+
+function newDetailsInsert2(){
+    const inputStockName = document.getElementById('inputStockName').value;
+    const inputStockQuantity = document.getElementById('inputStockQuantity').value;
+    const inputDividendCycle = document.getElementById('inputDividendCycle').value;
+    const inputPurchasePrice = document.getElementById('inputPurchasePrice').value;
+    const inputDividendAmount = document.getElementById('inputDividendAmount').value;
+    //alert(inputStockQuantity);
+
+    fetch("/detailsInsert.do",
+        {
+            method : "post",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({
+                stockName : inputStockName,
+                stockQuantity : inputStockQuantity,
+                dividendCycle : inputDividendCycle,
+                purchasePrice : inputPurchasePrice,
+                dividendAmount : inputDividendAmount
+            }),
+        })
+        .then((response) => {
+            console.log(response.status);
+            if(response.status == 200){
+                alert("등록되었습니다..");
+            }
+        })
+        .then(data => {
+            //alert(data);
+            location.reload();
+        })
+        .catch((error) => {
+            alert("error " + error)
+        });
+}

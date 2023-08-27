@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.spring.dto.StockDTO;
+import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.mapper.DetailsMapper;
 import com.springboot.spring.vo.StockVO;
+import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +24,7 @@ public class DetailServiceImpl implements DetailsService {
 
     // 주식 거래내역
     @Override
-    public List<StockVO> stockDetailsList() {
+    public List<StockportfolioVO> stockDetailsList() {
        return detailsMaper.stockDetailsList();
     }
 
@@ -32,7 +34,7 @@ public class DetailServiceImpl implements DetailsService {
         int cnt = -1;
         ObjectMapper oMapper = new ObjectMapper();
         try {
-            StockDTO stockDTO = oMapper.convertValue(map, StockDTO.class);
+            StockportfolioDto stockDTO = oMapper.convertValue(map, StockportfolioDto.class);
             //log.info("어떤식으로 오나");
             //log.info("toString : : : : " + stockDTO.toString());
             cnt = detailsMaper.detailsInsert(stockDTO);
@@ -50,7 +52,7 @@ public class DetailServiceImpl implements DetailsService {
         
         ObjectMapper oMapper = new ObjectMapper();
         try {
-            StockDTO stockDTO = oMapper.convertValue(map, StockDTO.class);
+            StockportfolioDto stockDTO = oMapper.convertValue(map, StockportfolioDto.class);
             cnt = detailsMaper.detailsUpdate(stockDTO);
         } catch (Exception e) {
             log.error("오류 " + e.toString());

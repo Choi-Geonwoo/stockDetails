@@ -6,75 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* 일요일 날짜 빨간색 */
-    .fc-day-sun a {
-      color: red;
-      text-decoration: none;
+.fc-day-sun a {
+  color: red;
+  text-decoration: none;
+}
+
+/* 토요일 날짜 파란색 */
+.fc-day-sat a {
+  color: blue;
+  text-decoration: none;
+}
+.fc-day-other{
+	visibility : hidden
+}
+    .dialog {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: rgba(0, 0, 0, .5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* 토요일 날짜 파란색 */
-    .fc-day-sat a {
-      color: blue;
-      text-decoration: none;
-    }
+.dialog__inner {
+        width: 400px;
+        height: 200px;
+        background: white;
+}
+.top-div{
+    width: 100%;
+    height: 50px;
+    background-color: yellow;
+}
+.content-div{
+    width: 100%;
+    height: 100%;
+    float: left; /* 컨텐츠를 띄워서 왼쪽정렬 */
+    background-color: white;
+}
     </style>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
   <script type="text/javascript" th:src="@{/JS/dividend/dvdndClndr.js}"></script>
   <script>
- document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          selectable: true,
-          selectMirror: true,
-          locale: 'ko', // 한국어 설정
-          select: function (info) {
-                    var title = prompt('Event Title:');
-                    if (title) {
-                        var eventData = {
-                            title: title,
-                            start: info.startStr,
-                            end: info.endStr
-                        };
-
-                        // Send event data to the server
-                        fetch('/dividend/dividendList.do', {
-                            method: 'get',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(eventData)
-                        })
-                        .then(response => response.json())
-                        .then(event => {
-                            eventData.id = event.id;
-                            calendar.addEvent(eventData);
-                        });
-                    }
-
-                    calendar.unselect();
-                },
-          events: [
-                {
-                      title : "All Day Event"
-                    , start : "2023-08-01"
-                }
-            ], 
-           dateClick: function(info) { 
-           //날짜 클릭 시 발생할 이벤트
-          //info에서 console 찍어보면 편함
-          },
-          eventClick: function(info) {
-          // 일정 클릭 시 발생할 이벤트
-          //클릭한 일정 Id
-          var id = info.event._def.defId;
-          alert(id);
-          }
-        });
-        calendar.render();
-      });
-
+  
   </script>
-  <script>window.onload = function () { buildCalendar(); }</script>
   <title>배당 일정관리</title>
 </head>
 <body>

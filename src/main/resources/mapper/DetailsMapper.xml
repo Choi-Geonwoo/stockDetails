@@ -3,6 +3,25 @@
 
 <mapper namespace="com.springboot.spring.mapper.DetailsMapper">
 
+
+<select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO">
+        SELECT
+                        NO,
+                        STOCK_NAME,
+                        STOCK_QUANTITY,
+                        DIVIDEND_CYCLE,
+                        PURCHASE_PRICE,
+                        DIVIDEND_AMOUNT,
+                        CLSCD,
+                        RGSTDATE
+                FROM
+                        STOCKPORTFOLIO
+                where CLSCD != 'N'
+                        order by NO DESC, RGSTDATE desc
+</select>
+
+<!--
+
 <select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockVO">
         SELECT 
                 registration_order, 
@@ -16,43 +35,49 @@
                 order by to_number(registration_order) desc
 </select>
 
-<update id="detailsUpdate" parameterType="com.springboot.spring.dto.StockDTO" >
-        update 
-         STOCK_MANAGEMENT_TABLE
-          set   stock_name       =      #{stock_name}
-                ,shares          =      #{shares}
-                ,stock_dividends =      #{stock_dividends}
-                ,maeipkkeum      =      #{maeipkkeum}
-                ,dividends       =      #{dividends}
-                ,registration_date = sysdate
-        where registration_order = #{registration_order}
+-->
+
+<update id="detailsUpdate" parameterType="com.springboot.spring.dto.StockportfolioDto" >
+       UPDATE STOCKPORTFOLIO
+         SET 
+                STOCK_NAME= #{stockName}, 
+                STOCK_QUANTITY=#{stockQuantity}, 
+                DIVIDEND_CYCLE=#{dividendCycle} , 
+                PURCHASE_PRICE=#{purchasePrice}, 
+                DIVIDEND_AMOUNT=#{dividendAmount}, 
+                CLSCD= #{clscd} , 
+                RGSTDATE=sysdate
+        WHERE NO = #{no}
 </update>
 
-<insert id="detailsInsert" parameterType="com.springboot.spring.dto.StockDTO" >
-        INSERT	INTO STOCK_MANAGEMENT_TABLE
-        (
-                REGISTRATION_ORDER,
-                STOCK_NAME,
-                SHARES,
-                STOCK_DIVIDENDS,
-                MAEIPKKEUM,
-                DIVIDENDS,
-                REGISTRATION_DATE)
-        VALUES(
-                STOCK_MANAGEMENT_SEQ.NEXTVAL,
-                #{stock_name},
-                #{shares},
-                #{stock_dividends},
-                #{maeipkkeum},
-                #{dividends},
-                sysdate 
+<insert id="detailsInsert" parameterType="com.springboot.spring.vo.StockportfolioVO" >
+        INSERT 	INTO	STOCKPORTFOLIO
+                (       NO,
+                        STOCK_NAME,
+                        STOCK_QUANTITY,
+                        DIVIDEND_CYCLE,
+                        PURCHASE_PRICE,
+                        DIVIDEND_AMOUNT,
+                        RGSTDATE)
+                VALUES(
+                        STOCKPORTFOLIO_SEQ.NEXTVAL
+                        ,#{stockName}
+                        ,#{stockQuantity}
+                        ,#{dividendCycle}
+                        ,#{purchasePrice}
+                        ,#{dividendAmount}
+                        ,sysdate
                 )
-
 </insert>
 
-<delete id="detailsDelete" parameterType="int"> 
-        DELETE FROM STOCK_MANAGEMENT_TABLE WHERE REGISTRATION_ORDER = #{registration_order}
-</delete>
-	
+
+
+<update id="detailsDelete" parameterType="int">
+       UPDATE STOCKPORTFOLIO
+         SET 
+                CLSCD=  'N' , 
+                RGSTDATE=sysdate
+        WHERE NO = #{no}
+</update>
 
 </mapper>

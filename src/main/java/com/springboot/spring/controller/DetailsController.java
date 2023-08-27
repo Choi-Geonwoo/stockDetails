@@ -35,6 +35,7 @@ public class DetailsController {
     public String detailsInsert(@RequestBody Map<String, Object> map){
         //log.info("어떤값이 나오나 "+map.toString());
         return String.valueOf(detailsService.detailsInsert(map));
+        
     }
 
     // 주식 내역 수정

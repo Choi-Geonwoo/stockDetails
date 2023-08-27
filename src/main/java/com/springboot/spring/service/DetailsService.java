@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.springboot.spring.vo.StockVO;
+import com.springboot.spring.vo.StockportfolioVO;
 
 public interface DetailsService {
     
     // 주식 거래내역
-    public List<StockVO>  stockDetailsList();
+    public List<StockportfolioVO>  stockDetailsList();
     
     // 주식 거래내역 수정
     public int  detailsUpdate(Map<String, Object> map);

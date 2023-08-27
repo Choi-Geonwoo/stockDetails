@@ -2,36 +2,66 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.springboot.spring.mapper.DividendMapper">
-
-<select id = "dividendList"  resultType="com.springboot.spring.dto.DividendDto" parameterType="com.springboot.spring.dto.DividendDto">
-
-            SELECT
-                TURN,
-                YEARMONTH,
-                CATEGORY,
-                JANUARY,
-                FEBRUARY,
-                MARCH,
-                APRIL,
-                MAY,
-                JUNE,
-                JULY,
-                AUGUST,
-                SEPTEMBER,
-                OCTOBER,
-                NOVEMBER,
-                DECEMBER,
-                ID
-            FROM
-                DIVIDEND
-            where  1=1
-            <if test='yearmonth != null and yearmonth != "" '>
-            and YEARMONTH = #{yearmonth}
-            </if>
-            <if test='category != null and category != "" '>
-            and CATEGORY = #{category}
-            </if>
+<!-- 주식 배당 내역-->
+<select id = "dividendList"  resultType="Map" parameterType="com.springboot.spring.dto.TransactionDto" >
+                SELECT
+                    STOCK_NAME,
+                    to_char(TRNSCDATE, 'YYYY') AS TRNSCDATE,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') ) AS january,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '02' , AMOUNT, '0') ) AS february,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '03' , AMOUNT, '0') ) AS march,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '04' , AMOUNT, '0') ) AS april,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '05' , AMOUNT, '0') ) AS may,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '06' , AMOUNT, '0') ) AS june,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '07' , AMOUNT, '0') ) AS july,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '08' , AMOUNT, '0') ) AS august,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '09' , AMOUNT, '0') ) AS september,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '10' , AMOUNT, '0') ) AS october,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '11' , AMOUNT, '0') ) AS november,
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) AS december
+                FROM
+                    TRANSACTION
+                where 1=1
+                <if test='stockName != null and stockName != "" '>
+                    and STOCK_NAME = #{stockName}
+                </if>
+                <if test='trnscdate != null and trnscdate != "" '>
+                    and to_char(TRNSCDATE, 'YYYY') = #{trnscdate}
+                </if>
+                GROUP BY 
+                    STOCK_NAME,
+                    to_char(TRNSCDATE, 'YYYY')
+                ORDER BY STOCK_NAME
 </select>
+
+<insert id="transactionInsert" parameterType="com.springboot.spring.dto.TransactionDto" >
+        INSERT  INTO transaction
+        (   NO,
+            TRNSCDATE,
+            STOCK_NAME,
+            AMOUNT
+        )
+        VALUES(
+            TRANSACTION_SEQ.NEXTVAL,
+            #{trnscdate},
+            #{stockName},
+            #{amount}
+        )
+</insert>
+
+<insert id="dividendInsert" parameterType="com.springboot.spring.dto.DividendDto" >
+        INSERT  INTO DIVIDEND
+        (   TURN,
+            YEARMONTH,
+            CATEGORY
+        )
+        VALUES(
+            DIVIDEND_SEQ.NEXTVAL,
+            #{yearmonth},
+            #{category}
+        )
+</insert>
+
 
 
 </mapper>
