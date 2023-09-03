@@ -46,9 +46,11 @@ function dividendList(data){
     //alert(data.length);
     const datasets = {};
     const dataArray = [];
+    const TRNSCDATE = [];
 for(var key = 0; key < data.length; key++){
+  TRNSCDATE.push(data[key].TRNSCDATE),
   dataArray.push({
-    label: data[key].STOCK_NAME,
+    label: data[key].TRNSCDATE + " - "+data[key].STOCK_NAME,
     data : [
             data[key].JANUARY, 
             data[key].FEBRUARY, 
@@ -65,7 +67,8 @@ for(var key = 0; key < data.length; key++){
     ],
     backgroundColor : chartColorr[key]
   });
-    }
+  }
+  //console.log(TRNSCDATE);
     // 곡선 차트
     //lineChart(dataArray);
     // 막대 차트
@@ -79,6 +82,7 @@ var chBar = document.getElementById("bar_chart");
     labels: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
     datasets: dataArray
   };
+  
   var myChart = new Chart(chBar, {
     // 챠트 종류를 선택
     type: 'bar',
@@ -120,7 +124,7 @@ function trnscdateSelect(yearmonth){
       const option = document.createElement('option');
       option.value = year;
       option.text = year;
-      console.log("year " + year + " yearmonth : " + yearmonth);
+      //console.log("year " + year + " yearmonth : " + yearmonth);
       if(year == yearmonth){
         option.selected = true; // 현재 년도를 기본 선택으로 설정
         yearSelect.value = yearmonth;
@@ -215,4 +219,9 @@ function detailsInsert() {
       .catch((error) => {
           alert("error " + error)
       });
+}
+
+function update(){
+  alert();
+	$("#new_modal").modal("show");
 }

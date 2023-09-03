@@ -115,11 +115,11 @@ function detailsDelete(button) {
             alert("error " + error)
         });
     };
-
-    function myChart(x,y){
+    // 파이 차트
+    function pieMyChart(x,y){
 
         var context = document
-                .getElementById('myChart')
+                .getElementById('pieMyChart')
                 .getContext('2d');
                 var myChart = new Chart(context, {
                 type: 'pie', // 차트의 형태
@@ -127,7 +127,7 @@ function detailsDelete(button) {
                     labels: x,
                     datasets: [
                         { //데이터
-                            label: 'test1', //차트 제목
+                            label: '주식 수', //차트 제목
                             fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
                             data: y,
                             backgroundColor: chartColorr,
@@ -149,9 +149,45 @@ function detailsDelete(button) {
                 }
             });
     }
-    
+    function lineMyChart1(data){
+        let [dataArray, TRNSCDATE] = dividendList(data);
+        lineMyChart2(dataArray, TRNSCDATE);
+    }
+    function lineMyChart2(dataArray,TRNSCDATE){
+          
+        new Chart(document.getElementById("lineMyChart"), {
+            type: 'line',
+            data: {
+                labels: TRNSCDATE,
+                datasets: [{ 
+                    data: dataArray,
+                    //label: TRNSCDATE,
+                    borderColor: "#3e95cd",
+                    fill: false
+                  }
+                ]
+              },
+            options: {
+              title: {
+                //display: true,
+                //text: 'World population per region (in millions)'
+              }
+            }
+          }); 
+    }
 
-
+    function dividendList(data){
+        //alert(data.length);
+        const datasets = {};
+        const dataArray = [];
+        const TRNSCDATE = [];
+    for(var key = 0; key < data.length; key++){
+      //datasets.push(data[key].TRNSCDATE)
+      TRNSCDATE.push(data[key].stockName);
+      dataArray.push(data[key].stockQuantity);
+      }
+      return [dataArray,TRNSCDATE];
+    }
 
     const chartColorr = [
         "rgba(18, 203, 87, 0.6)"

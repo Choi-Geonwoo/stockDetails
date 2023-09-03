@@ -23,7 +23,8 @@
             x.push(data[i].stockName);
             y.push(data[i].stockQuantity);
         }
-        myChart(x,y);
+        pieMyChart(x,y);
+        lineMyChart1(data)
 }
 
 
@@ -79,9 +80,12 @@
         </table>
 
     </div>
-    <div style="width: 30%; float:left;">
-
-            <canvas id="myChart"></canvas>
+    <div style="width: 45%; float:left;">
+      <canvas id="pieMyChart"></canvas>
+    </div>
+    <div style="width: 50%; float:left;">
+    <canvas id="lineMyChart"></canvas>
+    </div>
 
 
 
@@ -133,6 +137,5 @@
       </div>
     </div>
   </div>
-	</div>
 </body>
 </html>

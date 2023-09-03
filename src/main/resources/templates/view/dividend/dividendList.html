@@ -28,8 +28,32 @@ tbody {
   }
 th,td{
   height: 30px;
-    display:block;
+  display:block;
   }
+  
+.container {
+  display: grid;
+  grid-auto-flow: column; /* 가로로 그리드 아이템 배치 */
+  overflow-x: auto; /* 가로 스크롤 활성화 */
+  gap: 10px; /* 요소 간 간격 */
+  justify-content: start; /* 왼쪽 정렬 */
+}
+
+.item {
+  height: 100px; /* 각 요소의 높이 */
+  background-color: lightgray; /* 배경색 */
+}
+.fixed-table-body{
+  display: flex;
+
+}
+.wrap-vertical{
+  width: auto;
+  overflow: scroll;
+   /* 가로 스크롤 */
+  overflow: auto;
+  white-space: nowrap;
+}
   </style>
 
   <script th:inline="javascript">
@@ -52,73 +76,100 @@ th,td{
     <label th:text="${title}"></label> 
     
     <br><br><br>
-    <div>
+  <div>
       <a href="/">홈</a>
       <a href="/dividend/dividendList">배당화면</a>
       <a href="/clndr/dvdndClndr">일정관리</a>
       <br><br><br>
   </div>
   
-  <div>
+  <div class="input-group">
     <form th:action="@{/dividend/dividendList}" method="get">
-
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;년월 
-      <select name="trnscdate" title="전체"  id="trnscdateSelect">
-        <option value = "total">전체</option>
-      </select>
-      &nbsp;항목 <input type="text" name="stockName" th:value="${stockName}"> 
-      &nbsp;&nbsp;<button type="submit">검색</button>
+      <div class="input-group">
+          &nbsp;&nbsp;
+          <span class="input-group-text">년월</span>
+          &nbsp;&nbsp;
+        <div class="w-20">
+          <select class="form-select" aria-label="Default select example" name="trnscdate" title="전체"  id="trnscdateSelect">
+            <option value = "total">전체</option>
+          </select>
+        </div>
+        &nbsp;&nbsp;
+        <span class="input-group-text">항목</span>
+          &nbsp;&nbsp;
+          <input type="text" name="stockName" th:value="${stockName}"> 
+          &nbsp;&nbsp;<button type="submit">검색</button>
+      </div>
     </form>
-    
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    등록
-  </button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      등록
+    </button>
   </div>
+
+  
   <br>
-  <table>
-    <thead>
-      <tr>
-          <th>등록년월</th>
-          <th>항목</th>
-          <th>1월</th>
-          <th>2월</th>
-          <th>3월</th>
-          <th>4월</th>
-          <th>5월</th>
-          <th>6월</th>
-          <th>7월</th>
-          <th>8월</th>
-          <th>9월</th>
-          <th>10월</th>
-          <th>11월</th>
-          <th>12월</th>
-      </tr>
-  </thead>
-  <tbody>
-    <tr th:each="dlist : ${dList}">
-      <!--등록년월--><th ><input type="text" th:value="${dlist.TRNSCDATE}" readonly></th>
-      <!--항목--><td ><input type="text" th:value="${dlist.STOCK_NAME}" ></td>
-      <!--1월--><td ><input type="text" th:value="${dlist.JANUARY}" ></td>
-      <!--2월--><td ><input type="text" th:value="${dlist.FEBRUARY}" ></td>
-      <!--3월--><td ><input type="text" th:value="${dlist.MARCH}" ></td>
-      <!--4월--><td ><input type="text" th:value="${dlist.APRIL}" ></td>
-      <!--5월--><td ><input type="text" th:value="${dlist.MAY}" ></td>
-      <!--6월--><td ><input type="text" th:value="${dlist.JUNE}" ></td>
-      <!--7월--><td ><input type="text" th:value="${dlist.JULY}" ></td>
-      <!--8월--><td ><input type="text" th:value="${dlist.AUGUST}" ></td>
-      <!--9월--><td ><input type="text" th:value="${dlist.SEPTEMBER}" ></td>
-      <!--10월--><td ><input type="text" th:value="${dlist.OCTOBER}" ></td>
-      <!--11월--><td ><input type="text" th:value="${dlist.NOVEMBER}" ></td>
-      <!--12월--><td ><input type="text" th:value="${dlist.DECEMBER}" ></td>
-    </tr>
-  </tbody>
-  </table>
+  <div >
+    <div   style="width: 5%; float:left;">
+      <!--년도--><div >년도</div>
+      <!--항목--><div>항목</div>
+      <!--1월--> <div>01월</div>
+      <!--2월--> <div>02월</div>
+      <!--3월--> <div>03월</div>
+      <!--4월--> <div>04월</div>
+      <!--5월--> <div>05월</div>
+      <!--6월--> <div>06월</div>
+      <!--7월--> <div>07월</div>
+      <!--8월--> <div>08월</div>
+      <!--9월--> <div>09월</div>
+      <!--10월--><div>10월</div>
+      <!--11월--><div>11월</div>
+      <!--12월--><div>12월</div>
+      <!--12월--><div>합계</div>
+    </div>
+    <div class="wrap-vertical">
+    <div class="fixed-table-body">
+    <th:block th:each="dlist : ${dList}">
+          <div  >
+            <!--년도--><div  th:text="${dlist.TRNSCDATE}"></div>
+            <!--항목--> <div th:text="${dlist.STOCK_NAME}"></div>
+            <!--1월--> <div th:text="${dlist.JANUARY}"></div>
+            <!--2월--> <div th:text="${dlist.FEBRUARY}"></div>
+            <!--3월--> <div th:text="${dlist.MARCH}"></div>
+            <!--4월--> <div th:text="${dlist.APRIL}"></div>
+            <!--5월--> <div th:text="${dlist.MAY}"></div>
+            <!--6월--> <div th:text="${dlist.JUNE}" ></div>
+            <!--7월--> <div th:text="${dlist.JULY}" ></div>
+            <!--8월--> <div th:text="${dlist.AUGUST}" ></div>
+            <!--9월--> <div th:text="${dlist.SEPTEMBER}" ></div>
+            <!--10월--><div th:text="${dlist.OCTOBER}" ></div>
+            <!--11월--><div th:text="${dlist.NOVEMBER}" ></div>
+            <!--12월--><div th:text="${dlist.DECEMBER}" ></div>
+            <!--12월--><div th:text="${
+              dlist.JANUARY 
+              + dlist.FEBRUARY
+              + dlist.MARCH
+              + dlist.APRIL
+              + dlist.MAY
+              + dlist.JUNE
+              + dlist.JULY
+              + dlist.AUGUST
+              + dlist.SEPTEMBER
+              + dlist.OCTOBER
+              + dlist.NOVEMBER
+              + dlist.DECEMBER
+            }" ></div>
+          </div>
+    </th:block>
+  </div>
+</div>
   <br>
-  <div style="width: 50%;">
+  <br>
+  <div style="width: 70%;">
 
     <canvas id="bar_chart"></canvas>
 
-</div>
+  </div>
 
 
  <!-- Modal -->
@@ -160,6 +211,8 @@ th,td{
       </div>
     </div>
   </div>
+  </div>
+
 
 </body>
 </html>
