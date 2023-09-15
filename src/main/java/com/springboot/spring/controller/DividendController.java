@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.springboot.spring.dto.DividendDto;
 import com.springboot.spring.dto.TransactionDto;
 import com.springboot.spring.service.DividendService;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 // 배당 관련 화면
 @Slf4j

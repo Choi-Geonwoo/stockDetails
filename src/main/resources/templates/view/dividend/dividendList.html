@@ -16,43 +16,56 @@
 
   <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
   <style>
-  table{
-  display:flex;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  overflow-x: auto;
-  overflow-y: hidden;
-  }
-tbody {
-  display:flex;
-  }
-th,td{
-  height: 30px;
-  display:block;
-  }
-  
-.container {
-  display: grid;
-  grid-auto-flow: column; /* 가로로 그리드 아이템 배치 */
-  overflow-x: auto; /* 가로 스크롤 활성화 */
-  gap: 10px; /* 요소 간 간격 */
-  justify-content: start; /* 왼쪽 정렬 */
-}
+    table{
+      display:flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      overflow-x: auto;
+      overflow-y: hidden;
+      }
+    tbody {
+      display:flex;
+      }
+    th,td{
+      height: 30px;
+      display:block;
+      }
+      
+    .container {
+      display: grid;
+      grid-auto-flow: column; /* 가로로 그리드 아이템 배치 */
+      overflow-x: auto; /* 가로 스크롤 활성화 */
+      gap: 10px; /* 요소 간 간격 */
+      justify-content: start; /* 왼쪽 정렬 */
+    }
 
-.item {
-  height: 100px; /* 각 요소의 높이 */
-  background-color: lightgray; /* 배경색 */
-}
-.fixed-table-body{
-  display: flex;
+    .item {
+      height: 100px; /* 각 요소의 높이 */
+      background-color: lightgray; /* 배경색 */
+    }
+    .fixed-table-body{
+      display: flex;
 
+    }
+    .wrap-vertical{
+      width: auto;
+      overflow: scroll;
+      /* 가로 스크롤 */
+      overflow: auto;
+      white-space: nowrap;
+    }
+new_div1,.new_div {
+
+	width: 300px;
+  /*border: 0.5px solid rgb(202, 201, 201);*/
+  margin: 0 20px 0 5px;
+/*margin: 위, 오른쪽, 아래, 왼쪽*/
 }
-.wrap-vertical{
-  width: auto;
-  overflow: scroll;
-   /* 가로 스크롤 */
-  overflow: auto;
-  white-space: nowrap;
+.new_div > div{
+  border: 0.5px solid rgb(202, 201, 201);
+}
+.new_div1 > div{
+  border: 0.5px solid rgb(163, 162, 162);
 }
   </style>
 
@@ -110,8 +123,8 @@ th,td{
   
   <br>
   <div >
-    <div   style="width: 5%; float:left;">
-      <!--년도--><div >년도</div>
+    <div  class="new_div1" style="width: 5%; float:left;">
+      <!--년도--><div>년도</div>
       <!--항목--><div>항목</div>
       <!--1월--> <div>01월</div>
       <!--2월--> <div>02월</div>
@@ -130,9 +143,9 @@ th,td{
     <div class="wrap-vertical">
     <div class="fixed-table-body">
     <th:block th:each="dlist : ${dList}">
-          <div  >
+          <div class="new_div" style="width: 300px;">
             <!--년도--><div  th:text="${dlist.TRNSCDATE}"></div>
-            <!--항목--> <div th:text="${dlist.STOCK_NAME}"></div>
+            <!--항목--><div th:text="${dlist.STOCK_NAME}"></div>
             <!--1월--> <div th:text="${dlist.JANUARY}"></div>
             <!--2월--> <div th:text="${dlist.FEBRUARY}"></div>
             <!--3월--> <div th:text="${dlist.MARCH}"></div>
@@ -146,7 +159,7 @@ th,td{
             <!--11월--><div th:text="${dlist.NOVEMBER}" ></div>
             <!--12월--><div th:text="${dlist.DECEMBER}" ></div>
             <!--12월--><div th:text="${
-              dlist.JANUARY 
+                dlist.JANUARY 
               + dlist.FEBRUARY
               + dlist.MARCH
               + dlist.APRIL

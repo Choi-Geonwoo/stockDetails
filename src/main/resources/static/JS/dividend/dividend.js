@@ -147,6 +147,8 @@ function trnscdateSelect(yearmonth){
     
     const inputTrnscdate = document.querySelector('input[type="date"]');
     const inputAmount = document.getElementById('inputAmount').value;
+    // 데이터 문자열 체크
+    if(dateChek(inputAmount)) return;
     //alert(stockName+" | "+ dateControl.value+" | "+inputTrnscdate + " | " + inputAmount);
 
     fetch("/dividendInsert.do",
@@ -224,4 +226,17 @@ function detailsInsert() {
 function update(){
   alert();
 	$("#new_modal").modal("show");
+}
+
+
+function dateChek(date){
+  const val = "/./g";
+  // 정규 표현식으로 모든 출현을 검색
+  const dotCount = (date.match(/\./g) || [0]).length;
+  if((1 != dotCount) ){
+    alert("오류 발생");
+    return true;
+  }else{
+    return false;
+  }
 }

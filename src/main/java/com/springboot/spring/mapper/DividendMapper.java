@@ -6,9 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.springboot.spring.dto.DividendDto;
-import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.dto.TransactionDto;
-import com.springboot.spring.vo.StockportfolioVO;
 
 @Mapper
 public interface DividendMapper {

@@ -1,47 +1,29 @@
-function detailsUpdate(button) {
-    const row               = button.parentElement.parentElement;
-    const columns           = row.getElementsByTagName('td');
-    const order             = columns[0].querySelector('input').value;
-    const name              = columns[1].querySelector('input').value;
-    const shares            = columns[2].querySelector('input').value;
-    const stock_dividends   = columns[3].querySelector('input').value;
-    const maeipkkeum        = columns[4].querySelector('input').value;
-    const dividends         = columns[5].querySelector('input').value;
-    const date              = columns[6].querySelector('input').value;
 
-    // You can use the name and age values for your update logic
-    // For now, let's just display an alert
-    //alert(order + " " + name);
-    fetch("/detailsUpdate.do",
-        {
-            method : "post",
-            headers : {
-                "Content-Type" : "application/json",
-            },
-            body : JSON.stringify({
-                no  :    order,
-                stockName           : name,
-                stockQuantity       : shares,
-                dividendCycle       : stock_dividends,
-                purchasePrice       : maeipkkeum,
-                dividendAmount      : dividends,
-                clscd               : 'Y'
-            }),
-        })
-        .then((response) => {
-            console.log(response.status);
-            if(response.status == 200){
-                alert("수정되었습니다.");
-            }
-        })
-        .then((data) => {
-            //alert(data);
-            location.reload();
-        })
-        .catch((error) => {
-            alert("error " + error);
-        });
-};
+// 주식 검색
+function stockSrch(){
+    // 폼 요소와 셀렉트 박스 요소 가져오기
+    var form = document.getElementById('myForm');
+    var selectBox = document.getElementById('selectBox');
+
+    // 폼 제출 시 실행할 함수 정의
+    form.addEventListener('submit', function(e) {
+
+        // 선택된 옵션의 값을 가져오기
+        var selectedValue = selectBox.value;
+        debugger;
+
+        // 선택된 값을 폼 필드에 설정합니다.
+        // 이 예제에서는 폼 필드의 name 속성을 "selectedOption"으로 지정합니다.
+        var inputField = document.createElement('input');
+        inputField.type = 'hidden';
+        inputField.name = 'stockName';
+        inputField.value = selectedValue;
+        form.appendChild(inputField);
+
+        // 폼을 서버로 제출합니다.
+        form.submit();
+    });
+}
 
 // 등록
 function detailsInsert(button) {
@@ -85,10 +67,54 @@ function detailsInsert(button) {
         });
 }
 
+// 수정
+function detailsUpdate(button) {
+    const tableRow = button.closest("tr");
+    const cells = tableRow.querySelectorAll("td");
+    const order             = cells[0].querySelector('input').value;
+    const name              = cells[1].querySelector('input').value;
+    const shares            = cells[2].querySelector('input').value;
+    const stock_dividends   = cells[3].querySelector('input').value;
+    const maeipkkeum        = cells[4].querySelector('input').value;
+    const dividends         = cells[5].querySelector('input').value;
+    //const date              = cells[6].querySelector('input').value;
+
+    fetch("/detailsUpdate.do",
+    {
+        method : "post",
+        headers : {
+            "Content-Type" : "application/json",
+        },
+        body : JSON.stringify({
+            no  :    order,
+            stockName           : name,
+            stockQuantity       : shares,
+            dividendCycle       : stock_dividends,
+            purchasePrice       : maeipkkeum,
+            dividendAmount      : dividends,
+            clscd               : 'Y'
+        }),
+    })
+    .then((response) => {
+        console.log(response.status);
+        if(response.status == 200){
+            alert("수정되었습니다.");
+        }
+    })
+    .then((data) => {
+        //alert(data);
+        location.reload();
+    })
+    .catch((error) => {
+        alert("error " + error);
+    });
+}
+
+
 // 삭제
 function detailsDelete(button) {
-    const row               = button.parentElement.parentElement;
-    const columns           = row.getElementsByTagName('td');
+    const row               =button.closest("tr");
+    const columns           = row.querySelectorAll("td");
     const registration_order= columns[0].querySelector('input').value;
 
     // You can use the name and age values for your update logic
@@ -115,11 +141,30 @@ function detailsDelete(button) {
             alert("error " + error)
         });
     };
-    // 파이 차트
-    function pieMyChart(x,y){
 
+    function myChart(data){
+        // 주식 수
+        let [sharesArray, sharesName] = sharesList(data);
+        
+
+        //lineMyChart2(sharesArray, sharesName);
+        // 주식 수 기준
+        // 파이 차트
+        pieMyChart(sharesArray, sharesName,"주식 수", "sharesPieMyChart");
+        // 막대 차트
+        barChart(sharesArray, sharesName,"주식수 기준" ,"sharesBarMyChart");
+
+        let [dvdndArray, dvdndName] = dvdndList(data);
+        // 막대 차트
+        barChart(dvdndArray, dvdndName,"배당금 기준", "dvdndBarMyChart");
+        // 파이 차트
+        pieMyChart(dvdndArray, dvdndName,"배당금 기준", "dvdndPieMyChart");
+
+    }    
+    // 파이 차트
+    function pieMyChart(y,x,label, pieMyChart){
         var context = document
-                .getElementById('pieMyChart')
+                .getElementById(pieMyChart)
                 .getContext('2d');
                 var myChart = new Chart(context, {
                 type: 'pie', // 차트의 형태
@@ -127,7 +172,7 @@ function detailsDelete(button) {
                     labels: x,
                     datasets: [
                         { //데이터
-                            label: '주식 수', //차트 제목
+                            label: label, //차트 제목
                             fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
                             data: y,
                             backgroundColor: chartColorr,
@@ -149,20 +194,20 @@ function detailsDelete(button) {
                 }
             });
     }
-    function lineMyChart1(data){
-        let [dataArray, TRNSCDATE] = dividendList(data);
-        lineMyChart2(dataArray, TRNSCDATE);
-    }
-    function lineMyChart2(dataArray,TRNSCDATE){
+
+    // 막대 차트
+    function barChart(dataArray,TRNSCDATE,label, barMyChart){
           
-        new Chart(document.getElementById("lineMyChart"), {
-            type: 'line',
+        new Chart(document.getElementById(barMyChart), {
+            type: 'bar',
             data: {
                 labels: TRNSCDATE,
                 datasets: [{ 
+                    label : label,
                     data: dataArray,
                     //label: TRNSCDATE,
-                    borderColor: "#3e95cd",
+                    backgroundColor: chartColorr,
+                    borderColor: chartColorr,
                     fill: false
                   }
                 ]
@@ -174,20 +219,37 @@ function detailsDelete(button) {
               }
             }
           }); 
-    }
+    }    
 
-    function dividendList(data){
+    // 주식 수
+    function sharesList(data){
         //alert(data.length);
         const datasets = {};
         const dataArray = [];
         const TRNSCDATE = [];
-    for(var key = 0; key < data.length; key++){
-      //datasets.push(data[key].TRNSCDATE)
-      TRNSCDATE.push(data[key].stockName);
-      dataArray.push(data[key].stockQuantity);
-      }
+        for(var key = 0; key < data.length; key++){
+            TRNSCDATE.push(data[key].stockName);
+            dataArray.push(data[key].stockQuantity);
+        }
       return [dataArray,TRNSCDATE];
     }
+
+
+    // 배당금 기준
+    function dvdndList(data){
+        //alert(data.length);
+        const datasets = {};
+        const dataArray = [];
+        const TRNSCDATE = [];
+        for(var key = 0; key < data.length; key++){
+            if("0" != data[key].dividendAmount){
+                TRNSCDATE.push(data[key].stockName);
+                dataArray.push(Math.round((data[key].dividendAmount * strIndexOf(data[key].dividendCycle) * 100)  )/ 100);
+            }
+        }
+      return [dataArray,TRNSCDATE];
+    }
+
 
     const chartColorr = [
         "rgba(18, 203, 87, 0.6)"
@@ -232,6 +294,7 @@ function detailsDelete(button) {
       ,"rgba(65, 110, 235, 0.9)"  
         ]
 
+// 등록
 function newDetailsInsert2(){
     const inputStockName = document.getElementById('inputStockName').value;
     const inputStockQuantity = document.getElementById('inputStockQuantity').value;
@@ -267,4 +330,20 @@ function newDetailsInsert2(){
         .catch((error) => {
             alert("error " + error)
         });
+}
+
+
+function strIndexOf(text){
+    var count = 1;
+    var searchChar = ','; // 찾으려는 문자
+    var pos = text.indexOf(searchChar); //pos는 0의 값을 가집니다.
+
+    while (pos !== -1) {
+        count++;
+        pos = text.indexOf(searchChar, pos + 1); // 첫 번째 a 이후의 인덱스부터 a를 찾습니다.
+    }
+    if('월' == text){
+        count = 12;
+    }
+    return count;
 }

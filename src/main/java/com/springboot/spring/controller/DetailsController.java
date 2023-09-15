@@ -8,9 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.service.DetailsService;
+import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,10 +27,25 @@ public class DetailsController {
 
     @GetMapping("/")
     public String detailsView(Model model){
+        StockportfolioDto sDto = new StockportfolioDto();
         model.addAttribute("title", "주식내역");
-        model.addAttribute("sList", detailsService.stockDetailsList());
+        model.addAttribute("selectBox", detailsService.selectBox()); 
+        model.addAttribute("sList", detailsService.stockDetailsList(sDto));
         return "view/details/details";
     }
+
+ @GetMapping("/details/details")
+    public String detailsSearchView(Model model
+    ,@RequestParam(value = "stockName" ,required=false) String stockName){
+        StockportfolioDto sDto = new StockportfolioDto();
+        sDto.setStockName(stockName);
+        model.addAttribute("title", "주식내역");
+        model.addAttribute("reStockName", stockName);
+        model.addAttribute("selectBox", detailsService.selectBox()); 
+        model.addAttribute("sList", detailsService.stockDetailsList(sDto));
+        return "view/details/details";
+    }
+    
 
     // 주식 내역 등록
     @PostMapping("/detailsInsert.do")

@@ -49,7 +49,8 @@ public class DividendServiceImpl implements DividendService {
     // 주식명 조회 셀렉트 박스 사용
     @Override
     public List<StockportfolioVO> selectBox() {
-        return detailsMaper.stockDetailsList();
+        StockportfolioDto sDto = null;
+        return detailsMaper.stockDetailsList(sDto);
     }
 
     // 배당 거래 내역

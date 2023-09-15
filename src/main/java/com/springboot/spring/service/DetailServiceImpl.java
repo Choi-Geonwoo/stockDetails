@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.spring.dto.StockDTO;
 import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.mapper.DetailsMapper;
-import com.springboot.spring.vo.StockVO;
 import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +22,12 @@ public class DetailServiceImpl implements DetailsService {
 
     // 주식 거래내역
     @Override
-    public List<StockportfolioVO> stockDetailsList() {
-       return detailsMaper.stockDetailsList();
+    public List<StockportfolioVO> stockDetailsList(StockportfolioDto sDto) {
+        // 전체 클릭한 경우 값 null 셋팅
+        if("allStockName".equals(sDto.getStockName())){
+            sDto.setStockName(null);
+        }
+       return detailsMaper.stockDetailsList(sDto);
     }
 
     // 주식 내역 등록
@@ -73,6 +75,11 @@ public class DetailServiceImpl implements DetailsService {
         return cnt;
     }
 
-
+    // 주식명 조회 셀렉트 박스 사용
+    @Override
+    public List<StockportfolioVO> selectBox() {
+        StockportfolioDto sDto = null;
+        return detailsMaper.stockDetailsList(sDto);
+    }
     
 }

@@ -3,9 +3,8 @@ package com.springboot.spring.service;
 import java.util.List;
 import java.util.Map;
 
-import com.springboot.spring.dto.DividendDto;
+import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.dto.TransactionDto;
-import com.springboot.spring.vo.StockVO;
 import com.springboot.spring.vo.StockportfolioVO;
 
 public interface DividendService {

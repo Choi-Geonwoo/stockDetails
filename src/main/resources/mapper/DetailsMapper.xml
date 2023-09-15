@@ -4,7 +4,7 @@
 <mapper namespace="com.springboot.spring.mapper.DetailsMapper">
 
 
-<select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO">
+<select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
         SELECT
                         NO,
                         STOCK_NAME,
@@ -17,6 +17,9 @@
                 FROM
                         STOCKPORTFOLIO
                 where CLSCD != 'N'
+                <if test='stockName != null and stockName != "" '>
+                        and STOCK_NAME = #{stockName}
+                </if>
                         order by NO DESC, RGSTDATE desc
 </select>
 

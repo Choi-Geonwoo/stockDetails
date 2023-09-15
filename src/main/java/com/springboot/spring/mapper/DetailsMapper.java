@@ -13,7 +13,7 @@ import com.springboot.spring.vo.StockportfolioVO;
 public interface DetailsMapper {
 
     // 주식 거래내역
-    public List<StockportfolioVO>  stockDetailsList();
+    public List<StockportfolioVO>  stockDetailsList(StockportfolioDto sDto);
 
     
     // 주식 거래내역 수정
