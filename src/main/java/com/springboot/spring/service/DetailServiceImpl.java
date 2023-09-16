@@ -27,6 +27,10 @@ public class DetailServiceImpl implements DetailsService {
         if("allStockName".equals(sDto.getStockName())){
             sDto.setStockName(null);
         }
+        // 전체 클릭한 경우 값 null 셋팅
+        if("전체".equals(sDto.getDividendCycle())){
+            sDto.setDividendCycle(null);
+        }
        return detailsMaper.stockDetailsList(sDto);
     }
 

@@ -36,11 +36,15 @@ public class DetailsController {
 
  @GetMapping("/details/details")
     public String detailsSearchView(Model model
-    ,@RequestParam(value = "stockName" ,required=false) String stockName){
+    ,@RequestParam(value = "stockName" ,required=false) String stockName
+    ,@RequestParam(value = "dividendCycle" ,required=false) String dividendCycle
+    ){
         StockportfolioDto sDto = new StockportfolioDto();
         sDto.setStockName(stockName);
+        sDto.setDividendCycle(dividendCycle);
         model.addAttribute("title", "주식내역");
         model.addAttribute("reStockName", stockName);
+        model.addAttribute("reDividendCycle", dividendCycle);
         model.addAttribute("selectBox", detailsService.selectBox()); 
         model.addAttribute("sList", detailsService.stockDetailsList(sDto));
         return "view/details/details";
