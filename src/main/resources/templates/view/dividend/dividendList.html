@@ -18,8 +18,8 @@
   <style>
     table{
       display:flex;
-      display: -webkit-box;
-      display: -ms-flexbox;
+      /*display: -webkit-box;*/
+      /*display: -ms-flexbox;*/
       overflow-x: auto;
       overflow-y: hidden;
       }
@@ -28,45 +28,9 @@
       }
     th,td{
       height: 30px;
+      width: 250px;
       display:block;
       }
-      
-    .container {
-      display: grid;
-      grid-auto-flow: column; /* 가로로 그리드 아이템 배치 */
-      overflow-x: auto; /* 가로 스크롤 활성화 */
-      gap: 10px; /* 요소 간 간격 */
-      justify-content: start; /* 왼쪽 정렬 */
-    }
-
-    .item {
-      height: 100px; /* 각 요소의 높이 */
-      background-color: lightgray; /* 배경색 */
-    }
-    .fixed-table-body{
-      display: flex;
-
-    }
-    .wrap-vertical{
-      width: auto;
-      overflow: scroll;
-      /* 가로 스크롤 */
-      overflow: auto;
-      white-space: nowrap;
-    }
-new_div1,.new_div {
-
-	width: 300px;
-  /*border: 0.5px solid rgb(202, 201, 201);*/
-  margin: 0 20px 0 5px;
-/*margin: 위, 오른쪽, 아래, 왼쪽*/
-}
-.new_div > div{
-  border: 0.5px solid rgb(202, 201, 201);
-}
-.new_div1 > div{
-  border: 0.5px solid rgb(163, 162, 162);
-}
   </style>
 
   <script th:inline="javascript">
@@ -122,44 +86,44 @@ new_div1,.new_div {
 
   
   <br>
-  <div >
-    <div  class="new_div1" style="width: 5%; float:left;">
-      <!--년도--><div>년도</div>
-      <!--항목--><div>항목</div>
-      <!--1월--> <div>01월</div>
-      <!--2월--> <div>02월</div>
-      <!--3월--> <div>03월</div>
-      <!--4월--> <div>04월</div>
-      <!--5월--> <div>05월</div>
-      <!--6월--> <div>06월</div>
-      <!--7월--> <div>07월</div>
-      <!--8월--> <div>08월</div>
-      <!--9월--> <div>09월</div>
-      <!--10월--><div>10월</div>
-      <!--11월--><div>11월</div>
-      <!--12월--><div>12월</div>
-      <!--12월--><div>합계</div>
-    </div>
-    <div class="wrap-vertical">
-    <div class="fixed-table-body">
-    <th:block th:each="dlist : ${dList}">
-          <div class="new_div" style="width: 300px;">
-            <!--년도--><div  th:text="${dlist.TRNSCDATE}"></div>
-            <!--항목--><div th:text="${dlist.STOCK_NAME}"></div>
-            <!--1월--> <div th:text="${dlist.JANUARY}"></div>
-            <!--2월--> <div th:text="${dlist.FEBRUARY}"></div>
-            <!--3월--> <div th:text="${dlist.MARCH}"></div>
-            <!--4월--> <div th:text="${dlist.APRIL}"></div>
-            <!--5월--> <div th:text="${dlist.MAY}"></div>
-            <!--6월--> <div th:text="${dlist.JUNE}" ></div>
-            <!--7월--> <div th:text="${dlist.JULY}" ></div>
-            <!--8월--> <div th:text="${dlist.AUGUST}" ></div>
-            <!--9월--> <div th:text="${dlist.SEPTEMBER}" ></div>
-            <!--10월--><div th:text="${dlist.OCTOBER}" ></div>
-            <!--11월--><div th:text="${dlist.NOVEMBER}" ></div>
-            <!--12월--><div th:text="${dlist.DECEMBER}" ></div>
-            <!--12월--><div th:text="${
-                dlist.JANUARY 
+  <table class="table table-bordered table-hover table-bordered">
+    <thead >
+      <tr >        
+      <!--년도--><th >년도</th>
+      <!--항목--><th>항목</th>
+      <!--1월--> <th>01월</th>
+      <!--2월--> <th>02월</th>
+      <!--3월--> <th>03월</th>
+      <!--4월--> <th>04월</th>
+      <!--5월--> <th>05월</th>
+      <!--6월--> <th>06월</th>
+      <!--7월--> <th>07월</th>
+      <!--8월--> <th>08월</th>
+      <!--9월--> <th>09월</th>
+      <!--10월--><th>10월</th>
+      <!--11월--><th>11월</th>
+      <!--12월--><th>12월</th>
+      <!--12월--><th>합계</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  th:each="dlist : ${dList}">    
+            <!--년도--><td scope="col"><label th:text="${dlist.TRNSCDATE}"></label></td>
+            <!--항목--><td th:text="${dlist.STOCK_NAME}"></td>
+            <!--1월--> <td th:text="${dlist.JANUARY}"></td>
+            <!--2월--> <td th:text="${dlist.FEBRUARY}"></td>
+            <!--3월--> <td th:text="${dlist.MARCH}"></td>
+            <!--4월--> <td th:text="${dlist.APRIL}"></td>
+            <!--5월--> <td th:text="${dlist.MAY}"></td>
+            <!--6월--> <td th:text="${dlist.JUNE}" ></td>
+            <!--7월--> <td th:text="${dlist.JULY}" ></td>
+            <!--8월--> <td th:text="${dlist.AUGUST}" ></td>
+            <!--9월--> <td th:text="${dlist.SEPTEMBER}" ></td>
+            <!--10월--><td th:text="${dlist.OCTOBER}" ></td>
+            <!--11월--><td th:text="${dlist.NOVEMBER}" ></td>
+            <!--12월--><td th:text="${dlist.DECEMBER}" ></td>
+            <!--12월--><td th:text="${
+              dlist.JANUARY 
               + dlist.FEBRUARY
               + dlist.MARCH
               + dlist.APRIL
@@ -171,12 +135,11 @@ new_div1,.new_div {
               + dlist.OCTOBER
               + dlist.NOVEMBER
               + dlist.DECEMBER
-            }" ></div>
-          </div>
-    </th:block>
-  </div>
-</div>
-  <br>
+            }" ></td>
+      </tr>
+    </tbody>
+  </table>
+
   <br>
   <div style="width: 70%;">
 
