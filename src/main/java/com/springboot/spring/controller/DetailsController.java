@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.service.DetailsService;
-import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
 
-// 주식 거래내역
+// 주식  거래내역
 @Slf4j
 @Controller
 public class DetailsController {
@@ -25,7 +24,7 @@ public class DetailsController {
     @Autowired
     private DetailsService detailsService;
 
-    @GetMapping("/")
+@GetMapping("/")
     public String detailsView(Model model){
         StockportfolioDto sDto = new StockportfolioDto();
         model.addAttribute("title", "주식내역");
@@ -33,7 +32,8 @@ public class DetailsController {
         model.addAttribute("sList", detailsService.stockDetailsList(sDto));
         return "view/details/details";
     }
-
+    
+// 주식 거래 내역 
  @GetMapping("/details/details")
     public String detailsSearchView(Model model
     ,@RequestParam(value = "stockName" ,required=false) String stockName
@@ -49,7 +49,7 @@ public class DetailsController {
         model.addAttribute("sList", detailsService.stockDetailsList(sDto));
         return "view/details/details";
     }
-    
+
 
     // 주식 내역 등록
     @PostMapping("/detailsInsert.do")

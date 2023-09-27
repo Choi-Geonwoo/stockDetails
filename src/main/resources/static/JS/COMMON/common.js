@@ -1,4 +1,4 @@
-const chartColorr = [
+const chartColorr1 = [
     "rgba(18, 203, 87, 0.6)"
   ,"rgba(255, 97, 63, 0.2)"
   ,"rgba(74, 128, 255, 0.8)"
@@ -43,4 +43,4 @@ const chartColorr = [
 
 
     // export 선언 추가
-export { chartColorr }
+export { chartColorr1 }

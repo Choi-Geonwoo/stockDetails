@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.spring.dto.FileDTO;
 import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.mapper.DetailsMapper;
 import com.springboot.spring.vo.StockportfolioVO;
@@ -18,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DetailServiceImpl implements DetailsService {
 
     @Autowired
-    private DetailsMapper detailsMaper;
+    private DetailsMapper detailsMapper;
+    
 
     // 주식 거래내역
     @Override
@@ -31,7 +33,7 @@ public class DetailServiceImpl implements DetailsService {
         if("전체".equals(sDto.getDividendCycle())){
             sDto.setDividendCycle(null);
         }
-       return detailsMaper.stockDetailsList(sDto);
+       return detailsMapper.stockDetailsList(sDto);
     }
 
     // 주식 내역 등록
@@ -41,9 +43,13 @@ public class DetailServiceImpl implements DetailsService {
         ObjectMapper oMapper = new ObjectMapper();
         try {
             StockportfolioDto stockDTO = oMapper.convertValue(map, StockportfolioDto.class);
+            //FileDTO fileDTO = new FileDTO();
+            //String base64 = String.valueOf(map.get("contents"));
+            //fileDTO.setContents(base64.getBytes());
+            
             //log.info("어떤식으로 오나");
             //log.info("toString : : : : " + stockDTO.toString());
-            cnt = detailsMaper.detailsInsert(stockDTO);
+            cnt = detailsMapper.detailsInsert(stockDTO);
         } catch (Exception e) {
             log.error("오류 : " + e.toString());
             cnt = -1;
@@ -59,7 +65,7 @@ public class DetailServiceImpl implements DetailsService {
         ObjectMapper oMapper = new ObjectMapper();
         try {
             StockportfolioDto stockDTO = oMapper.convertValue(map, StockportfolioDto.class);
-            cnt = detailsMaper.detailsUpdate(stockDTO);
+            cnt = detailsMapper.detailsUpdate(stockDTO);
         } catch (Exception e) {
             log.error("오류 " + e.toString());
             cnt = -1;
@@ -72,7 +78,7 @@ public class DetailServiceImpl implements DetailsService {
     public int detailsDelete(int registration_order) {
         int cnt = -1;
         try {
-            cnt = detailsMaper.detailsDelete(registration_order);
+            cnt = detailsMapper.detailsDelete(registration_order);
         } catch (Exception e) {
             log.error("오류 " + e.toString());
         }
@@ -83,7 +89,7 @@ public class DetailServiceImpl implements DetailsService {
     @Override
     public List<StockportfolioVO> selectBox() {
         StockportfolioDto sDto = null;
-        return detailsMaper.stockDetailsList(sDto);
+        return detailsMapper.stockDetailsList(sDto);
     }
     
 }

@@ -35,20 +35,25 @@
 </select>
 
 <insert id="transactionInsert" parameterType="com.springboot.spring.dto.TransactionDto" >
-        INSERT  INTO transaction
+        INSERT  INTO transaction /* com.springboot.spring.mapper.DividendMapper.transactionInsert 배당 거래일자 등록*/
         (   NO,
             TRNSCDATE,
             STOCK_NAME,
             AMOUNT
         )
         VALUES(
-            TRANSACTION_SEQ.NEXTVAL,
+            #{no},
             #{trnscdate},
             #{stockName},
             #{amount}
         )
 </insert>
 
+<select id="tNoString" parameterType="com.springboot.spring.dto.TransactionDto" resultType="String">
+    select TRANSACTION_SEQ.NEXTVAL from dual
+</select>
+
+<!--
 <insert id="dividendInsert" parameterType="com.springboot.spring.dto.DividendDto" >
         INSERT  INTO DIVIDEND
         (   TURN,
@@ -61,7 +66,20 @@
             #{category}
         )
 </insert>
+-->
 
+
+<!-- 주식 배당 상세 내역-->
+<select id = "dividendDtlsInqry"  resultType="com.springboot.spring.dto.TransactionDto" parameterType="com.springboot.spring.dto.TransactionDto" >
+    SELECT  NO,
+            A.STOCK_NAME,
+            to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+            AMOUNT
+        FROM TRANSACTION A
+            WHERE  A.STOCK_NAME = #{stockName}
+                AND TRNSCDATE BETWEEN TO_DATE(#{trnscdate}, 'yyyy-MM-dd') AND 
+                                      LAST_DAY(TO_DATE(#{trnscdate}, 'yyyy-MM-dd'))
+</select>
 
 
 </mapper>

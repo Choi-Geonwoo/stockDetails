@@ -1,3 +1,5 @@
+
+
 // 배당 거래 내역등록
 const chartColorr = [
   "rgba(18, 203, 87, 0.6)"
@@ -147,26 +149,50 @@ function trnscdateSelect(yearmonth){
     
     const inputTrnscdate = document.querySelector('input[type="date"]');
     const inputAmount = document.getElementById('inputAmount').value;
+    
     // 데이터 문자열 체크
     if(dateChek(inputAmount)) return;
-    //alert(stockName+" | "+ dateControl.value+" | "+inputTrnscdate + " | " + inputAmount);
+
+
+    // 폼 데이터로 보내줘야 함
+    let formData = new FormData();
+
+    const imageFileInput = document.getElementById('inputFile');
+    const fileName = imageFileInput.files[0].name;
+    const file = imageFileInput.files[0];
+    let data = {
+                stockName : stockName, // 주식명
+                trnscdate : inputTrnscdate.value, //거래일자
+                amount : inputAmount, // 거래 금액
+                fName : fileName // 파일명
+    }
+		// 그냥 files까지만 보내면 배열이 갈 줄 알았으나 배열 모양을 한 딕셔너리더라...{0:{이름:ㅇㅇ},1:...
+    // 얕은 복사(Array.from)을 통해 배열로 데이터를 바꾸어 저장해준다
+		 Array.from(document.querySelector("#inputFile").files).forEach((file) => {
+         formData.append("files", file);  // files로 같은 이름에 데이터를 append 하면 배열로 들어간다
+         console.log(file);
+     });
+
+     formData.append(
+       "key",
+       new Blob([JSON.stringify(data)], { type: "application/json" })
+     );
 
     fetch("/dividendInsert.do",
         {
             method : "post",
-            headers : {
-                "Content-Type" : "application/json",
-            },
-            body : JSON.stringify({
-                stockName : stockName, // 주식명
-                trnscdate : inputTrnscdate.value, //거래일자
-                amount : inputAmount // 거래 금액
-            }),
+            
+            //headers : {
+            //    "Content-Type" : "application/json",
+            //    "Content-Type": "multipart/form-data",  //기존의 json 대신 formData 설정
+            //},
+            
+            body : formData,
         })
         .then((response) => {
             console.log(response.status);
             if(response.status == 200){
-                alert("등록되었습니다..");
+                alert("등록되었습니다.");
             }
         })
         .then(data => {
@@ -177,56 +203,6 @@ function trnscdateSelect(yearmonth){
         }); 
 }
 
-// 배당 거래 내역등록
-function detailsInsert() {
-  const inputYearmonth = document.getElementById('inputYearmonth').value;
-  const inputJanuary = document.getElementById('inputJanuary').value;
-  const inputFebruary = document.getElementById('inputFebruary').value;
-  
-  // You can use the name and age values for your update logic
-  // For now, let's just display an alert
-  //alert(order + " " + name);
-  fetch("/dividendInsert.do",
-      {
-          method : "post",
-          headers : {
-              "Content-Type" : "application/json",
-          },
-          body : JSON.stringify({
-              yearmonth : inputYearmonth,
-              january : inputJanuary,
-              february : inputFebruary,
-              march : inputMarch,
-              april : inputApril,
-              may : inputMay,
-              june : inputJune,
-              july : inputJuly,
-              august : inputAugust,
-              september : inputSeptember,
-              october : inputOctober,
-              november : inputNovember,
-              december : inputDecember
-          }),
-      })
-      .then((response) => {
-          console.log(response.status);
-          if(response.status == 200){
-              alert("등록되었습니다..");
-          }
-      })
-      .then(data => {
-          //alert(data);
-          location.reload();
-      })
-      .catch((error) => {
-          alert("error " + error)
-      });
-}
-
-function update(){
-  alert();
-	$("#new_modal").modal("show");
-}
 
 
 function dateChek(date){
@@ -239,4 +215,97 @@ function dateChek(date){
   }else{
     return false;
   }
+}
+
+function toBase64(event) {
+  var reader = new FileReader();
+  var base64img = "";
+  reader.readAsDataURL(event.files[0]);
+  reader.onload = function(event) {
+    base64img = event.target.result;// img -> base64
+    console.log("1. " + base64img);
+    return base64img;
+  };
+  console.log("2. " + base64img);
+}
+
+// 배당 거래 클릭 이벤트 (수정 모달창 호출)
+function fetchCall(event, exampleModal){
+            var modalToggle = document.getElementById('updateModal2');
+            var updateFile = document.getElementById('updateFile');
+            var className = event.relatedTarget.className;
+            var button = event.relatedTarget;
+            var modalTitle = exampleModal.querySelector('.modal-title');
+            var modalBodyStockNameInput = exampleModal.querySelector('.modal-body-stockName input');
+            var modalBodyAmountInput = exampleModal.querySelector('.modal-body-Amount input');
+            // 입력 요소 가져오기
+            var updateTrnscdate = document.getElementById('updateTrnscdate');
+            var data = button.getAttribute('data-bs-whatever');
+            // 문자열을 중괄호 {}로 둘러싸고, 각 속성을 큰따옴표 "로 둘러싸는 JSON 형태로 변경해야 합니다.
+            const keyValuePairs  = data.replace('{','').replace('}','').split(',');
+            // 결과 JSON 객체를 저장할 변수를 생성합니다.
+            var dateObj = {};
+
+            // 각 키와 값을 분리하여 JSON 객체에 추가합니다.
+            keyValuePairs.forEach(function(pair) {
+              var keyValue = pair.split('=');
+              var key = keyValue[0].trim();
+              var value = keyValue[1];
+              dateObj[key] = value;
+            });
+
+          // 파라미터를 담을 객체 생성
+          const params = {
+            stockName: dateObj.STOCK_NAME, // 항목명
+            trnscdate: dateObj.TRNSCDATE, // 년도
+            className : className // 클래스명
+          };
+          // 파라미터를 URL 형식으로 인코딩
+          const queryString = new URLSearchParams(params).toString();
+
+        // Fetch API를 사용하여 GET 요청 보내기
+        fetch(`/your-spring-boot-endpoint?${queryString}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('네트워크 오류');
+          }
+          return response.text();
+        })
+        .then(data => {
+          if('' != data){
+          //# JSON 데이터 파싱
+          var parsedData = JSON.parse(data);
+           modalTitle.textContent = '배당 수정 : ' + parsedData.transactionDto.stockName;
+           modalBodyStockNameInput.value = parsedData.transactionDto.stockName;
+           modalBodyAmountInput.value = parsedData.transactionDto.amount;
+           // //console.log(parsedData.stockName);
+           // // 입력 요소에 날짜 설정
+           updateTrnscdate.value = parsedData.transactionDto.trnscdate;
+           //updateFile.value = parsedData.fileDTO.fname;
+           fu_img(parsedData.fileDTO.contents);
+          }else{
+            alert('결과가 없습니다.');
+            modalBodyStockNameInput.value = "";
+            modalBodyAmountInput.value = "";
+            updateTrnscdate.value = "";
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+        //modalTitle.textContent = '배당 수정 : ' + dateObj.STOCK_NAME //+ " | " + rectext
+}
+
+
+function fu_img(imgData){
+  // 이미지를 표시할 <img> 요소 가져오기
+  var imageElement1 = document.getElementById("image1");
+
+  // blob 이미지 데이터 생성 (예제 데이터)
+  //const blobData = new Blob([imgData], { type: "image/png" }); // Blob 데이터 생성, MIME 타입은 실제 이미지에 맞게 변경
+
+  // Blob 데이터를 URL로 변환하여 이미지 표시
+  //var imageURL1 = URL.createObjectURL(blobData);
+  imageElement1.src = imgData;
 }

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.springboot.spring.mapper.DetailsMapper">
 
-
+<!-- 주식 거래 내역 등록-->
 <select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
         SELECT
                         NO,

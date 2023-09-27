@@ -320,7 +320,7 @@ function newDetailsInsert2(){
         .then((response) => {
             console.log(response.status);
             if(response.status == 200){
-                alert("등록되었습니다..");
+                alert("등록되었습니다.");
             }
         })
         .then(data => {

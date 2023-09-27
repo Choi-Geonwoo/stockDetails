@@ -4,18 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.springboot.spring.dto.CombinedDTO;
 import com.springboot.spring.dto.TransactionDto;
 import com.springboot.spring.service.DividendService;
 
 import lombok.extern.slf4j.Slf4j;
+
+
 // 배당 관련 화면
 @Slf4j
 @Controller
@@ -39,14 +45,42 @@ public class DividendController {
         return "view/dividend/dividendList";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
+
+    // 주식 거래 상세 내역 조회
+    @GetMapping("/dividendDtlsInqry.do")
+    @ResponseBody
+    public String dividendDtlsInqry(@RequestBody Map<String, Object> map){
+        //log.info("어떤값이 나오나 "+map.toString());
+        return String.valueOf(dividendService.dividendDtlsInqry(map));
+    }    
     
     // 배당 등록
     @PostMapping("/dividendInsert.do")
     @ResponseBody
-    public String detailsList(@RequestBody Map<String, Object> map, Model model){
-        log.info("결과 ㅣ ㅣ :ㅣ " + map.toString());
-        return String.valueOf(dividendService.dividendInsert(map));
+    //public String detailsList(@RequestBody Map<String, Object> map, Model model){
+    public String detailsList(@RequestPart(value = "key") HashMap map
+    , @RequestPart(value = "files", required = false) MultipartFile[] files){
+        //log.info("1.결과 ㅣ ㅣ :ㅣ " + map.toString());
+        //log.info("2.결과 ㅣ ㅣ :ㅣ " + files);
+        return String.valueOf(dividendService.transactionInsert(map, files));
     }
 
-    
+    @GetMapping("/your-spring-boot-endpoint")
+    public ResponseEntity<CombinedDTO> yourEndpoint(
+        @RequestParam String stockName,
+        @RequestParam String trnscdate,
+        @RequestParam String className
+    ) {
+        // 파라미터를 이용한 작업 수행
+        // 예: 데이터베이스에서 데이터를 가져오거나 계산 수행
+
+        // 결과를 클라이언트에 반환
+        Map<String, Object> map = new HashMap<>();
+        CombinedDTO cDto = new CombinedDTO();
+        map.put("stockName", stockName);
+        map.put("trnscdate", trnscdate);
+        map.put("className", className);
+        cDto = dividendService.dividendDtlsInqry(map);
+        return ResponseEntity.ok(cDto);
+    }
 }
