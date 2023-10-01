@@ -1,5 +1,7 @@
 package com.springboot.spring.dto;
 
+import java.sql.Blob;
+
 import lombok.Data;
 
 @Data

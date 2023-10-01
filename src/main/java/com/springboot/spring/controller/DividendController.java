@@ -46,26 +46,21 @@ public class DividendController {
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
 
-    // 주식 거래 상세 내역 조회
-    @GetMapping("/dividendDtlsInqry.do")
-    @ResponseBody
-    public String dividendDtlsInqry(@RequestBody Map<String, Object> map){
-        //log.info("어떤값이 나오나 "+map.toString());
-        return String.valueOf(dividendService.dividendDtlsInqry(map));
-    }    
+
     
     // 배당 등록
     @PostMapping("/dividendInsert.do")
     @ResponseBody
     //public String detailsList(@RequestBody Map<String, Object> map, Model model){
     public String detailsList(@RequestPart(value = "key") HashMap map
-    , @RequestPart(value = "files", required = false) MultipartFile[] files){
+    , @RequestPart(value = "files", required = false) String files){
         //log.info("1.결과 ㅣ ㅣ :ㅣ " + map.toString());
         //log.info("2.결과 ㅣ ㅣ :ㅣ " + files);
         return String.valueOf(dividendService.transactionInsert(map, files));
     }
 
-    @GetMapping("/your-spring-boot-endpoint")
+    // 배당 상세 내역 호출
+    @GetMapping("/dividendDtlsInqry.do")
     public ResponseEntity<CombinedDTO> yourEndpoint(
         @RequestParam String stockName,
         @RequestParam String trnscdate,
@@ -82,5 +77,15 @@ public class DividendController {
         map.put("className", className);
         cDto = dividendService.dividendDtlsInqry(map);
         return ResponseEntity.ok(cDto);
+    }
+
+
+
+    // 이미지 테스트
+    @PostMapping("/imgData.do")
+    @ResponseBody
+    //public String detailsList(@RequestBody Map<String, Object> map, Model model){
+    public String imgData(@RequestPart(value = "files", required = false) String files){
+        return String.valueOf(dividendService.imgData(files));
     }
 }

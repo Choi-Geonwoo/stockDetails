@@ -22,6 +22,8 @@ public interface DividendService {
     public List<StockportfolioVO>  selectBox();
     
     // 주식 거래내역 등록
-    public int  transactionInsert(Map<String, Object> map, MultipartFile[] files);
+    public int  transactionInsert(Map<String, Object> map, String files);
+
+    public String imgData(String files);
 
 }

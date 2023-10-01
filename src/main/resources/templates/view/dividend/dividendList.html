@@ -187,7 +187,13 @@
             
             <div class="mb-3 row">
               <div class="col-sm-11">
-                <input type="file" class="form-control" id="inputFile" name="inputFile"  multiple="multiple" ><!--onchange="toBase64(event);"-->
+                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" ><!--onchange="toBase64(event);"-->
+              </div>
+            </div>
+            
+            <div class="mb-3 row">
+              <div class="col-sm-11">
+                  <pre id="byteArrayDisplay"></pre>
               </div>
             </div>
       </div>
@@ -209,7 +215,14 @@
           <h5 class="modal-title" id="exampleModalLabel">배당 수정</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <!-- 스피너 -->
+        <div class="d-flex justify-content-center" >
+          <div class="spinner-border" role="status" id="spinner">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        
+        <div class="modal-body" id="modal-body">
             <div class="mb-3 row modal-body-stockName">
                 <label class="col-sm-3 col-form-label ">주식명</label>
                 <div class="col-sm-8">
@@ -237,13 +250,13 @@
               
               <div class="mb-3 row">
                 <div class="col-sm-11">
-                  <img id="image1" src="" alt="이미지">
+                  <img id="image1" class="img-thumbnail" src="" alt="이미지">
                 </div>
               </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-outline-success" onclick="transactionInsert();">저장</button>
+          <button type="button" class="btn btn-outline-success" onclick="transactionInsert111();">수정</button>
         </div>
       </div>
     </div>

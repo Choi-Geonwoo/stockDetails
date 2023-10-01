@@ -1,5 +1,6 @@
 package com.springboot.spring.service;
 
+import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.spring.com.DateRltd;
 import com.springboot.spring.dto.CombinedDTO;
 import com.springboot.spring.dto.DividendDto;
 import com.springboot.spring.dto.FileDTO;
@@ -62,34 +64,25 @@ public class DividendServiceImpl implements DividendService {
         return detailsMaper.stockDetailsList(sDto);
     }
 
-    // 배당 거래 내역
+    // 배당 거래 내역 등록
     @Override
-    public int transactionInsert(Map<String, Object> map, MultipartFile[] files) {
+    public int transactionInsert(Map<String, Object> map, String files) {
         int cnt = -1;
-        ObjectMapper oMapper = new ObjectMapper();
         String tNo = "";
         try {
-            //TransactionDto tDTO = oMapper.convertValue(map, TransactionDto.class);
             TransactionDto tDTO = new TransactionDto();
             FileDTO fDto = new FileDTO();
             tDTO.setStockName(String.valueOf(map.get("stockName")));
             tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
             tDTO.setAmount(String.valueOf(map.get("amount")));
-            String base64 = String.valueOf(files);
             tNo = dividendMapper.tNoString(tDTO);
-            log.info("#####################################");
-            log.info("#####################################");
-            log.info("#####################################");
-            log.info(map.toString());
-            log.info("#####################################");
-            log.info("#####################################");
             tDTO.setNo(Integer.valueOf(tNo));
             fDto.setTNo(tNo);
             fDto.setFName(String.valueOf(map.get("fName")));
-            // 거래일자 등록
+            // 배당 거래 등록
             cnt = dividendMapper.transactionInsert(tDTO);
-            
-            fDto.setContents(base64.getBytes());
+            fDto.setContents(files.getBytes());
+            // 이미지 파일 등록
             fileMapper.fileInsert(fDto);
             
         } catch (Exception e) {
@@ -108,63 +101,42 @@ public class DividendServiceImpl implements DividendService {
         CombinedDTO cDto = new CombinedDTO();
         try {
             tDto.setStockName(String.valueOf(map.get("stockName")));
-            switch (String.valueOf(map.get("className"))) {
-                case "JANUARY":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-01-01");
-                    break;
-                case "FEBRUARY":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-02-01");
-                    break;
-                case "MARCH":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-03-01");
-                    break;
-                case "APRIL":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-04-01");
-                    break;
-                case "MAY":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-05-01");
-                    break;
-                case "JUNE":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-06-01");
-                    break;
-                case "JULY":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-07-01");
-                    break;
-                case "AUGUST":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-08-01");
-                    break;
-                case "SEPTEMBER":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-09-01");
-                    break;
-                case "OCTOBER":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-10-01");
-                    break;
-                case "NOVEMBER":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-11-01");
-                    break;
-                case "DECEMBER":
-                    tDto.setTrnscdate(map.get("trnscdate")+"-12-01");
-                    break;
-            }
-
+            String rStr = DateRltd.dateCnvrs(map);
+            tDto.setTrnscdate(rStr);
             tList = dividendMapper.dividendDtlsInqry(tDto);
             fDto = fileMapper.imgFileList(String.valueOf(tList.getNo()));
-            byte[] imageContent = (byte[]) fDto.getContents();
-            log.info("################################");
-            log.info("################################");
-            log.info(""+fDto.getContents());
-            log.info(""+imageContent);
-            log.info("################################");
-            log.info("################################");
-            log.info("################################");
-            fDto.setReContents(fDto.getContents().toString());
+            if(null != fDto){
+                //fDto.setReContents(fDto.getContents().toString());
+                String base64ToString = new String(fDto.getContents());
+                fDto.setReContents(base64ToString);
+                log.info("결과 :ㅣ : " + fDto.toString());
+                log.info("결과 :ㅣ : " + fDto.toString());
+                log.info("결과 :ㅣ : " + fDto.toString());
+                log.info("결과 :ㅣ : " + fDto.toString());
+                log.info("결과 :ㅣ : " + fDto.toString());
+                cDto.setFileDTO(fDto);
+
+            }
             cDto.setTransactionDto(tList);
-            cDto.setFileDTO(fDto);
         } catch (Exception e) {
             log.error(e.toString());
             cDto = null;
         }
         return cDto;
+    }
+
+
+    @Override
+    public String imgData(String files) {
+        FileDTO fDto = new FileDTO();
+        String tNo = "";
+            tNo = "999";
+            fDto.setTNo(tNo);
+            fDto.setFName("1111");
+
+            fDto.setContents(files.getBytes());
+            fileMapper.fileInsert(fDto);
+        return "";
     }
     
 }
