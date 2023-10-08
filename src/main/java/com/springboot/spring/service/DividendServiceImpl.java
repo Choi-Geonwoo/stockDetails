@@ -1,21 +1,15 @@
 package com.springboot.spring.service;
 
-import java.sql.Blob;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.spring.com.DateRltd;
+import com.springboot.spring.com.IsNullCheck;
 import com.springboot.spring.dto.CombinedDTO;
-import com.springboot.spring.dto.DividendDto;
 import com.springboot.spring.dto.FileDTO;
 import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.dto.TransactionDto;
@@ -26,6 +20,7 @@ import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
 
+// 주식 배당 거래내역 관련 함수
 @Slf4j
 @Service
 public class DividendServiceImpl implements DividendService {
@@ -42,16 +37,24 @@ public class DividendServiceImpl implements DividendService {
 
     // 배당 내역 조회
     @Override
-    public List<Map> dividendList(TransactionDto tDto) { 
-        // 날짜 공백인경우 현재 날짜로 지정
-        if("".equals(tDto.getTrnscdate()) || null == tDto.getTrnscdate()){
-            Date nowDate = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-            tDto.setTrnscdate(simpleDateFormat.format(nowDate));
+    public List<Map> dividendList(Map<String, Object> map) { 
+        TransactionDto tDto = new TransactionDto();
+        if(IsNullCheck.isNull(map.get("stockName"))){
+            tDto.setStockName("");
+        }else{
+            tDto.setStockName(String.valueOf(map.get("stockName")));
         }
-        if("total".equals(tDto.getTrnscdate())){
+        //년도 공백 인경우
+        if(IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("trnscdate"))){
             tDto.setTrnscdate("");
+        }else if(!IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("trnscdate"))){
+            tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"));
+        }else if(IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("trnscdate")) ){
+            tDto.setTrnscdate(String.valueOf("-"+map.get("monthSelect")));
+        }else if(!IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("trnscdate")) ){
+            tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"+map.get("monthSelect")));
         }
+
         // tDto
         //log.info("toString : : : : : " + tDto.toString());
         return dividendMapper.dividendList(tDto);
@@ -76,9 +79,11 @@ public class DividendServiceImpl implements DividendService {
             tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
             tDTO.setAmount(String.valueOf(map.get("amount")));
             tNo = dividendMapper.tNoString(tDTO);
+            //tNo ="999";
             tDTO.setNo(Integer.valueOf(tNo));
             fDto.setTNo(tNo);
             fDto.setFName(String.valueOf(map.get("fName")));
+            log.info("1. 요청 값 : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
             // 배당 거래 등록
             cnt = dividendMapper.transactionInsert(tDTO);
             fDto.setContents(files.getBytes());
@@ -86,8 +91,8 @@ public class DividendServiceImpl implements DividendService {
             fileMapper.fileInsert(fDto);
             
         } catch (Exception e) {
-            log.error("오류 : " + e.toString());
             cnt = -1;
+            handleException(e);
         }
         return cnt;
     }
@@ -109,34 +114,132 @@ public class DividendServiceImpl implements DividendService {
                 //fDto.setReContents(fDto.getContents().toString());
                 String base64ToString = new String(fDto.getContents());
                 fDto.setReContents(base64ToString);
-                log.info("결과 :ㅣ : " + fDto.toString());
-                log.info("결과 :ㅣ : " + fDto.toString());
-                log.info("결과 :ㅣ : " + fDto.toString());
-                log.info("결과 :ㅣ : " + fDto.toString());
-                log.info("결과 :ㅣ : " + fDto.toString());
                 cDto.setFileDTO(fDto);
 
             }
             cDto.setTransactionDto(tList);
         } catch (Exception e) {
-            log.error(e.toString());
             cDto = null;
+            handleException(e);
         }
         return cDto;
     }
 
+    // 주식 배당 거래내역 함수
+    @Override
+    public int transactionUpdate(Map<String, Object> map, String files) {
+        int cnt = -1;
+    
+        try {
+            log.info("========== transactionUpdate START ===========");
+    
+            TransactionDto tDTO = createTransactionDto(map);
+            cnt = dividendMapper.transactionUpdate(tDTO);
+    
+            if (!IsNullCheck.isNull(files)) {
+                FileDTO fDTO = createFileDTO(map, files);
+    
+                if (IsNullCheck.isNull(fDTO.getFNo())) {
+                    cnt += fileMapper.fileInsert(fDTO);
+                } else {
+                    cnt += fileMapper.fileUpdate(fDTO);
+                }
+            }
+    
+            log.info("결과 : " + cnt);
+            log.info("========== transactionUpdate END ===========");
+        } catch (Exception e) {
+            handleException(e);
+        }
+    
+        return cnt;
+    }
+/*
+@Override
+    public int transactionUpdate(Map<String, Object> map, String files) {
+        int cnt = -1;
+        try {
+            log.info(" =========== transactionUpdate START =========== ");
+           
+            TransactionDto tDTO = new TransactionDto();
+            FileDTO fDto = new FileDTO();
+            String tNo = String.valueOf(map.get("no"));
+            tDTO.setStockName(String.valueOf(map.get("stockName")));
+            tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
+            tDTO.setAmount(String.valueOf(map.get("amount")));
+            tDTO.setNo(Integer.valueOf(tNo));
+            tDTO.setNo(Integer.valueOf(tNo));
+            // 배당 거래내역 업데이트
+            cnt = dividendMapper.transactionUpdate(tDTO);
+            
+            if(!IsNullCheck.isNull(files)){
+            fDto.setFNo(String.valueOf(map.get("fNo")));
+            fDto.setFName(String.valueOf(map.get("fName")));
+            fDto.setContents(files.getBytes());
+            fDto.setTNo(tNo);                
+            
+                if(IsNullCheck.isNull(fDto.getFNo())){
+                    // 이미지 파일 등록
+                    cnt += fileMapper.fileInsert(fDto);
+                }else{
+                    // 이미지 파일 수정
+                    cnt += fileMapper.fileUpdate(fDto);
+                }
+            }
+            
+            
+            log.info("결과 : " + cnt);
+            log.info(" =========== transactionUpdate EDN =========== ");
+        } catch (Exception e) {
+            cnt = -1;
+            log.error(" === ERROR START === ");
+            log.error(e.toString());
+            log.error(" === ERROR EDN === ");
+        }
+
+        return cnt;
+    }
+ */
+
 
     @Override
-    public String imgData(String files) {
-        FileDTO fDto = new FileDTO();
-        String tNo = "";
-            tNo = "999";
-            fDto.setTNo(tNo);
-            fDto.setFName("1111");
-
-            fDto.setContents(files.getBytes());
-            fileMapper.fileInsert(fDto);
-        return "";
+    public int transactionDelete(String no) throws Exception {
+        int cnt = -1;
+        try {
+            
+            cnt = dividendMapper.transactionDelete(no);
+        } catch (Exception e) {
+            log.error("============== transactionDelete ERROR START =====================");
+            log.error(e.toString());
+            log.error("============== transactionDelete ERROR END =====================");
+            throw new UnsupportedOperationException("Unimplemented method 'transactionDelete'");
+        }
+        return cnt;
     }
     
+
+
+    private TransactionDto createTransactionDto(Map<String, Object> map) {
+            TransactionDto tDTO = new TransactionDto();
+            tDTO.setStockName(String.valueOf(map.get("stockName")));
+            tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
+            tDTO.setAmount(String.valueOf(map.get("amount")));
+            tDTO.setNo(Integer.valueOf(String.valueOf(map.get("no"))));
+        return tDTO;
+    }
+
+    private FileDTO createFileDTO(Map<String, Object> map, String files) {
+            FileDTO fDTO = new FileDTO();
+            fDTO.setFNo(String.valueOf(map.get("fNo")));
+            fDTO.setFName(String.valueOf(map.get("fName")));
+            fDTO.setContents(files.getBytes());
+            fDTO.setTNo(String.valueOf(map.get("no")));
+        return fDTO;
+    }
+
+    private void handleException(Exception e) {
+        log.error(" === ERROR START === ");
+        log.error(e.toString());
+        log.error(" === ERROR END === ");
+    }
 }

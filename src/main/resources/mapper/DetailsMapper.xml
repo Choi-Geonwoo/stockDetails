@@ -5,7 +5,7 @@
 
 <!-- 주식 거래 내역 등록-->
 <select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
-        SELECT
+        SELECT          /* DetailsMapper.stockDetailsList */
                         NO,
                         STOCK_NAME,
                         STOCK_QUANTITY,
@@ -44,7 +44,8 @@
 -->
 
 <update id="detailsUpdate" parameterType="com.springboot.spring.dto.StockportfolioDto" >
-       UPDATE STOCKPORTFOLIO
+       UPDATE   /* DetailsMapper.detailsUpdate */
+                 STOCKPORTFOLIO
          SET 
                 STOCK_NAME= #{stockName}, 
                 STOCK_QUANTITY=#{stockQuantity}, 
@@ -57,7 +58,8 @@
 </update>
 
 <insert id="detailsInsert" parameterType="com.springboot.spring.vo.StockportfolioVO" >
-        INSERT 	INTO	STOCKPORTFOLIO
+        INSERT 	INTO	        /* DetailsMapper.detailsInsert */
+                STOCKPORTFOLIO
                 (       NO,
                         STOCK_NAME,
                         STOCK_QUANTITY,
@@ -79,7 +81,8 @@
 
 
 <update id="detailsDelete" parameterType="int">
-       UPDATE STOCKPORTFOLIO
+       UPDATE   /* DetailsMapper.detailsDelete */
+                 STOCKPORTFOLIO
          SET 
                 CLSCD=  'N' , 
                 RGSTDATE=sysdate

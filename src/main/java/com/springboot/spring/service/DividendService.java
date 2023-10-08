@@ -3,17 +3,15 @@ package com.springboot.spring.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.springboot.spring.dto.CombinedDTO;
-import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.dto.TransactionDto;
 import com.springboot.spring.vo.StockportfolioVO;
 
+/* 배당 거래내역 관련 함수 */
 public interface DividendService {
     
     //배당 거래내역
-    public List<Map>  dividendList(TransactionDto tDto);
+    public List<Map>  dividendList(Map<String, Object> map);
     
     // 배당 거래 상세 내역
     public CombinedDTO dividendDtlsInqry(Map<String, Object> map); 
@@ -23,7 +21,12 @@ public interface DividendService {
     
     // 주식 거래내역 등록
     public int  transactionInsert(Map<String, Object> map, String files);
-
-    public String imgData(String files);
+    
+    // 주식 거래내역 수정
+    public int  transactionUpdate(Map<String, Object> map, String files);
+    
+    // 주식 배당 거래내역 삭제
+    public int  transactionDelete(String no)  throws Exception;
+    
 
 }

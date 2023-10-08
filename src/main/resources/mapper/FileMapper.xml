@@ -6,13 +6,13 @@
 <insert id="fileInsert" parameterType="com.springboot.spring.dto.FileDTO" >
         INSERT INTO TB_FILE
         (
-            NO, 
+            F_NO, 
             F_NAME, 
             T_NO, 
             CONTENTS
             )
         VALUES(
-            (select nvl(max(no)+1, 1) from TB_FILE), 
+            (select nvl(max(f_no)+1, 1) from TB_FILE), 
             #{fName}, 
             #{tNo}, 
             #{contents}
@@ -20,15 +20,24 @@
 
 </insert>
 
+<update id="fileUpdate" parameterType="com.springboot.spring.dto.FileDTO">
+    UPDATE TB_FILE
+        set  F_NAME = #{fName}
+            ,CONTENTS = #{contents}
+        where F_NO = #{fNo}
+</update>
+
 
 <!-- 이미지 상세보기-->
 <select id = "imgFileList"  resultType="com.springboot.spring.dto.FileDTO" parameterType="String" >
-    SELECT  NO, 
+    SELECT  F_NO, 
             F_NAME, 
             T_NO, 
             CONTENTS
         FROM TB_FILE
             where T_NO = #{tNo}
+                and rownum = 1
+        order by f_no desc
 </select>
 
 </mapper>

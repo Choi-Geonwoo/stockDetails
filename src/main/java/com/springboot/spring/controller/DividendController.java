@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.spring.dto.CombinedDTO;
+import com.springboot.spring.dto.DividendDto;
 import com.springboot.spring.dto.TransactionDto;
 import com.springboot.spring.service.DividendService;
 
@@ -33,15 +34,23 @@ public class DividendController {
     @GetMapping("/dividend/dividendList")
     public String detailsView(Model model 
     ,@RequestParam(value = "stockName" ,required=false) String stockName
-    ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate){
-        TransactionDto tDto = new TransactionDto();
-        tDto.setStockName(stockName); // 항목멱
-        tDto.setTrnscdate(trnscdate);     //거래내역
+    ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate
+    ,@RequestParam(value = "monthSelect" ,required=false) String monthSelect)
+    {
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("stockName", stockName);
+        map.put("trnscdate", trnscdate);
+        map.put("monthSelect", monthSelect);
+
+        //tDto.setStockName(stockName); // 항목멱
+        //tDto.setTrnscdate(trnscdate);     //거래내역
         model.addAttribute("trnscdate", trnscdate); 
+        model.addAttribute("monthSelect", monthSelect); 
         model.addAttribute("stockName", stockName); 
         model.addAttribute("selectBox", dividendService.selectBox()); 
         model.addAttribute("title", "배당내역");
-        model.addAttribute("dList", dividendService.dividendList(tDto));
+        model.addAttribute("dList", dividendService.dividendList(map));
         return "view/dividend/dividendList";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
@@ -52,11 +61,12 @@ public class DividendController {
     @PostMapping("/dividendInsert.do")
     @ResponseBody
     //public String detailsList(@RequestBody Map<String, Object> map, Model model){
-    public String detailsList(@RequestPart(value = "key") HashMap map
+    public ResponseEntity<Map> detailsList(@RequestPart(value = "key") HashMap map
     , @RequestPart(value = "files", required = false) String files){
-        //log.info("1.결과 ㅣ ㅣ :ㅣ " + map.toString());
-        //log.info("2.결과 ㅣ ㅣ :ㅣ " + files);
-        return String.valueOf(dividendService.transactionInsert(map, files));
+        Map<String, Object> reMap = new HashMap<>();
+        reMap.put("retNo", dividendService.transactionInsert(map, files));
+        reMap.put("msg", "등록");
+        return ResponseEntity.ok(reMap);
     }
 
     // 배당 상세 내역 호출
@@ -79,13 +89,28 @@ public class DividendController {
         return ResponseEntity.ok(cDto);
     }
 
-
-
-    // 이미지 테스트
-    @PostMapping("/imgData.do")
+    // 배당 거래내역 수정
+    @PostMapping("/dividendUpdate.do")
     @ResponseBody
-    //public String detailsList(@RequestBody Map<String, Object> map, Model model){
-    public String imgData(@RequestPart(value = "files", required = false) String files){
-        return String.valueOf(dividendService.imgData(files));
+    public ResponseEntity<Map> dividendUpdate(@RequestPart(value = "key") HashMap map
+                                , @RequestPart(value = "files", required = false) String files
+    ){
+        Map<String, Object> reMap = new HashMap<>();
+        reMap.put("retNo", dividendService.transactionUpdate(map,files));
+        reMap.put("msg", "수정");
+        //return String.valueOf();
+        return ResponseEntity.ok(reMap);
+    }
+
+    // 배당 거래내역 수정
+    @PostMapping("/dividendDelete.do")
+    @ResponseBody
+    public ResponseEntity<Map> dividendDelete(@RequestPart(value = "key") HashMap map ) throws Exception
+    {
+        Map<String, Object> reMap = new HashMap<>();
+        reMap.put("msg", "삭제");
+        reMap.put("retNo", dividendService.transactionDelete(String.valueOf(map.get("no"))));
+        //return String.valueOf();
+        return ResponseEntity.ok(reMap);
     }
 }

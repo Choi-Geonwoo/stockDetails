@@ -1,6 +1,3 @@
-
-
-
 function dividendList(data){
     //alert(data.length);
     const datasets = {};
@@ -72,101 +69,47 @@ var chBar = document.getElementById("bar_chart");
 }
 
 
-// 조회 년도 셀렉트 박스
-function trnscdateSelect(yearmonth){
-    const yearSelect = document.getElementById('trnscdateSelect');
-    const currentYear = new Date().getFullYear();
-    const startYear = 2020; // 시작 년도
-    const endYear = currentYear + 10; // 현재 년도에서 10년 뒤까지 표시
-
-    for (let year = startYear; year <= endYear; year++) {
-      const option = document.createElement('option');
-      option.value = year;
-      option.text = year;
-      //console.log("year " + year + " yearmonth : " + yearmonth);
-      if(year == yearmonth){
-        option.selected = true; // 현재 년도를 기본 선택으로 설정
-        yearSelect.value = yearmonth;
-        yearSelect.appendChild(option);
-      }else{
-      yearSelect.appendChild(option);
-      }
-    }
-    // 현재 년도를 기본값으로 설정
-    if(null == yearmonth){
-        yearSelect.value = currentYear;
-    }
-  }
-
  // 배당 등록
   function transactionInsert(){
     var imageInput = document.getElementById('inputFile');
     var selectedFile = imageInput.files[0];
     const inputAmount = document.getElementById('inputAmount').value;
     const inputTrnscdate = document.querySelector('input[type="date"]');
-    //var byteArrayDisplay = document.getElementById('byteArrayDisplay');
        
     const imageFileInput = document.getElementById('inputFile');
-    const fileName = imageFileInput.files[0].name;
+    var fileName;
     var stockName = (selectBox.options[selectBox.selectedIndex].value);
-      
+    if(!isEmpty(imageFileInput.files[0])){
+      fileName = imageFileInput.files[0].name;
+    }
     let data = {
                 stockName : stockName, // 주식명
                 trnscdate : inputTrnscdate.value, //거래일자
                 amount : inputAmount, // 거래 금액
                 fName : fileName // 파일명
     }
+
+      // 이미지 수정하는 경우
+  if(!isEmpty(imageFileInput.files[0])){
+    imgFile(selectedFile, data, "/dividendInsert.do");
+  }else{
+    // 데이터만 수정
+    dataTransfer(data, "/dividendInsert.do");
+  }
   
   
-    // 폼 데이터로 보내줘야 함
-    let formData = new FormData();
-    if (selectedFile) {
-                    var reader = new FileReader();
-    
-                    reader.onload = function(event) {
-                              var fileData = new Uint8Array(event.target.result);
-                              //alert(JSON.stringify(Array.from(fileData)));
-                              formData.append("files", JSON.stringify(Array.from(fileData)));
-                              formData.append(
-                                "key",
-                                new Blob([JSON.stringify(data)], { type: "application/json" })
-                              );
-                                  // 바이트 배열을 출력
-                                //byteArrayDisplay.textContent = JSON.stringify(Array.from(fileData));
-  
-                                fetch("/dividendInsert.do",
-                                    {
-                                        method : "post",
-                                        body : formData,
-                                    })
-                                    .then((response) => {
-                                        console.log(response.status);
-                                        if(response.status == 200){
-                                            alert("등록되었습니다.");
-                                        }
-                                    })
-                                    .then(data => {
-                                        location.reload();
-                                    })
-                                    .catch((error) => {
-                                        alert("error " + error)
-                                    }); 
-                                };
-    
-                    reader.readAsArrayBuffer(selectedFile);
-                } else {
-                    alert('이미지 파일을 선택하세요.');
-                }
 }
 
 
 // 배당 거래 클릭 이벤트 (수정 모달창 호출)
 function fetchCall(event, exampleModal){
-            var className = event.relatedTarget.className;
+            var className = event.relatedTarget.className.split(' ')[0];
             var button = event.relatedTarget;
             var modalTitle = exampleModal.querySelector('.modal-title');
             var modalBodyStockNameInput = exampleModal.querySelector('.modal-body-stockName input');
             var modalBodyAmountInput = exampleModal.querySelector('.modal-body-Amount input');
+            var modalBodyNoInput = exampleModal.querySelector('.modal-body-no input');
+            var modalBodyFNoInput = exampleModal.querySelector('.modal-body-fno input');
             // 입력 요소 가져오기
             var updateTrnscdate = document.getElementById('updateTrnscdate');
             var data = button.getAttribute('data-bs-whatever');
@@ -198,7 +141,7 @@ function fetchCall(event, exampleModal){
           };
           // 파라미터를 URL 형식으로 인코딩
           const queryString = new URLSearchParams(params).toString();
-
+        //debugger;
         // Fetch API를 사용하여 GET 요청 보내기
         fetch(`/dividendDtlsInqry.do?${queryString}`)
         .then(response => {
@@ -212,16 +155,28 @@ function fetchCall(event, exampleModal){
           //# JSON 데이터 파싱
           var parsedData = JSON.parse(data);
            modalTitle.textContent = '배당 수정 : ' + parsedData.transactionDto.stockName;
-           modalBodyStockNameInput.value = parsedData.transactionDto.stockName;
-           modalBodyAmountInput.value = parsedData.transactionDto.amount;
+           const el = document.getElementById('updatestockName');  //select box
+           const len = el.options.length; //select box의 option 갯수
+           for (let i=0; i<len; i++){  
+            //select box의 option value가 입력 받은 value의 값과 일치할 경우 selected
+            if(el.options[i].value == parsedData.transactionDto.stockName){
+              el.options[i].selected = true;
+            }
+          } 
+           //modalBodyStockNameInput.value = parsedData.transactionDto.stockName; // 배당 거래내역 주식명
+           modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
+           modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
+           //debugger;
            // // 입력 요소에 날짜 설정
            updateTrnscdate.value = parsedData.transactionDto.trnscdate;
            if(('' != parsedData.fileDTO ) && (null != parsedData.fileDTO )){
-              // 이미지 출력
-              fu_img(parsedData.fileDTO.reContents);
+             // 이미지 출력
+             fu_img(parsedData.fileDTO.reContents);
+             modalBodyFNoInput.value = parsedData.fileDTO.fno;
            }else{
               spinner.style.display = 'none';
-              image1.style.display = 'none'; 	
+              image1.style.display = 'none'; 	//숨기기
+              modalBody.style.display = 'block';  // 표출
            }    
           }else{
             alert('결과가 없습니다.');
@@ -234,8 +189,136 @@ function fetchCall(event, exampleModal){
         })
         .catch(error => {
           console.error(error);
+          alert("오류가 발생했습니다.");
         });
 }
+
+
+
+// 수정 버튼 동작
+function transactionUpdate(){
+  let updateTno = document.getElementById('updateTno').value;
+  let updateFno = document.getElementById('updateFno').value;
+  let updatestockName = document.getElementById('updatestockName').value;
+  let updateTrnscdate = document.getElementById('updateTrnscdate').value;
+  let updateAmount = document.getElementById('updateAmount').value;
+
+  var fileName;
+  const updateFile = document.getElementById('updateFile');
+  var selectedFile = updateFile.files[0];
+  if(!isEmpty(updateFile.files[0])){
+    fileName = updateFile.files[0].name;
+  }
+  let data = {
+              no : updateTno, //배당 거래내역 순번
+              stockName : updatestockName, // 주식명
+              trnscdate : updateTrnscdate, //거래일자
+              amount : updateAmount, // 거래 금액
+              fName : fileName, // 파일명
+              fNo : updateFno   // 파일 순번
+  }
+  // 이미지 수정하는 경우
+  if(!isEmpty(updateFile.files[0])){
+    imgFile(selectedFile, data, "/dividendUpdate.do");
+  }else{
+    // 데이터 전송
+    dataTransfer(data, "/dividendUpdate.do");
+  }
+  
+}
+
+// 삭제 버튼 동작
+function transactionDelete(){
+  let updateTno = document.getElementById('updateTno').value;
+
+  let data = {
+              no : updateTno //배당 거래내역 순번
+  }
+    // 데이터 전송
+    dataTransfer(data, "/dividendDelete.do");  
+}
+
+// 데이터 전송
+function dataTransfer(data, url){
+  // 폼 데이터로 보내줘야 함
+  let formData = new FormData();
+  formData.append("files", "");
+  formData.append("key",  new Blob([JSON.stringify(data)], { type: "application/json" }));
+  fetch(url,
+    {
+        method : "post",
+        body : formData,
+    })
+    .then((response) => {
+        //console.log(response.status);
+        if(response.status != 200){
+            alert("오류 발생했습니다.");
+        }
+        return response.json(); // 응답 데이터를 파싱하고 반환
+    })
+    .then(data => {
+      if(-1 != data.retNo){
+        alert(data.msg+"되었습니다.");
+        location.reload();
+      }else{
+        alert("오류가 발생되었습니다.");
+        location.reload();
+      }
+    })
+    .catch((error) => {
+        alert("error " + error);
+    }); 
+
+}
+
+// 이미지 포함 전송
+function imgFile(selectedFile, data, url){
+        // 폼 데이터로 보내줘야 함
+        let formData = new FormData();
+          if (selectedFile) {
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                      var fileData = new Uint8Array(event.target.result);
+                      formData.append("files", JSON.stringify(Array.from(fileData)));
+                      formData.append(
+                        "key",
+                        new Blob([JSON.stringify(data)], { type: "application/json" })
+                      );
+
+                        fetch(url,
+                            {
+                                method : "post",
+                                body : formData,
+                            })
+                            .then((response) => {
+                                console.log(response.status);
+                                if(response.status != 200){
+                                  alert("오류 발생했습니다.");
+                                }
+                                return response.json(); // 응답 데이터를 파싱하고 반환
+                            })
+                            .then(data => {
+                                    if(-1 != data.retNo){
+                                      alert(data.msg+"되었습니다.");
+                                      location.reload();
+                                    }else{
+                                      alert("오류가 발생되었습니다.");
+                                      location.reload();
+                                    }
+                                  })
+                            .catch((error) => {
+                                alert("error " + error)
+                            }); 
+                        };
+
+            reader.readAsArrayBuffer(selectedFile);
+        } else {
+            alert('이미지 파일을 선택하세요.');
+        }
+}
+
+
 
 // 이미지 출력
 function fu_img(imgData){
@@ -245,29 +328,18 @@ function fu_img(imgData){
   let modalBody = document.getElementById('modal-body');
   // 이미지를 표시할 <img> 요소 가져오기
   var imageElement1 = document.getElementById("image1");
+  // 이미지
+  let image1 = document.getElementById('image1');
   var byteData =  JSON.parse(imgData);
   // 바이트 데이터를 Blob으로 변환
   var blobData = new Blob([new Uint8Array(byteData)], { type: 'image/jpeg' });
 
-  modalBody.style.display = 'block'; 	// 표출
   // Blob 데이터를 Blob URL로 변환
   var blobUrl = URL.createObjectURL(blobData);
+  modalBody.style.display = 'block'; 	// 표출
+  image1.style.display = 'block'; 	// 표출
   imageElement1.src =  blobUrl;
   spinner.style.display = 'none'; 	// 숨기기
-}
-
-
-
-function dateChek(date){
-  const val = "/./g";
-  // 정규 표현식으로 모든 출현을 검색
-  const dotCount = (date.match(/\./g) || [0]).length;
-  if((1 != dotCount) ){
-    alert("오류 발생");
-    return true;
-  }else{
-    return false;
-  }
 }
 
 

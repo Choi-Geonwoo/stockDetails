@@ -4,7 +4,7 @@
 <mapper namespace="com.springboot.spring.mapper.DvdndClndrMapper">
 
 <select id="transactionList" parameterType="com.springboot.spring.dto.TransactionDto">
-    SELECT 
+    SELECT /* DvdndClndrMapper.transactionList */
         NO, to_char(TRNSCDATE, 'YYYY-MM-DD') as TRNSCDATE, STOCK_NAME, AMOUNT, RGSTDATE
     FROM TRANSACTION
 </select>

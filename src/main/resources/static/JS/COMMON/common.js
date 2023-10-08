@@ -1,46 +1,75 @@
-const chartColorr1 = [
-    "rgba(18, 203, 87, 0.6)"
-  ,"rgba(255, 97, 63, 0.2)"
-  ,"rgba(74, 128, 255, 0.8)"
-  ,"rgba(150, 50, 200, 0.4)"
-  ,"rgba(10, 180, 130, 0.7)"
-  ,"rgba(88, 40, 120, 0.5)"
-  ,"rgba(200, 80, 40, 0.3)"
-  ,"rgba(33, 150, 210, 0.9)"
-  ,"rgba(255, 175, 0, 0.1)"
-  ,"rgba(120, 60, 255, 0.6)"
-  ,"rgba(48, 205, 112, 0.4)"
-  ,"rgba(180, 20, 65, 0.8)"
-  ,"rgba(100, 160, 240, 0.7)"
-  ,"rgba(220, 90, 30, 0.5)"
-  ,"rgba(5, 190, 175, 0.3)"
-  ,"rgba(75, 130, 220, 0.9)"
-  ,"rgba(255, 150, 20, 0.1)"
-  ,"rgba(130, 80, 190, 0.6)"
-  ,"rgba(55, 215, 100, 0.4)"
-  ,"rgba(190, 10, 90, 0.8)"
-  ,"rgba(80, 140, 250, 0.7)"
-  ,"rgba(240, 100, 50, 0.5)"
-  ,"rgba(15, 180, 160, 0.3)"
-  ,"rgba(85, 125, 230, 0.9)"
-  ,"rgba(255, 135, 10, 0.1)"
-  ,"rgba(140, 70, 180, 0.6)"
-  ,"rgba(35, 220, 125, 0.4)"
-  ,"rgba(200, 30, 60, 0.8)"
-  ,"rgba(120, 170, 230, 0.7)"
-  ,"rgba(230, 110, 20, 0.5)"
-  ,"rgba(25, 200, 145, 0.3)"
-  ,"rgba(95, 120, 240, 0.9)"
-  ,"rgba(255, 120, 0, 0.1)"
-  ,"rgba(160, 90, 170, 0.6)"
-  ,"rgba(45, 225, 80, 0.4)"
-  ,"rgba(210, 40, 50, 0.8)"
-  ,"rgba(110, 150, 220, 0.7)"
-  ,"rgba(250, 120, 40, 0.5)"
-  ,"rgba(35, 210, 150, 0.3)"
-  ,"rgba(65, 110, 235, 0.9)"  
-    ]
+function fu_monthSelect(monthValue){
+  // 월 선택 상자 엘리먼트 찾기
+  var monthSelect = document.getElementById("monthSelect");
+  
+  // 현재 날짜를 가져오는 JavaScript 객체 생성
+  var currentDate = new Date();
+  
+  // 현재 월을 가져오기 (0부터 시작하므로 1을 더해줍니다)
+  var currentMonth = currentDate.getMonth() + 1;
+  
+    // 월 선택 상자에서 현재 월과 일치하는 옵션을 선택합니다.
+    for (var i = 0; i < monthSelect.options.length; i++) {
+      if (monthSelect.options[i].value == monthValue) {
+        monthSelect.options[i].selected = true;
+        break; // 원하는 옵션을 찾으면 루프 종료
+      }else if (monthSelect.options[i].value == currentMonth) {
+            monthSelect.options[i].selected = true;
+            break; // 원하는 옵션을 찾으면 루프 종료
+        }
+    }
+  }
+
+  
+// 조회 년도 셀렉트 박스
+function trnscdateSelect(yearmonth){
+  const yearSelect = document.getElementById('trnscdateSelect');
+  const currentYear = new Date().getFullYear();
+  const startYear = 2020; // 시작 년도
+  const endYear = currentYear + 10; // 현재 년도에서 10년 뒤까지 표시
+
+  for (let year = startYear; year <= endYear; year++) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.text = year;
+    //console.log("year " + year + " yearmonth : " + yearmonth);
+    if(year == yearmonth){
+      option.selected = true; // 현재 년도를 기본 선택으로 설정
+      yearSelect.value = yearmonth;
+      yearSelect.appendChild(option);
+    }else{
+    yearSelect.appendChild(option);
+    }
+  }
+  // 현재 년도를 기본값으로 설정
+  if(null == yearmonth){
+      yearSelect.value = currentYear;
+  }
+}
 
 
-    // export 선언 추가
-export { chartColorr1 }
+
+function dateChek(date){
+  const val = "/./g";
+  // 정규 표현식으로 모든 출현을 검색
+  const dotCount = (date.match(/\./g) || [0]).length;
+  if((1 != dotCount) ){
+    alert("오류 발생");
+    return true;
+  }else{
+    return false;
+  }
+}
+
+
+/**
+	 * 문자열이 빈 문자열인지 체크하여 결과값을 리턴한다. 
+	 * @param str		: 체크할 문자열
+	*/
+function isEmpty(str){
+		
+  if(typeof str == "undefined" || str == null || str == "")
+    return true;
+  else
+    return false ;
+}

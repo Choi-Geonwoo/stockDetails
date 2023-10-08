@@ -4,7 +4,7 @@
 <mapper namespace="com.springboot.spring.mapper.DividendMapper">
 <!-- 주식 배당 내역-->
 <select id = "dividendList"  resultType="Map" parameterType="com.springboot.spring.dto.TransactionDto" >
-                SELECT
+                SELECT /* DividendMapper.dividendList */
                     STOCK_NAME,
                     to_char(TRNSCDATE, 'YYYY') AS TRNSCDATE,
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') ) AS january,
@@ -26,7 +26,7 @@
                     and STOCK_NAME like  '%' || #{stockName} || '%'
                 </if>
                 <if test='trnscdate != null and trnscdate != "" '>
-                    and to_char(TRNSCDATE, 'YYYY') = #{trnscdate}
+                    and to_char(TRNSCDATE, 'YYYY-MM') LIKE #{trnscdate} || '%'
                 </if>
                 GROUP BY 
                     STOCK_NAME,
@@ -50,28 +50,13 @@
 </insert>
 
 <select id="tNoString" parameterType="com.springboot.spring.dto.TransactionDto" resultType="String">
-    select TRANSACTION_SEQ.NEXTVAL from dual
+    select /* DividendMapper.tNoString */ TRANSACTION_SEQ.NEXTVAL from dual
 </select>
-
-<!--
-<insert id="dividendInsert" parameterType="com.springboot.spring.dto.DividendDto" >
-        INSERT  INTO DIVIDEND
-        (   TURN,
-            YEARMONTH,
-            CATEGORY
-        )
-        VALUES(
-            DIVIDEND_SEQ.NEXTVAL,
-            #{yearmonth},
-            #{category}
-        )
-</insert>
--->
-
 
 <!-- 주식 배당 상세 내역-->
 <select id = "dividendDtlsInqry"  resultType="com.springboot.spring.dto.TransactionDto" parameterType="com.springboot.spring.dto.TransactionDto" >
-    SELECT  NO,
+    SELECT  /* DividendMapper.dividendDtlsInqry */
+            NO,
             A.STOCK_NAME,
             to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
             AMOUNT
@@ -80,6 +65,21 @@
                 AND TRNSCDATE BETWEEN TO_DATE(#{trnscdate}, 'yyyy-MM-dd') AND 
                                       LAST_DAY(TO_DATE(#{trnscdate}, 'yyyy-MM-dd'))
 </select>
+
+<update id="transactionUpdate" parameterType="com.springboot.spring.dto.TransactionDto">
+    UPDATE  /* DividendMapper.transactionUpdate */
+        TRANSACTION
+    set   STOCK_NAME =  #{stockName}
+        , AMOUNT     =  #{amount}
+        , TRNSCDATE  =  #{trnscdate}
+        , RGSTDATE   =  sysdate
+    where no = #{no}
+</update>
+
+<delete id="transactionDelete" parameterType="String">
+    DELETE  /* DividendMapper.transactionDelete */
+     FROM TRANSACTION WHERE no = #{no}
+</delete>
 
 
 </mapper>

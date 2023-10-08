@@ -15,6 +15,7 @@
 
 
   <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
+  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
   <style>
     table{
       display:flex;
@@ -31,6 +32,14 @@
       width: 250px;
       display:block;
       }
+
+      .td_hove:hover {
+        background-color: #aaaaaa;
+      }
+
+      .td_disable{
+        pointer-events : none;
+      }
   </style>
 
   <script th:inline="javascript">
@@ -38,9 +47,11 @@
   window.onload = function(){
     const data = /*[[${dList}]]*/;
     const trnscdate = /*[[${trnscdate}]]*/;
+    const monthSelect =/*[[${monthSelect}]]*/;
     const stockName = /*[[${stockName}]]*/;
     dividendList(data);
     trnscdateSelect(trnscdate);
+    fu_monthSelect(monthSelect);
 
     // 수정 모달찰 호출
     var exampleModal = document.getElementById('updateModal2')
@@ -72,8 +83,28 @@
           &nbsp;&nbsp;
         <div class="w-20">
           <select class="form-select" aria-label="Default select example" name="trnscdate" title="전체"  id="trnscdateSelect">
-            <option value = "total">전체</option>
+            <option value = "">전체</option>
           </select>
+        </div>
+        &nbsp;&nbsp;
+        <span class="input-group-text">년월</span>
+        &nbsp;&nbsp;
+        <div class="w-20">
+          <select id="monthSelect" name="monthSelect" class="form-select">
+            <option value="">전체</option>
+            <option value="01">1월</option>
+            <option value="02">2월</option>
+            <option value="03">3월</option>
+            <option value="04">4월</option>
+            <option value="05">5월</option>
+            <option value="06">6월</option>
+            <option value="07">7월</option>
+            <option value="08">8월</option>
+            <option value="09">9월</option>
+            <option value="10">10월</option>
+            <option value="11">11월</option>
+            <option value="12">12월</option>
+        </select>
         </div>
         &nbsp;&nbsp;
         <span class="input-group-text">항목</span>
@@ -90,7 +121,7 @@
 
   
   <br>
-  <table class="table table-bordered table-hover table-bordered">
+  <table class="table table-bordered">
     <thead >
       <tr >        
       <!--년도--><th >년도</th>
@@ -114,18 +145,18 @@
       <tr  th:each="dlist : ${dList}">    
             <!--년도--><td scope="col"><label th:text="${dlist.TRNSCDATE}"></label></td>
             <!--항목--><td th:text="${dlist.STOCK_NAME}"></td>
-            <!--1월--> <td class="JANUARY" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JANUARY}"></td>
-            <!--2월--> <td class="FEBRUARY" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.FEBRUARY}"></td>
-            <!--3월--> <td class="MARCH" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MARCH}"></td>
-            <!--4월--> <td class="APRIL" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.APRIL}"></td>
-            <!--5월--> <td class="MAY" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MAY}"></td>
-            <!--6월--> <td class="JUNE" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JUNE}" ></td>
-            <!--7월--> <td class="JULY" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JULY}" ></td>
-            <!--8월--> <td class="AUGUST" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.AUGUST}" ></td>
-            <!--9월--> <td class="SEPTEMBER" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.SEPTEMBER}" ></td>
-            <!--10월--><td class="OCTOBER" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.OCTOBER}" ></td>
-            <!--11월--><td class="NOVEMBER" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.NOVEMBER}" ></td>
-            <!--12월--><td class="DECEMBER" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.DECEMBER}" ></td>
+            <!--1월--> <td class="JANUARY"   th:classappend="${dlist.JANUARY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JANUARY}"></td>
+            <!--2월--> <td class="FEBRUARY"  th:classappend="${dlist.FEBRUARY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.FEBRUARY}"></td>
+            <!--3월--> <td class="MARCH"     th:classappend="${dlist.MARCH eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MARCH}"></td>
+            <!--4월--> <td class="APRIL"     th:classappend="${dlist.APRIL eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.APRIL}"></td>
+            <!--5월--> <td class="MAY"       th:classappend="${dlist.MAY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MAY}"></td>
+            <!--6월--> <td class="JUNE"      th:classappend="${dlist.JUNE eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JUNE}" ></td>
+            <!--7월--> <td class="JULY"      th:classappend="${dlist.JULY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JULY}" ></td>
+            <!--8월--> <td class="AUGUST"    th:classappend="${dlist.AUGUST eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.AUGUST}" ></td>
+            <!--9월--> <td class="SEPTEMBER" th:classappend="${dlist.SEPTEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.SEPTEMBER}" ></td>
+            <!--10월--><td class="OCTOBER"   th:classappend="${dlist.OCTOBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.OCTOBER}" ></td>
+            <!--11월--><td class="NOVEMBER"  th:classappend="${dlist.NOVEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.NOVEMBER}" ></td>
+            <!--12월--><td class="DECEMBER"  th:classappend="${dlist.DECEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.DECEMBER}" ></td>
             <!--합계--><td th:text="${
               dlist.JANUARY 
               + dlist.FEBRUARY
@@ -221,44 +252,72 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-        
-        <div class="modal-body" id="modal-body">
-            <div class="mb-3 row modal-body-stockName">
-                <label class="col-sm-3 col-form-label ">주식명</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" id="inputstockName">
+            <div class="modal-body" id="modal-body">
+                      <div class="mb-3 row modal-body-no" style="display: none;"><!---->
+                          <label class="col-sm-3 col-form-label ">배당 순번</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="updateTno" name="tNo">
+                          </div>
+                      </div>
+                      <div class="mb-3 row modal-body-fno" style="display: none;">
+                        <label class="col-sm-3 col-form-label ">파일 순번</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="updateFno" name="fNo">
+                        </div>
+                      </div>
+
+
+                      <div class="mb-3 row modal-body-stockName">
+                          <label class="col-sm-3 col-form-label ">주식명</label>
+                          <!--
+
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="updatestockName" name="stockName">
+                            </div>
+
+                          -->
+                          <div class="col-sm-8">
+                            <select class="form-select" aria-label="Default select example" id="updatestockName">
+                              <th:block th:each="selectBox : ${selectBox}">
+                                <option name="updatestockName" th:value="${selectBox.stockName}"
+                                th:text="${selectBox.stockName}"></option>
+                              </th:block>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label  class="col-sm-3 col-form-label">거래 일자</label>
+                        <div class="col-sm-8">
+                          <input type="date" class="form-control" id="updateTrnscdate" name="trnscdate">
+                        </div>
+                      </div>
+                      <div class="mb-3 row modal-body-Amount">
+                        <label  class="col-sm-3 col-form-label">거래 금액</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="updateAmount" name="amount">
+                        </div>
+                      </div>
+                      
+                      <div class="mb-3 row">
+                        <div class="col-sm-11">
+                          <input type="file" class="form-control" id="updateFile" name="updateFile"  ><!--onchange="toBase64(event);"-->
+                        </div>
+                      </div>
+                      
+                      <div class="mb-3 row">
+                        <div class="col-sm-11">
+                          <img id="image1" class="card-img-bottom" src="" alt="이미지">
+                        </div>
+                      </div>
                 </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="transactionDelete();">삭제</button>
+                        <button type="button" class="btn btn-outline-success" onclick="transactionUpdate();">수정</button>
+                      </div>
+
+                      
             </div>
-              <div class="mb-3 row">
-                <label  class="col-sm-3 col-form-label">거래 일자</label>
-                <div class="col-sm-8">
-                  <input type="date" class="form-control" id="updateTrnscdate">
-                </div>
-              </div>
-              <div class="mb-3 row modal-body-Amount">
-                <label  class="col-sm-3 col-form-label">거래 금액</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" id="inputAmount">
-                </div>
-              </div>
-              
-              <div class="mb-3 row">
-                <div class="col-sm-11">
-                  <input type="file" class="form-control" id="updateFile" name="updateFile"  multiple="multiple" ><!--onchange="toBase64(event);"-->
-                </div>
-              </div>
-              
-              <div class="mb-3 row">
-                <div class="col-sm-11">
-                  <img id="image1" class="img-thumbnail" src="" alt="이미지">
-                </div>
-              </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-outline-success" onclick="transactionInsert111();">수정</button>
-        </div>
-      </div>
     </div>
   </div>
 
