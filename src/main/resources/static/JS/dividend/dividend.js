@@ -1,73 +1,65 @@
-function dividendList(data){
-    //alert(data.length);
-    const datasets = {};
-    const dataArray = [];
-    const TRNSCDATE = [];
-for(var key = 0; key < data.length; key++){
-  TRNSCDATE.push(data[key].TRNSCDATE),
-  dataArray.push({
-    label: data[key].TRNSCDATE + " - "+data[key].STOCK_NAME,
-    data : [
-            data[key].JANUARY, 
-            data[key].FEBRUARY, 
-            data[key].MARCH, 
-            data[key].APRIL, 
-            data[key].MAY, 
-            data[key].JUNE, 
-            data[key].JULY, 
-            data[key].AUGUST, 
-            data[key].SEPTEMBER, 
-            data[key].OCTOBER, 
-            data[key].NOVEMBER,
-            data[key].DECEMBER
-    ],
-    backgroundColor : chartColorr[key]
-  });
-  }
-  //console.log(TRNSCDATE);
-    // 곡선 차트
-    //lineChart(dataArray);
-    // 막대 차트
-    barGraph(dataArray)
-}
-
-//막대 차트
-function barGraph(dataArray){
-var chBar = document.getElementById("bar_chart");
-  var chartData = {
-    labels: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
-    datasets: dataArray
-  };
+function dividendList(data, monthSelect) {
+  const dataArray = [];
+  const TRNSCDATE = [];
+  var dataValues = [];
   
-  var myChart = new Chart(chBar, {
-    // 챠트 종류를 선택
-    type: 'bar',
-
-    // 챠트를 그릴 데이타
-    data: chartData,
-
-    // 옵션
-    options: {
-    scales: {
-                y: {
-                    beginAtZero: true
-                }
-    },
-      plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false
-                }
-            }
-
+  for (const item of data) {
+      TRNSCDATE.push(item.TRNSCDATE);
+      
+      const label = `${item.TRNSCDATE} - ${item.STOCK_NAME}`;
+      if(!isEmpty(monthSelect)){
+        dataValues = [item[monthToNumber(monthSelect)]];
+      }
+      else{
+      dataValues = [
+          item.JANUARY, item.FEBRUARY, item.MARCH, item.APRIL, item.MAY,
+          item.JUNE, item.JULY, item.AUGUST, item.SEPTEMBER, item.OCTOBER, item.NOVEMBER, item.DECEMBER
+      ];
     }
-  });
+      
+      const backgroundColor = chartColorr[data.indexOf(item)]; // Assuming chartColorr is defined elsewhere.
+
+      dataArray.push({
+          label: label,
+          data: dataValues,
+          backgroundColor: backgroundColor
+      });
+  }
+  console.log(monthToNumber(monthSelect));
+  const months = isEmpty(monthSelect) ? ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"] : [`${monthSelect}월`];
+
+  createBarChart(dataArray, months);
 }
 
+function createBarChart(dataArray, months) {
+  const chBar = document.getElementById("bar_chart");
+  const chartData = {
+      labels: months,
+      datasets: dataArray
+  };
+
+  const myChart = new Chart(chBar, {
+      type: 'bar',
+      data: chartData,
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          },
+          plugins: {
+              legend: {
+                  display: true,
+                  position: 'top'
+              },
+              tooltip: {
+                  mode: 'index',
+                  intersect: false
+              }
+          }
+      }
+  });
+}
 
  // 배당 등록
   function transactionInsert(){
@@ -387,3 +379,24 @@ const chartColorr = [
 ,"rgba(35, 210, 150, 0.3)"
 ,"rgba(65, 110, 235, 0.9)"  
   ]
+
+
+
+  function monthToNumber(month) {
+    const monthMap = {
+        '01':'JANUARY',
+        '02':'FEBRUARY',
+        '03':'MARCH',
+        '04':'APRIL',
+        '05':'MAY',
+        '06':'JUNE',
+        '07':'JULY',
+        '08':'AUGUST',
+        '09':'SEPTEMBER',
+        '10':'OCTOBER',
+        '11':'NOVEMBER',
+        '12':'DECEMBER'
+    };
+
+    return monthMap[month] || 0; // Return 0 for invalid months.
+}

@@ -49,7 +49,7 @@
     const trnscdate = /*[[${trnscdate}]]*/;
     const monthSelect =/*[[${monthSelect}]]*/;
     const stockName = /*[[${stockName}]]*/;
-    dividendList(data);
+    dividendList(data, monthSelect);
     trnscdateSelect(trnscdate);
     fu_monthSelect(monthSelect);
 
@@ -176,11 +176,9 @@
   </table>
 
   <br>
-  <div >
-
-    <canvas id="bar_chart"></canvas>
-
-  </div>
+    <div class="w-75 p-3">
+      <canvas id="bar_chart"></canvas>
+    </div>
 
 
  <!-- 등록 Modal -->

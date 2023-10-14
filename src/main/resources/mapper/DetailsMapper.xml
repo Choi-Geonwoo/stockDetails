@@ -21,7 +21,9 @@
                         and STOCK_NAME = #{stockName}
                 </if>
                 <if test='dividendCycle != null and dividendCycle != "" '>
-                        and DIVIDEND_CYCLE = #{dividendCycle}
+                        and (DIVIDEND_CYCLE like #{dividendCycle} || '%'
+                        or DIVIDEND_CYCLE = '월'
+                        )
                 </if>
                         order by NO DESC, RGSTDATE desc
 </select>

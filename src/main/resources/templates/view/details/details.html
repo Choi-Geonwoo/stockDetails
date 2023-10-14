@@ -30,6 +30,9 @@
   .new_input{
     border:0 solid black;
   }
+  .td_disable{
+        pointer-events : none;
+      }
 </style>
 
   <!--부트스트랩-->
@@ -133,12 +136,12 @@
             <tbody>
             <tr th:each="slist : ${sList}">
                     <td style="display: none;"><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
-                    <td ><input class="form-control-plaintext" type="text" th:value="${slist.stockName}" readonly></td><!--주식명-->
+                    <td ><input  class="form-control-plaintext td_disable" type="text" th:value="${slist.stockName}" readonly></td><!--주식명-->
                     <td ><input class="form-control form-control-sm" type="text" th:value="${slist.stockQuantity}"></td><!--주식수-->
                     <td ><input class="form-control form-control-sm" type="text" th:value="${slist.dividendCycle}"></td><!--배당 주기-->
                     <td ><input class="form-control form-control-sm" type="text" th:value="${slist.purchasePrice}"></td><!--매입금-->
                     <td ><input class="form-control form-control-sm" type="text" th:value="${slist.dividendAmount}"></td><!--배당금-->
-                    <td ><input class="form-control-plaintext" type="text" th:value="${#strings.substring(slist.rgstdate, 0, 10)}" readonly></td><!--등록일자-->
+                    <td ><input class="form-control-plaintext td_disable" type="text" th:value="${#strings.substring(slist.rgstdate, 0, 10)}" readonly></td><!--등록일자-->
 
                     <!-- th:text="${#strings.substring(slist.rgstdate, 0, 8)}" -->
                     <!-- th:text="${#temporals.format(item.createDt, 'yyyy-MM-dd HH:mm:ss')}" -->
@@ -195,27 +198,29 @@
 
 <br/><br/><br/>
     <section class="Main">
-      <div class="Grid">
-        <div class="CardContainer w-100">
-          <p class="text-center">주식 수</p>
-          <div class="CardBox">
-            <canvas id="sharesPieMyChart"></canvas>
+      <div class="w-75 p-3">
+        <div class="Grid">
+          <div class="CardContainer">
+            <p class="text-center">주식 수</p>
+            <div class="CardBox w-70">
+              <canvas id="sharesPieMyChart"></canvas>
+            </div>
           </div>
-        </div>
-        <div class="CardContainer w-100">
-          <p class="text-center">배당금 기준</p>
-          <div class="CardBox">
-            <canvas id="dvdndPieMyChart"></canvas>
+          <div class="CardContainer w-100">
+            <p class="text-center">배당금 기준</p>
+            <div class="CardBox w-70">
+              <canvas id="dvdndPieMyChart"></canvas>
+            </div>
           </div>
-        </div>
-        <div class="CardContainer">
-          <div class="CardBox">
-            <canvas id="sharesBarMyChart"></canvas>
+          <div class="CardContainer">
+            <div class="CardBox">
+              <canvas id="sharesBarMyChart"></canvas>
+            </div>
           </div>
-        </div>
-        <div class="CardContainer">
-          <div class="CardBox">
-            <canvas id="dvdndBarMyChart"></canvas>
+          <div class="CardContainer">
+            <div class="CardBox">
+              <canvas id="dvdndBarMyChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
