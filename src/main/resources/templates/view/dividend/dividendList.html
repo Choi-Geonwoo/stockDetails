@@ -21,14 +21,19 @@
       display:flex;
       /*display: -webkit-box;*/
       /*display: -ms-flexbox;*/
-      overflow-x: auto;
+      
       overflow-y: hidden;
+      overflow-y: hidden;
+      /*overflow-x: auto;*/
       }
     tbody {
       display:flex;
+      overflow-x: auto;
+      overflow-y: hidden
+      /*overflow-x: auto;*/
       }
     th,td{
-      height: 30px;
+      height: 35px;
       width: 250px;
       display:block;
       }
@@ -58,7 +63,26 @@
     exampleModal.addEventListener('show.bs.modal', function (event) {
       fetchCall(event, exampleModal);
     })
+    // 현재날짜로 셋팅
+    document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
+    // 숨기기
+    document.getElementById("col-sm-11").style.display ='none';	
+    document.getElementById("col-sm-12").style.display ='none';	
   }
+
+  function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('image1').src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+    document.getElementById("col-sm-11").style.display ='block';	
+  } else {
+    document.getElementById('image1').src = "";
+    document.getElementById("col-sm-11").style.display ='none';	
+  }
+}
   </script>
 </head>
 <body>
@@ -216,13 +240,13 @@
             
             <div class="mb-3 row">
               <div class="col-sm-11">
-                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" ><!--onchange="toBase64(event);"-->
+                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" onchange="readURL(this);" ><!--onchange="toBase64(event);"-->
               </div>
             </div>
             
             <div class="mb-3 row">
-              <div class="col-sm-11">
-                  <pre id="byteArrayDisplay"></pre>
+              <div class="col-sm-11" id="col-sm-11">
+                <img id="image2" class="card-img-bottom" src="" alt="이미지">
               </div>
             </div>
       </div>
@@ -298,12 +322,12 @@
                       
                       <div class="mb-3 row">
                         <div class="col-sm-11">
-                          <input type="file" class="form-control" id="updateFile" name="updateFile"  ><!--onchange="toBase64(event);"-->
+                          <input type="file" class="form-control" id="updateFile" name="updateFile" onchange="readURL(this);"><!--onchange="toBase64(event);"-->
                         </div>
                       </div>
                       
                       <div class="mb-3 row">
-                        <div class="col-sm-11">
+                        <div class="col-sm-11" id="col-sm-12">
                           <img id="image1" class="card-img-bottom" src="" alt="이미지">
                         </div>
                       </div>

@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.spring.com.DateRltd;
 import com.springboot.spring.com.IsNullCheck;
 import com.springboot.spring.dto.CombinedDTO;
@@ -73,6 +72,7 @@ public class DividendServiceImpl implements DividendService {
         int cnt = -1;
         String tNo = "";
         try {
+            log.info("========== transactionInsert START ===========");
             TransactionDto tDTO = new TransactionDto();
             FileDTO fDto = new FileDTO();
             tDTO.setStockName(String.valueOf(map.get("stockName")));
@@ -83,16 +83,19 @@ public class DividendServiceImpl implements DividendService {
             tDTO.setNo(Integer.valueOf(tNo));
             fDto.setTNo(tNo);
             fDto.setFName(String.valueOf(map.get("fName")));
-            log.info("1. 요청 값 : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
             // 배당 거래 등록
             cnt = dividendMapper.transactionInsert(tDTO);
-            fDto.setContents(files.getBytes());
-            // 이미지 파일 등록
-            fileMapper.fileInsert(fDto);
+            if(!IsNullCheck.isNull(files)){
+                log.info("1. 요청 값 : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
+                fDto.setContents(files.getBytes());
+                // 이미지 파일 등록
+                fileMapper.fileInsert(fDto);
+            }
+            log.info("========== transactionInsert END ===========");
             
         } catch (Exception e) {
             cnt = -1;
-            handleException(e);
+            handleException("transactionInsert",e);
         }
         return cnt;
     }
@@ -120,7 +123,7 @@ public class DividendServiceImpl implements DividendService {
             cDto.setTransactionDto(tList);
         } catch (Exception e) {
             cDto = null;
-            handleException(e);
+            handleException("dividendDtlsInqry",e);
         }
         return cDto;
     }
@@ -149,7 +152,7 @@ public class DividendServiceImpl implements DividendService {
             log.info("결과 : " + cnt);
             log.info("========== transactionUpdate END ===========");
         } catch (Exception e) {
-            handleException(e);
+            handleException("transactionUpdate",e);
         }
     
         return cnt;
@@ -237,9 +240,9 @@ public class DividendServiceImpl implements DividendService {
         return fDTO;
     }
 
-    private void handleException(Exception e) {
-        log.error(" === ERROR START === ");
+    private void handleException(String str,Exception e) {
+        log.error(" === "+str+" ERROR START === ");
         log.error(e.toString());
-        log.error(" === ERROR END === ");
+        log.error(" === "+str+" ERROR END === ");
     }
 }
