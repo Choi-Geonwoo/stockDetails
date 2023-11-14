@@ -33,6 +33,13 @@
   .td_disable{
         pointer-events : none;
       }
+.hide_column{
+    display: none;
+}
+
+.show_columns{
+    display: block;
+}
 </style>
 
   <!--부트스트랩-->
@@ -107,17 +114,19 @@
                       등록
                     </button>  
                   </th>
-                  <th class="w-10" colspan="14"></th>
+                  <th class="w-10" colspan="14">
+                    <input type=checkbox value="C" onClick="displayCheck(this)">숨기기<br>
+                  </th>
               </tr>
               </form>
                 <tr>
                     <th class="w-10" style="display: none;">순번</th>
                     <th class="w-10" >주식명</th>
-                    <th class="w-10">주식수</th>
-                    <th class="w-10">배당주기</th>
-                    <th class="w-10">매입금</th>
-                    <th class="w-10">배당금</th>
-                    <th class="w-10">등록일자</th>
+                    <th name="paragraph" class="w-10">주식수</th>
+                    <th name="paragraph" class="w-10">배당주기</th>
+                    <th name="paragraph" class="w-10">매입금</th>
+                    <th name="paragraph" class="w-10">배당금</th>
+                    <th name="paragraph" class="w-10">등록일자</th>
                     <th class="w-10">구분</th>
                     <th class="w-10">01월</th>
                     <th class="w-10">02월</th>
@@ -137,11 +146,11 @@
             <tr th:each="slist : ${sList}">
                     <td style="display: none;"><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
                     <td ><input  class="form-control-plaintext td_disable" type="text" th:value="${slist.stockName}" readonly></td><!--주식명-->
-                    <td ><input class="form-control form-control-sm" type="text" th:value="${slist.stockQuantity}"></td><!--주식수-->
-                    <td ><input class="form-control form-control-sm" type="text" th:value="${slist.dividendCycle}"></td><!--배당 주기-->
-                    <td ><input class="form-control form-control-sm" type="text" th:value="${slist.purchasePrice}"></td><!--매입금-->
-                    <td ><input class="form-control form-control-sm" type="text" th:value="${slist.dividendAmount}"></td><!--배당금-->
-                    <td ><input class="form-control-plaintext td_disable" type="text" th:value="${#strings.substring(slist.rgstdate, 0, 10)}" readonly></td><!--등록일자-->
+                    <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.stockQuantity}"></td><!--주식수-->
+                    <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendCycle}"></td><!--배당 주기-->
+                    <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.purchasePrice}"></td><!--매입금-->
+                    <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendAmount}"></td><!--배당금-->
+                    <td name="paragraph"><input class="form-control-plaintext td_disable" type="text" th:value="${#strings.substring(slist.rgstdate, 0, 10)}" readonly></td><!--등록일자-->
 
                     <!-- th:text="${#strings.substring(slist.rgstdate, 0, 8)}" -->
                     <!-- th:text="${#temporals.format(item.createDt, 'yyyy-MM-dd HH:mm:ss')}" -->

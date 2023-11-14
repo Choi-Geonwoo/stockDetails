@@ -347,3 +347,17 @@ function strIndexOf(text){
     }
     return count;
 }
+
+function displayCheck(box){
+    if(box.checked == true){
+        var elements = document.getElementsByName('paragraph');
+         for (var i = 0; i < elements.length; i++) {
+           elements[i].className='hide_column';
+         }
+    }else{
+        var elements = document.getElementsByName('paragraph');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].className ='w-10';
+        }
+    }
+}

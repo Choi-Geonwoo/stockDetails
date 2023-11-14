@@ -3,7 +3,7 @@
 
 <mapper namespace="com.springboot.spring.mapper.DetailsMapper">
 
-<!-- 주식 거래 내역 등록-->
+<!-- 주식 거래 내역-->
 <select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
         SELECT          /* DetailsMapper.stockDetailsList */
                         NO,
@@ -28,22 +28,22 @@
                         order by NO DESC, RGSTDATE desc
 </select>
 
-<!--
-
-<select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockVO">
-        SELECT 
-                registration_order, 
-                stock_name, 
-                shares, 
-                stock_dividends, 
-                maeipkkeum, 
-                dividends, 
-                registration_date
-         FROM STOCK_MANAGEMENT_TABLE
-                order by to_number(registration_order) desc
+<!-- 주식 종목 내역-->
+<select id = "selectBox"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
+        SELECT          /* DetailsMapper.selectBox */
+                        NO,
+                        STOCK_NAME,
+                        STOCK_QUANTITY,
+                        DIVIDEND_CYCLE,
+                        PURCHASE_PRICE,
+                        DIVIDEND_AMOUNT,
+                        CLSCD,
+                        RGSTDATE
+                FROM
+                        STOCKPORTFOLIO
+                where 1=1
+                        order by NO DESC,STOCK_NAME, RGSTDATE desc
 </select>
-
--->
 
 <update id="detailsUpdate" parameterType="com.springboot.spring.dto.StockportfolioDto" >
        UPDATE   /* DetailsMapper.detailsUpdate */

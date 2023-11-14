@@ -54,6 +54,8 @@
     const trnscdate = /*[[${trnscdate}]]*/;
     const monthSelect =/*[[${monthSelect}]]*/;
     const stockName = /*[[${stockName}]]*/;
+
+    document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
     dividendList(data, monthSelect);
     trnscdateSelect(trnscdate);
     fu_monthSelect(monthSelect);
@@ -64,23 +66,27 @@
       fetchCall(event, exampleModal);
     })
     // 현재날짜로 셋팅
-    document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
     // 숨기기
-    document.getElementById("col-sm-11").style.display ='none';	
-    document.getElementById("col-sm-12").style.display ='none';	
+    //document.getElementById("col-sm-11").style.display ='none';	
+    //document.getElementById("col-sm-12").style.display ='none';	
+      // 파일 입력 필드를 찾습니다.
+      var fileInput2 = document.getElementById("image1");
+      // 입력 필드의 값을 초기화합니다.
+      fileInput1.value = "";// 입력 필드의 값을 초기화합니다.
+      fileInput1.src = "";// 입력 필드의 값을 초기화합니다.
   }
-
-  function readURL(input) {
+ 
+  function readURL(input, img) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      document.getElementById('image1').src = e.target.result;
+      document.getElementById(img).src = e.target.result;
     };
     reader.readAsDataURL(input.files[0]);
-    document.getElementById("col-sm-11").style.display ='block';	
+    //document.getElementById("col-sm-11").style.display ='block';	
   } else {
-    document.getElementById('image1').src = "";
-    document.getElementById("col-sm-11").style.display ='none';	
+    //document.getElementById('image1').src = "";
+    //document.getElementById("col-sm-11").style.display ='none';	
   }
 }
   </script>
@@ -141,6 +147,22 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
       등록
     </button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <div >
+        <span class="callout" th:text="${'합계: ' + #aggregates.sum(dList.![
+          JANUARY
+        + FEBRUARY
+        + MARCH
+        + APRIL
+        + MAY
+        + JUNE
+        + JULY
+        + AUGUST
+        + SEPTEMBER
+        + OCTOBER
+        + NOVEMBER
+        + DECEMBER]) * 1.0}"></span>
+      </div>
   </div>
 
   
@@ -162,7 +184,7 @@
       <!--10월--><th>10월</th>
       <!--11월--><th>11월</th>
       <!--12월--><th>12월</th>
-      <!--12월--><th>합계</th>
+      <!--합계--><th>합계</th>
       </tr>
     </thead>
     <tbody>
@@ -196,6 +218,7 @@
               + dlist.DECEMBER
             }" ></td>
       </tr>
+  </tr>
     </tbody>
   </table>
 
@@ -234,13 +257,13 @@
             <div class="mb-3 row">
               <label  class="col-sm-3 col-form-label">거래 금액</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control inputAmount" id="inputAmount">
+                <input type="text" class="form-control inputAmount" id="inputAmount" value="0">
               </div>
             </div>
             
             <div class="mb-3 row">
               <div class="col-sm-11">
-                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" onchange="readURL(this);" ><!--onchange="toBase64(event);"-->
+                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" onchange="readURL(this, 'image2');" ><!--onchange="toBase64(event);"-->
               </div>
             </div>
             
@@ -322,7 +345,7 @@
                       
                       <div class="mb-3 row">
                         <div class="col-sm-11">
-                          <input type="file" class="form-control" id="updateFile" name="updateFile" onchange="readURL(this);"><!--onchange="toBase64(event);"-->
+                          <input type="file" class="form-control" id="updateFile" name="updateFile" onchange="readURL(this, 'image1');"><!--onchange="toBase64(event);"-->
                         </div>
                       </div>
                       

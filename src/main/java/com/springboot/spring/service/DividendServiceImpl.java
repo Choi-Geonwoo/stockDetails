@@ -63,7 +63,7 @@ public class DividendServiceImpl implements DividendService {
     @Override
     public List<StockportfolioVO> selectBox() {
         StockportfolioDto sDto = null;
-        return detailsMaper.stockDetailsList(sDto);
+        return detailsMaper.selectBox(sDto);
     }
 
     // 배당 거래 내역 등록

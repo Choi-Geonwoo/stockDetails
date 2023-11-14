@@ -16,3 +16,12 @@
     height: 200px;
     background: white;
 }
+
+
+.hide_column{
+    display: none;
+}
+
+.show_columns{
+    display: block;
+}

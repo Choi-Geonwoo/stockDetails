@@ -89,7 +89,7 @@ public class DetailServiceImpl implements DetailsService {
     @Override
     public List<StockportfolioVO> selectBox() {
         StockportfolioDto sDto = null;
-        return detailsMapper.stockDetailsList(sDto);
+        return detailsMapper.selectBox(sDto);
     }
     
 }

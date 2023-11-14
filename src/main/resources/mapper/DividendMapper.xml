@@ -18,7 +18,20 @@
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '09' , AMOUNT, '0') ) AS september,
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '10' , AMOUNT, '0') ) AS october,
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '11' , AMOUNT, '0') ) AS november,
-                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) AS december
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) AS december,
+                    
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') ) + 
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '02' , AMOUNT, '0') ) +
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '03' , AMOUNT, '0') ) + 
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '04' , AMOUNT, '0') ) +
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '05' , AMOUNT, '0') ) + 
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '06' , AMOUNT, '0') ) +
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '07' , AMOUNT, '0') ) + 
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '08' , AMOUNT, '0') ) +
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '09' , AMOUNT, '0') ) + 
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '10' , AMOUNT, '0') ) +
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '11' , AMOUNT, '0') ) + 
+                    sum(DECODE(to_char(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) AS sum
                 FROM
                     TRANSACTION
                 where 1=1
