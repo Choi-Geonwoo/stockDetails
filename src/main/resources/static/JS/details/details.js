@@ -361,3 +361,19 @@ function displayCheck(box){
         }
     }
 }
+
+
+function visibleCheck(box){
+    if(box.checked == true){
+        var elements = document.getElementsByName('purchasePrice');
+         for (var i = 0; i < elements.length; i++) {
+           elements[i].className='hidden_column form-control form-control-sm';
+         }
+    }else{
+        var elements = document.getElementsByName('purchasePrice');
+        for (var i = 0; i < elements.length; i++) {
+            //elements[i].className ='visible_column';
+            elements[i].className = 'form-control form-control-sm';
+        }
+    }
+}

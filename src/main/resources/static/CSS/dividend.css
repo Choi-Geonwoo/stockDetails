@@ -1,0 +1,28 @@
+table{
+    display:flex;
+    /*display: -webkit-box;*/
+    /*display: -ms-flexbox;*/
+    
+    overflow-y: hidden;
+    overflow-y: hidden;
+    /*overflow-x: auto;*/
+    }
+  tbody {
+    display:flex;
+    overflow-x: auto;
+    overflow-y: hidden
+    /*overflow-x: auto;*/
+    }
+  th,td{
+    height: 35px;
+    width: 250px;
+    display:block;
+    }
+
+    .td_hove:hover {
+      background-color: #aaaaaa;
+    }
+
+    .td_disable{
+      pointer-events : none;
+    }

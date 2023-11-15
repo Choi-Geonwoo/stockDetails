@@ -1,3 +1,4 @@
+
 .dialog {
     width: 100vw;
     height: 100vh;
@@ -24,4 +25,59 @@
 
 .show_columns{
     display: block;
+}
+
+.hidden_column
+{
+    visibility: hidden;
+}
+
+.visible_column
+{
+    visibility: visible;
+}
+
+
+
+.Grid {
+    width: 100%;
+    height: 70%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+
+  .CardContainer {
+    width: 100%;
+    height: 70%;
+    position: relative;
+  }
+
+  .CardContainer::after {
+    display: block;
+    padding-bottom: 100%;
+  }
+
+.new_input{
+  border:0 solid black;
+}
+.td_disable{
+      pointer-events : none;
+    }
+.hide_column{
+  display: none;
+}
+
+.show_columns{
+  display: block;
+}
+
+.hidden_column
+{
+  visibility: hidden;
+}
+
+.visible_column
+{
+  visibility: visible;
 }

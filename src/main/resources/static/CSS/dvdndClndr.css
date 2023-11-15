@@ -37,8 +37,21 @@ cursor: pointer;
   cursor: pointer;
 }
 .circle-test {
-width: 10px;
-height: 10px;
-border-radius: 50%;
-background-color: green;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: green;
 }
+
+
+    /* 일요일 날짜 빨간색 */
+    .fc-day-sun a {
+      color: red;
+      text-decoration: none;
+    }
+    
+    /* 토요일 날짜 파란색 */
+    .fc-day-sat a {
+      color: blue;
+      text-decoration: none;
+    }
