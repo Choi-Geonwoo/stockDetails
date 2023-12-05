@@ -47,7 +47,7 @@
       // 파일 입력 필드를 찾습니다.
       var fileInput2 = document.getElementById("image1");
       // 입력 필드의 값을 초기화합니다.
-      fileInput1.value = "";// 입력 필드의 값을 초기화합니다.
+      //fileInput1.value = "";// 입력 필드의 값을 초기화합니다.
       fileInput1.src = "";// 입력 필드의 값을 초기화합니다.
   }
  
@@ -202,6 +202,7 @@
       <canvas id="bar_chart"></canvas>
     </div>
 
+    
 
  <!-- 등록 Modal -->
  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -244,7 +245,7 @@
             
             <div class="mb-3 row">
               <div class="col-sm-11" id="col-sm-11">
-                <img id="image2" class="card-img-bottom" src="" alt="이미지">
+                <img id="image2" class="card-img-bottom image3" src="" alt="이미지">
               </div>
             </div>
       </div>
@@ -286,16 +287,8 @@
                         </div>
                       </div>
 
-
                       <div class="mb-3 row modal-body-stockName">
                           <label class="col-sm-3 col-form-label ">주식명</label>
-                          <!--
-
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="updatestockName" name="stockName">
-                            </div>
-
-                          -->
                           <div class="col-sm-8">
                             <select class="form-select" aria-label="Default select example" id="updatestockName">
                               <th:block th:each="selectBox : ${selectBox}">
@@ -326,7 +319,7 @@
                       
                       <div class="mb-3 row">
                         <div class="col-sm-11" id="col-sm-12">
-                          <img id="image1" class="card-img-bottom" src="" alt="이미지">
+                          <img id="image1" class="card-img-bottom image3" src="" alt="이미지">
                         </div>
                       </div>
                 </div>

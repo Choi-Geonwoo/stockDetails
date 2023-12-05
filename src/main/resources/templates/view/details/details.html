@@ -183,6 +183,26 @@
     </div>
 
 <br/><br/><br/>
+   
+
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="sharesPieMyChart-tab" data-bs-toggle="tab" data-bs-target="#sharesPieMyChart-tab-pane" type="button" role="tab" aria-controls="sharesPieMyChart-tab-pane" aria-selected="true">주식수(원형)</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="sharesBarMyChart-tab" data-bs-toggle="tab" data-bs-target="#sharesBarMyChart-tab-pane" type="button" role="tab" aria-controls="sharesBarMyChart-tab-pane" aria-selected="false">주식(바)</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="dvdndPieMyChart-tab" data-bs-toggle="tab" data-bs-target="#dvdndPieMyChart-tab-pane" type="button" role="tab" aria-controls="dvdndPieMyChart-tab-pane" aria-selected="false">배당금(원형)</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="dvdndBarMyChart-tab" data-bs-toggle="tab" data-bs-target="#dvdndBarMyChart-tab-pane" type="button" role="tab" aria-controls="dvdndBarMyChart-tab-pane" aria-selected="false" >배당금(바)</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+
+  <div class="tab-pane fade show active" id="sharesPieMyChart-tab-pane" role="tabpanel" aria-labelledby="sharesPieMyChart-tab" tabindex="0">
     <section class="Main">
       <div class="w-75 p-3">
         <div class="Grid">
@@ -192,25 +212,63 @@
               <canvas id="sharesPieMyChart"></canvas>
             </div>
           </div>
-          <div class="CardContainer w-100">
-            <p class="text-center">배당금 기준</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="tab-pane fade" id="sharesBarMyChart-tab-pane" role="tabpanel" aria-labelledby="sharesBarMyChart-tab" tabindex="0">
+
+    <section class="Main">
+      <div class="w-95 p-3">
+        <div class="Grid">
+          <div class="CardContainer">
+            <p class="text-center">주식 수</p>
+            <div class="CardBox w-70">
+              <canvas id="sharesBarMyChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="tab-pane fade" id="dvdndPieMyChart-tab-pane" role="tabpanel" aria-labelledby="dvdndPieMyChart-tab" tabindex="0">
+
+    
+    <section class="Main">
+      <div class="w-75 p-3">
+        <div class="Grid">
+          <div class="CardContainer">
+            <p class="text-center">배당금</p>
             <div class="CardBox w-70">
               <canvas id="dvdndPieMyChart"></canvas>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <div class="tab-pane fade" id="dvdndBarMyChart-tab-pane" role="tabpanel" aria-labelledby="dvdndBarMyChart-tab" tabindex="0">
+
+
+    <section class="Main">
+      <div class="w-95 p-3">
+        <div class="Grid">
           <div class="CardContainer">
-            <div class="CardBox">
-              <canvas id="sharesBarMyChart"></canvas>
-            </div>
-          </div>
-          <div class="CardContainer">
-            <div class="CardBox">
+            <p class="text-center">배당금</p>
+            <div class="CardBox w-70">
               <canvas id="dvdndBarMyChart"></canvas>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+  </div>
+</div>
 
 
   <!-- 등록 -->

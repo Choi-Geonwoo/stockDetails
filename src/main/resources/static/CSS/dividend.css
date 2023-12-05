@@ -26,3 +26,10 @@ table{
     .td_disable{
       pointer-events : none;
     }
+
+
+    .image3{
+      width: 400px;
+      height: 250px;
+      object-fit: scale-down;
+    }
