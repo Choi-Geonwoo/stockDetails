@@ -123,7 +123,7 @@
       등록
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div >
+      <div th:if="${!#lists.isEmpty(dList)}">
         <span class="callout" th:text="${'합계: ' + #aggregates.sum(dList.![
           JANUARY
         + FEBRUARY
@@ -142,7 +142,7 @@
 
   
   <br>
-  <table class="table table-bordered">
+  <table class="table table-bordered" th:if="${!#lists.isEmpty(dList)}">
     <thead >
       <tr >        
       <!--년도--><th >년도</th>
@@ -198,7 +198,7 @@
   </table>
 
   <br>
-    <div class="w-75 p-3">
+    <div class="w-75 p-3" th:if="${!#lists.isEmpty(dList)}">
       <canvas id="bar_chart"></canvas>
     </div>
 

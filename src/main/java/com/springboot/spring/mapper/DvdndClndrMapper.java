@@ -1,7 +1,6 @@
 package com.springboot.spring.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,6 +9,6 @@ import com.springboot.spring.dto.TransactionDto;
 @Mapper
 public interface DvdndClndrMapper {
     
-    // ë°°ë‹¹ ì¼ìë³„ ê±°ë˜ë‚´ì—­
+    // ¹è´ç ÀÏÀÚº° °Å·¡³»¿ª
     public List<TransactionDto> transactionList();
 }

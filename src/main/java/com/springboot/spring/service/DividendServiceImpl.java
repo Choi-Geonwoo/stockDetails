@@ -113,13 +113,16 @@ public class DividendServiceImpl implements DividendService {
             tDto.setTrnscdate(rStr);
             tList = dividendMapper.dividendDtlsInqry(tDto);
             fDto = fileMapper.imgFileList(String.valueOf(tList.getNo()));
+System.out.println("한글입력");
             if(null != fDto){
-                //fDto.setReContents(fDto.getContents().toString());
-                String base64ToString = new String(fDto.getContents());
-                fDto.setReContents(base64ToString);
-                cDto.setFileDTO(fDto);
+                log.info("rStr " +fDto.toString());
+                 //fDto.setReContents(fDto.getContents().toString());
+                 //String base64ToString = new String(fDto.getContents());
+                 //fDto.setReContents(base64ToString);
+                 //cDto.setFileDTO(fDto);
 
-            }
+             }
+            log.debug("succ1 : " + tList.toString());
             cDto.setTransactionDto(tList);
         } catch (Exception e) {
             cDto = null;
@@ -135,6 +138,7 @@ public class DividendServiceImpl implements DividendService {
     
         try {
             log.info("========== transactionUpdate START ===========");
+            //log.info("FILE " + files);
     
             TransactionDto tDTO = createTransactionDto(map);
             cnt = dividendMapper.transactionUpdate(tDTO);
@@ -149,10 +153,11 @@ public class DividendServiceImpl implements DividendService {
                 }
             }
     
-            log.info("결과 : " + cnt);
+            log.info("succ : " + cnt);
             log.info("========== transactionUpdate END ===========");
         } catch (Exception e) {
             handleException("transactionUpdate",e);
+            cnt = -1;
         }
     
         return cnt;

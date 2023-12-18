@@ -4,8 +4,36 @@ server :
   
 spring :
   datasource :
-    url :   jdbc:oracle:thin:@localhost:1521/XE
+    url :   jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
+    #url :   jdbc:oracle:thin:@localhost:1521/XE
     #url : jdbc:log4jdbc:oracle:thin:@localhost:1521/XE
     username : 
     password : 
-    driver-class-name : oracle.jdbc.OracleDriver
+    #driver-class-name : oracle.jdbc.OracleDriver
+    driver-class-name : net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  thymeleaf:
+    prefix: classpath:templates/
+    check-template-location: true
+    suffix: .html
+    mode: HTML
+    cache: false # default true, 개발 시에는 false로 두는 것이 좋음
+
+#spring.datasource.driver-class-name=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#spring.datasource.hikari.jdbc-url=jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
+# Mapper Xml Location
+mybatis:  
+  configuration:    
+    multiple-result-sets-enabled: false    
+    map-underscore-to-camel-case: true    
+    call-setters-on-nulls: true        
+    jdbc-type-for-null: varchar    
+    default-fetch-size: 500  
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package : com.springboot.spring.mapper.*

@@ -16,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class DvdndClndrController {
-
     @Autowired
     public DvdndClndrService dvdndClndrService;
     
     @GetMapping("/clndr/dvdndClndr")
     public String detailsView(Model model){
-        model.addAttribute("title", "ë°°ë‹¹ ì¼ì •ê´€ë¦¬");
+    log.info("¹è´ç ÀÏÁ¤°ü¸®");
+    model.addAttribute("title", "¹è´ç ÀÏÁ¤°ü¸®");
         return "view/clndr/dvdndClndr";
     }
 

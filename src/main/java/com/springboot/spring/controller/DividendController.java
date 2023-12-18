@@ -9,15 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.spring.dto.CombinedDTO;
-import com.springboot.spring.dto.DividendDto;
-import com.springboot.spring.dto.TransactionDto;
 import com.springboot.spring.service.DividendService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class DividendController {
-    
+   
     @Autowired
     public DividendService dividendService;
 
@@ -42,6 +38,7 @@ public class DividendController {
         map.put("stockName", stockName);
         map.put("trnscdate", trnscdate);
         map.put("monthSelect", monthSelect);
+        log.info("배당내역");
 
         //tDto.setStockName(stockName); // 항목멱
         //tDto.setTrnscdate(trnscdate);     //거래내역

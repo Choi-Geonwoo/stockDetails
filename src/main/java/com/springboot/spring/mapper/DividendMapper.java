@@ -8,29 +8,29 @@ import org.apache.ibatis.annotations.Mapper;
 import com.springboot.spring.dto.DividendDto;
 import com.springboot.spring.dto.TransactionDto;
 
-// ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ê´€ë ¨ í•¨ìˆ˜
+// ¹è´ç °Å·¡³»¿ª °ü·Ã ÇÔ¼ö
 @Mapper
 public interface DividendMapper {
 
-    // ë°°ë‹¹ ê±°ë˜ë‚´ì—­
+    // ¹è´ç °Å·¡³»¿ª
     public List<Map> dividendList(TransactionDto tDto);
 
-    // ë°°ë‹¹ ê±°ë˜ ìƒì„¸ ë‚´ì—­
+    // ¹è´ç °Å·¡ »ó¼¼ ³»¿ª
     public TransactionDto dividendDtlsInqry(TransactionDto tDto); 
 
-    // ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä ¹è´ç °Å·¡³»¿ª µî·Ï
     public int  transactionInsert(TransactionDto tDTO);
     
-    // ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ìˆ˜ì •
+    // ÁÖ½Ä ¹è´ç °Å·¡³»¿ª ¼öÁ¤
     public int  transactionUpdate(TransactionDto tDTO);
     
-    // ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ì‚­ì œ
+    // ÁÖ½Ä ¹è´ç °Å·¡³»¿ª »èÁ¦
     public int  transactionDelete(String no);
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä °Å·¡³»¿ª µî·Ï
     public int  dividendInsert(DividendDto tDTO);
 
-    // ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ìˆœë²ˆ ì¡°íšŒ
+    // ÁÖ½Ä ¹è´ç °Å·¡³»¿ª ¼ø¹ø Á¶È¸
     public String tNoString(TransactionDto tDTO);
 
 }

@@ -4,28 +4,26 @@ import java.util.List;
 import java.util.Map;
 
 import com.springboot.spring.dto.CombinedDTO;
-import com.springboot.spring.dto.TransactionDto;
 import com.springboot.spring.vo.StockportfolioVO;
 
-/* ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ê´€ë ¨ í•¨ìˆ˜ */
+/* ¹è´ç °Å·¡³»¿ª °ü·Ã ÇÔ¼ö */
 public interface DividendService {
-    
-    //ë°°ë‹¹ ê±°ë˜ë‚´ì—­
+    //¹è´ç °Å·¡³»¿ª
     public List<Map>  dividendList(Map<String, Object> map);
     
-    // ë°°ë‹¹ ê±°ë˜ ìƒì„¸ ë‚´ì—­
+    // ¹è´ç °Å·¡ »ó¼¼ ³»¿ª
     public CombinedDTO dividendDtlsInqry(Map<String, Object> map); 
 
-    // ì£¼ì‹ëª… ì¡°íšŒ ì…€ë ‰íŠ¸ ë°•ìŠ¤ ì‚¬ìš©
+    // ÁÖ½Ä¸í Á¶È¸ ¼¿·ºÆ® ¹Ú½º »ç¿ë
     public List<StockportfolioVO>  selectBox();
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä °Å·¡³»¿ª µî·Ï
     public int  transactionInsert(Map<String, Object> map, String files);
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ìˆ˜ì •
+    // ÁÖ½Ä °Å·¡³»¿ª ¼öÁ¤
     public int  transactionUpdate(Map<String, Object> map, String files);
     
-    // ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ì‚­ì œ
+    // ÁÖ½Ä ¹è´ç °Å·¡³»¿ª »èÁ¦
     public int  transactionDelete(String no)  throws Exception;
     
 

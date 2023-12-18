@@ -8,19 +8,19 @@ import com.springboot.spring.vo.StockportfolioVO;
 
 public interface DetailsService {
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­
+    // ÁÖ½Ä °Å·¡³»¿ª
     public List<StockportfolioVO>  stockDetailsList(StockportfolioDto sDto);
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ìˆ˜ì •
+    // ÁÖ½Ä °Å·¡³»¿ª ¼öÁ¤
     public int  detailsUpdate(Map<String, Object> map);
     
-    // ì£¼ì‹ëª… ì¡°íšŒ ì…€ë ‰íŠ¸ ë°•ìŠ¤ ì‚¬ìš©
+    // ÁÖ½Ä¸í Á¶È¸ ¼¿·ºÆ® ¹Ú½º »ç¿ë
     public List<StockportfolioVO>  selectBox();
 
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä °Å·¡³»¿ª µî·Ï
     public int  detailsInsert(Map<String, Object> map);
 
-    // ì£¼ì‹ ê±°ë™ë‚´ì—­ ì‚­ì œ
+    // ÁÖ½Ä °Å·¢³»¿ª »èÁ¦
     public int detailsDelete(int registration_order);
 
 }

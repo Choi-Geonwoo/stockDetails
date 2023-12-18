@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface DvdndClndrService {
     
-    // ë°°ë‹¹ ì¼ìë³„ ê±°ë˜ë‚´ì—­
+    // ¹è´ç ÀÏÀÚº° °Å·¡³»¿ª
     public List<Map> transactionList();
 }

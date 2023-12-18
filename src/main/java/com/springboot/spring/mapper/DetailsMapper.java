@@ -10,20 +10,20 @@ import com.springboot.spring.vo.StockportfolioVO;
 @Mapper
 public interface DetailsMapper {
 
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­
+    // ÁÖ½Ä °Å·¡³»¿ª
     public List<StockportfolioVO>  stockDetailsList(StockportfolioDto sDto);
     
-    // ì£¼ì‹ ì¢…ëª© ì¡°íšŒ
+    // ÁÖ½Ä Á¾¸ñ Á¶È¸
     public List<StockportfolioVO>  selectBox(StockportfolioDto sDto);
 
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ìˆ˜ì •
+    // ÁÖ½Ä °Å·¡³»¿ª ¼öÁ¤
     public int  detailsUpdate(StockportfolioDto stockDTO);
 
     
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä °Å·¡³»¿ª µî·Ï
     public int  detailsInsert(StockportfolioDto stockDTO);
 
-    // ì£¼ì‹ ê±°ë™ë‚´ì—­ ì‚­ì œ
+    // ÁÖ½Ä °Å·¢³»¿ª »èÁ¦
     public int detailsDelete(int registration_order);
 }

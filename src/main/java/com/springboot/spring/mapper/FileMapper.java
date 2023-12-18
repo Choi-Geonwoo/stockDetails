@@ -7,12 +7,12 @@ import com.springboot.spring.dto.FileDTO;
 @Mapper
 public interface FileMapper {
     
-    // ì´ë¯¸ì§€ íŒŒì¼ ë“±ë¡
+    // ÀÌ¹ÌÁö ÆÄÀÏ µî·Ï
     public int  fileInsert(FileDTO stockDTO);
 
-    // ì´ë¯¸ì§€ íŒŒì¼ ìˆ˜ì •
+    // ÀÌ¹ÌÁö ÆÄÀÏ ¼öÁ¤
     public int  fileUpdate(FileDTO stockDTO);
 
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä °Å·¡³»¿ª µî·Ï
     public FileDTO  imgFileList(String tNo);
 }

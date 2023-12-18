@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.spring.dto.FileDTO;
 import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.mapper.DetailsMapper;
 import com.springboot.spring.vo.StockportfolioVO;
@@ -22,21 +21,21 @@ public class DetailServiceImpl implements DetailsService {
     private DetailsMapper detailsMapper;
     
 
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­
+    // ÁÖ½Ä °Å·¡³»¿ª
     @Override
     public List<StockportfolioVO> stockDetailsList(StockportfolioDto sDto) {
-        // ì „ì²´ í´ë¦­í•œ ê²½ìš° ê°’ null ì…‹íŒ…
+        // ÀüÃ¼ Å¬¸¯ÇÑ °æ¿ì °ª null ¼ÂÆÃ
         if("allStockName".equals(sDto.getStockName())){
             sDto.setStockName(null);
         }
-        // ì „ì²´ í´ë¦­í•œ ê²½ìš° ê°’ null ì…‹íŒ…
-        if("ì „ì²´".equals(sDto.getDividendCycle())){
+        // ÀüÃ¼ Å¬¸¯ÇÑ °æ¿ì °ª null ¼ÂÆÃ
+        if("ÀüÃ¼".equals(sDto.getDividendCycle())){
             sDto.setDividendCycle(null);
         }
        return detailsMapper.stockDetailsList(sDto);
     }
 
-    // ì£¼ì‹ ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä ³»¿ª µî·Ï
     @Override
     public int detailsInsert(Map<String, Object> map) {
         int cnt = -1;
@@ -47,17 +46,17 @@ public class DetailServiceImpl implements DetailsService {
             //String base64 = String.valueOf(map.get("contents"));
             //fileDTO.setContents(base64.getBytes());
             
-            //log.info("ì–´ë–¤ì‹ìœ¼ë¡œ ì˜¤ë‚˜");
+            //log.info("¾î¶²½ÄÀ¸·Î ¿À³ª");
             //log.info("toString : : : : " + stockDTO.toString());
             cnt = detailsMapper.detailsInsert(stockDTO);
         } catch (Exception e) {
-            log.error("ì˜¤ë¥˜ : " + e.toString());
+            log.error("¿À·ù : " + e.toString());
             cnt = -1;
         }
         return cnt;
     }
 
-    // ì£¼ì‹ ë‚´ì—­ ìˆ˜ì •
+    // ÁÖ½Ä ³»¿ª ¼öÁ¤
     @Override
     public int detailsUpdate(Map<String, Object> map) {
         int cnt = -1;
@@ -67,25 +66,25 @@ public class DetailServiceImpl implements DetailsService {
             StockportfolioDto stockDTO = oMapper.convertValue(map, StockportfolioDto.class);
             cnt = detailsMapper.detailsUpdate(stockDTO);
         } catch (Exception e) {
-            log.error("ì˜¤ë¥˜ " + e.toString());
+            log.error("¿À·ù " + e.toString());
             cnt = -1;
         }
         return cnt;
     }
 
-    // ì£¼ì‹ ê±°ë˜ë‚´ì—­ ì‚­ì œ
+    // ÁÖ½Ä °Å·¡³»¿ª »èÁ¦
     @Override
     public int detailsDelete(int registration_order) {
         int cnt = -1;
         try {
             cnt = detailsMapper.detailsDelete(registration_order);
         } catch (Exception e) {
-            log.error("ì˜¤ë¥˜ " + e.toString());
+            log.error("¿À·ù " + e.toString());
         }
         return cnt;
     }
 
-    // ì£¼ì‹ëª… ì¡°íšŒ ì…€ë ‰íŠ¸ ë°•ìŠ¤ ì‚¬ìš©
+    // ÁÖ½Ä¸í Á¶È¸ ¼¿·ºÆ® ¹Ú½º »ç¿ë
     @Override
     public List<StockportfolioVO> selectBox() {
         StockportfolioDto sDto = null;
