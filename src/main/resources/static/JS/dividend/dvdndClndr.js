@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     fetch("/transactionList.do",
         {
-            method : "get",
+            method : "post",
             headers : {
                 "Content-Type" : "application/json",
-            }
+            },
+            body : JSON.stringify({})
         })
         .then((response) => {
             return response.json(); 
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }); 
   });
 
+
   function calendarFun(responseData){
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -28,18 +30,45 @@ document.addEventListener('DOMContentLoaded', function() {
       selectMirror: true,
       locale: 'ko', // 한국어 설정
       events: responseData, 
-       dateClick: function(info) { 
-       //날짜 클릭 시 발생할 이벤트
-      alert(info.dateStr + " | " + info.event);
+      dateClick: function(info) { 
+        // 날짜 클릭 시 발생할 이벤트
+        alert(info.dateStr + " | " + info.event);
       },
       eventClick: function(info) {
-      // 일정 클릭 시 발생할 이벤트
-      alert(dateFormat(info.event.start) + " | " + info.event.title);
-      //showDialog(info.event.title,dateFormat(info.event.start));
+        // 일정 클릭 시 발생할 이벤트
+        alert(dateFormat(info.event.start) + " | " + info.event.title);
+        // showDialog(info.event.title,dateFormat(info.event.start));
+      },
+      datesSet: function(info) {
+        // 달력이 이동될 때 발생하는 이벤트
+        var currentMonth = info.view.currentStart;
+        console.log('현재 월:', dateFormat(currentMonth));
+        // 월 변경 후 작업 추가 가능
+        // 예: 데이터 다시 불러오기, API 호출 등
+
+        fetch("/transactionList.do",
+        {
+            method : "post",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({ YMD :dateFormat(currentMonth) })
+        })
+        .then(response => response.json())
+        .then(newData => {
+          // 새로운 데이터로 이벤트 업데이트
+          calendar.setOption('events', newData);
+          console.log('데이터가 업데이트되었습니다.');
+        })
+        .catch(error => {
+          console.error('데이터를 불러오는 중 에러가 발생했습니다:', error);
+      });
       }
     });
     calendar.render();
   }
+
+
 
 // 날짜 변환
 function dateFormat(date) {

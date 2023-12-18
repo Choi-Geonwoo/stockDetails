@@ -3,10 +3,14 @@
 
 <mapper namespace="com.springboot.spring.mapper.DvdndClndrMapper">
 
-<select id="transactionList" parameterType="com.springboot.spring.dto.TransactionDto">
+<select id="transactionList" resultType="com.springboot.spring.dto.TransactionDto" parameterType="Map">
     SELECT /* DvdndClndrMapper.transactionList */
         NO, to_char(TRNSCDATE, 'YYYY-MM-DD') as TRNSCDATE, STOCK_NAME, AMOUNT, RGSTDATE
     FROM TRANSACTION
+    WHERE  1=1
+        <if test='YMD != null and YMD != "" '>
+        AND TRNSCDATE BETWEEN  TRUNC(TO_DATE(#{YMD}, 'YYYY-MM-DD'), 'MM') AND LAST_DAY(TO_DATE(#{YMD}, 'YYYY-MM-DD'))
+        </if>
 </select>
 
 </mapper>

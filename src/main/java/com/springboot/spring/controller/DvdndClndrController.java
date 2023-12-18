@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.spring.service.DvdndClndrService;
@@ -21,14 +23,13 @@ public class DvdndClndrController {
     
     @GetMapping("/clndr/dvdndClndr")
     public String detailsView(Model model){
-    log.info("硅寸 老沥包府");
-    model.addAttribute("title", "硅寸 老沥包府");
+    model.addAttribute("title", "?? ????");
         return "view/clndr/dvdndClndr";
     }
 
-    @GetMapping("/transactionList.do")
+    @PostMapping("/transactionList.do")
     @ResponseBody
-    public List<Map> transactionList(Model model){
-        return dvdndClndrService.transactionList();
+    public List<Map> transactionList(Model model, @RequestBody Map<String, Object> map){
+        return dvdndClndrService.transactionList(map);
     }
 }

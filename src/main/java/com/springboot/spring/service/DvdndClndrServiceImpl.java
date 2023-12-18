@@ -20,8 +20,8 @@ public class DvdndClndrServiceImpl implements DvdndClndrService {
     @Autowired
     private DvdndClndrMapper dvdndClndrMapper;
     @Override
-    public List<Map> transactionList() {
-        List<TransactionDto> tList =  dvdndClndrMapper.transactionList();
+    public List<Map> transactionList(Map<String, Object> map) {
+        List<TransactionDto> tList =  dvdndClndrMapper.transactionList(map);
         List<Map> listAll = null;
         log.info("################################");
         listAll = new ArrayList<Map>();

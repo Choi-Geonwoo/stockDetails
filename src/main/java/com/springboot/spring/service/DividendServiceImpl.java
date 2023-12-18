@@ -113,16 +113,13 @@ public class DividendServiceImpl implements DividendService {
             tDto.setTrnscdate(rStr);
             tList = dividendMapper.dividendDtlsInqry(tDto);
             fDto = fileMapper.imgFileList(String.valueOf(tList.getNo()));
-System.out.println("한글입력");
             if(null != fDto){
-                log.info("rStr " +fDto.toString());
-                 //fDto.setReContents(fDto.getContents().toString());
-                 //String base64ToString = new String(fDto.getContents());
-                 //fDto.setReContents(base64ToString);
-                 //cDto.setFileDTO(fDto);
+                 fDto.setReContents(fDto.getContents().toString());
+                 String base64ToString = new String(fDto.getContents());
+                 fDto.setReContents(base64ToString);
+                 cDto.setFileDTO(fDto);
 
              }
-            log.debug("succ1 : " + tList.toString());
             cDto.setTransactionDto(tList);
         } catch (Exception e) {
             cDto = null;
