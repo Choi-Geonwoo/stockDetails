@@ -27,6 +27,7 @@ public class DetailsController {
 @GetMapping("/")
     public String detailsView(Model model){
         StockportfolioDto sDto = new StockportfolioDto();
+        log.info("주식내역");
         model.addAttribute("title", "주식내역");
         model.addAttribute("selectBox", detailsService.selectBox()); 
         model.addAttribute("sList", detailsService.stockDetailsList(sDto));
@@ -75,5 +76,6 @@ public class DetailsController {
         //log.info("registration_order : : : : : : " + registration_order);
         return String.valueOf(detailsService.detailsDelete(registration_order));
     }   
+
 
 }
