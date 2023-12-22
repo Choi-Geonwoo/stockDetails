@@ -46,9 +46,6 @@
     //document.getElementById("col-sm-12").style.display ='none';	
       // 파일 입력 필드를 찾습니다.
       var fileInput2 = document.getElementById("image1");
-      // 입력 필드의 값을 초기화합니다.
-      //fileInput1.value = "";// 입력 필드의 값을 초기화합니다.
-      fileInput1.src = "";// 입력 필드의 값을 초기화합니다.
   }
  
   function readURL(input, img) {
@@ -58,6 +55,7 @@
       document.getElementById(img).src = e.target.result;
     };
     reader.readAsDataURL(input.files[0]);
+    document.getElementById(img).style.display = '';
     //document.getElementById("col-sm-11").style.display ='block';	
   } else {
     //document.getElementById('image1').src = "";
@@ -239,13 +237,13 @@
             
             <div class="mb-3 row">
               <div class="col-sm-11">
-                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" onchange="readURL(this, 'image2');" ><!--onchange="toBase64(event);"-->
+                <input type="file" class="form-control" id="inputFile" name="inputFile"  accept="image/*" onchange="readURL(this, 'image2');"  ><!--onchange="toBase64(event);"-->
               </div>
             </div>
             
             <div class="mb-3 row">
               <div class="col-sm-11" id="col-sm-11">
-                <img id="image2" class="card-img-bottom image3" src="" alt="이미지">
+                <img id="image2" class="card-img-bottom image3" src="" alt="이미지" style="display: none;">
               </div>
             </div>
       </div>
@@ -319,7 +317,7 @@
                       
                       <div class="mb-3 row">
                         <div class="col-sm-11" id="col-sm-12">
-                          <img id="image1" class="card-img-bottom image3" src="" alt="이미지">
+                          <img id="image1" class="card-img-bottom image3" src="" alt="이미지" style="display: none;">
                         </div>
                       </div>
                 </div>

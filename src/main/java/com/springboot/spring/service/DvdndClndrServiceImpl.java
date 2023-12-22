@@ -30,7 +30,8 @@ public class DvdndClndrServiceImpl implements DvdndClndrService {
             
             hash.put("title", string.getStockName());
             hash.put("start", string.getTrnscdate());
-            log.info("hash " + hash.toString());
+            hash.put("amount", string.getAmount());
+            
             listAll.add(hash);
         }   
         log.info("list " + listAll.toString());

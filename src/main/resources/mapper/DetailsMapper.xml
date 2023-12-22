@@ -42,7 +42,7 @@
                 FROM
                         STOCKPORTFOLIO
                 where 1=1
-                        order by NO DESC,STOCK_NAME, RGSTDATE desc
+                        order by STOCK_NAME, RGSTDATE desc
 </select>
 
 <update id="detailsUpdate" parameterType="com.springboot.spring.dto.StockportfolioDto" >

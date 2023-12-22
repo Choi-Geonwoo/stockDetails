@@ -23,7 +23,7 @@ public class DvdndClndrController {
     
     @GetMapping("/clndr/dvdndClndr")
     public String detailsView(Model model){
-    model.addAttribute("title", "?? ????");
+    model.addAttribute("title", "배당 일정관리");
         return "view/clndr/dvdndClndr";
     }
 

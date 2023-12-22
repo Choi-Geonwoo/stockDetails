@@ -69,6 +69,10 @@ function createBarChart(dataArray, months) {
     const inputTrnscdate = document.querySelector('input[type="date"]');
        
     const imageFileInput = document.getElementById('inputFile');
+    if(isEmpty(inputAmount)){
+      alert("거래금액 입력해주세요.");
+      return;
+  }
     var fileName;
     var stockName = (selectBox.options[selectBox.selectedIndex].value);
     if(!isEmpty(imageFileInput.files[0])){

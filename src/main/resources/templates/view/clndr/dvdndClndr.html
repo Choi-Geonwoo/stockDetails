@@ -8,12 +8,14 @@
 
     </style>
   <link rel="stylesheet" type="text/css" th:href="@{/CSS/dvdndClndr.css}">
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+  <!--부트스트랩-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
   <script type="text/javascript" th:src="@{/JS/dividend/dvdndClndr.js}"></script>
-  <script>
-  
-  </script>
-  <title>배당 일정관리</title>
+  <!-- 부트 스트랩 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <title>배당수신일정</title>
 </head>
 <body>
   
@@ -23,14 +25,32 @@
     <div>
       <a href="/">홈</a>
       <a href="/dividend/dividendList">배당화면</a>
-      <a href="/clndr/dvdndClndr">일정관리</a>
+      <a href="/clndr/dvdndClndr">배당일정관리</a>
     </div>
     <br><br><br>
 
       
-      <div class="CardBox " style="width: 800px; height: 800px;">
-        <div id='calendar' ></div>
+      <div class="row gx-3 gy-2 align-items-center" id="container">
+          <div class="CardBox " style="width: 700px; height: 600px; float: left;">
+            <div id='calendar' ></div>
+          </div>
+
+          <div class="CardBox " style="width: 450px; height: 580px; float: left; padding-top: 57px;">
+            <table class="table table-bordered" >
+              <thead>
+                <tr>
+                  <th>종목</th>
+                  <th>날짜</th>
+                  <th>금액</th>
+                </tr>
+              </thead>
+              <tbody id="tbody_00">
+
+              </tbody>
+            </table>
+          </div>
       </div>
-    </div>
+
+  </div>
 </body>
 </html>

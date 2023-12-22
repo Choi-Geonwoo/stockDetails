@@ -11,6 +11,7 @@
         <if test='YMD != null and YMD != "" '>
         AND TRNSCDATE BETWEEN  TRUNC(TO_DATE(#{YMD}, 'YYYY-MM-DD'), 'MM') AND LAST_DAY(TO_DATE(#{YMD}, 'YYYY-MM-DD'))
         </if>
+    order by 2
 </select>
 
 </mapper>

@@ -302,7 +302,26 @@ function newDetailsInsert2(){
     const inputPurchasePrice = document.getElementById('inputPurchasePrice').value;
     const inputDividendAmount = document.getElementById('inputDividendAmount').value;
     //alert(inputStockQuantity);
-
+    if(isEmpty(inputStockName)){
+        alert("주식명 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputStockQuantity)){
+        alert("주식수 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputDividendCycle)){
+        alert("배당주기 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputPurchasePrice)){
+        alert("매입금 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputDividendAmount)){
+        alert("배당금 입력해주세요.");
+        return;
+    }
     fetch("/detailsInsert.do",
         {
             method : "post",
