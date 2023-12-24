@@ -15,20 +15,22 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script type="text/javascript" th:src="@{/JS/details/details.js}"></script>
+  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
   <!-- 부트 스트랩 -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+  <!-- 엑셀 다운로드 용 SheetJS 라이브러리 추가 -->
+  <!-- Sheet JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+  <!-- FileSaver 사용 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
   <script th:inline="javascript">
-
     window.onload = function(){
-        const data = /*[[${sList}]]*/;
-        //  차트
-        myChart(data);
-
-
-}
-
-
+            const data = /*[[${sList}]]*/;
+            //  차트
+            myChart(data);
+    }
   </script>
 </head>
 <body>
@@ -42,60 +44,62 @@
         <a href="/clndr/dvdndClndr">일정관리</a>
     </div>
     <br><br><br>  
-    <div class="table-responsive height_scroll">
         <table id="myTable" class="table table-bordered w-100">
+          <form if="myForm" th:action="@{/details/details}" method="get">
+            <tr>
+                <th class="w-10" style="display: none;">순번</th>
+                <th class="w-10" colspan="19">
+                  
+                  <div class="input-group">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">주식</span>
+                    <select class="form-select w-20" aria-label="Default select example" id="selectBox" name="stockName">
+                      <option  th:value="allStockName" th:text="전체"></option>
+                      <th:block th:each="selectBox : ${selectBox}">
+                        <option name="stockName" th:value="${selectBox.stockName}"
+                        th:text="${selectBox.stockName}" th:selected="${selectBox.stockName} == ${reStockName}"></option>
+                      </th:block>
+                    </select>
+                    <input type="submit" class="btn btn-outline-secondary" onclick="stockSrch();" value="검색">
+
+                    &nbsp;&nbsp;&nbsp;  
+                    <span class="input-group-text" id="inputGroup-sizing-sm2">주기</span>
+                  <input class="form-control" list="datalistOptions" id="exampleDataList1" name="dividendCycle" th:value="${reDividendCycle}">
+                  <datalist id="datalistOptions">
+                    <option value="전체">
+                    <option value="01,04,07,10">
+                    <option value="02,05,08,11">
+                    <option value="03,06,09,12">
+                    <option value="04,07,10,12">
+                    <option value="월">
+                  </datalist>
+                  &nbsp;&nbsp;&nbsp;
+                  <button class="btn btn-outline-secondary">검색</button>
+                  &nbsp;&nbsp;&nbsp;                    
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    등록
+                  </button>  
+                  &nbsp;&nbsp;&nbsp;&nbsp;        
+                  <button type="button" class="btn btn-outline-success" onclick="exportExcel('거래내역_', 'myTable2');"><!--id="excelDownload"-->
+                    엑셀 다운로드
+                  </button>  
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" onClick="displayCheck(this)">
+                    <label class="form-check-label" for="inlineCheckbox1">숨기기</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" onClick="visibleCheck(this)">
+                    <label class="form-check-label" for="inlineCheckbox2">감추기</label>
+                  </div>
+                  &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;  
+                  </div>
+                </th>
+            </tr>
+            </form>
+        </table>
+        <div class="table-responsive height_scroll">
+        <table id="myTable2" class="table table-bordered w-100">
             <thead>
-              <form if="myForm" th:action="@{/details/details}" method="get">
-              <tr>
-                  <th class="w-10" style="display: none;">순번</th>
-                  <th class="w-10" colspan="2">
-                    
-                    <div class="input-group">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">주식</span>
-                      <select class="form-select w-20" aria-label="Default select example" id="selectBox" name="stockName">
-                        <option  th:value="allStockName" th:text="전체"></option>
-                        <th:block th:each="selectBox : ${selectBox}">
-                          <option name="stockName" th:value="${selectBox.stockName}"
-                          th:text="${selectBox.stockName}" th:selected="${selectBox.stockName} == ${reStockName}"></option>
-                        </th:block>
-                      </select>
-                      <input type="submit" class="btn btn-outline-secondary" onclick="stockSrch();" value="검색">
-                    </div>
-                  </th>
-                  <th class="w-10" colspan="2">
-                    <div class="input-group">
-                    주기&nbsp;&nbsp;&nbsp;
-                    <input class="form-control" list="datalistOptions" id="exampleDataList1" name="dividendCycle" th:value="${reDividendCycle}">
-                    <datalist id="datalistOptions">
-                      <option value="전체">
-                      <option value="01,04,07,10">
-                      <option value="02,05,08,11">
-                      <option value="03,06,09,12">
-                      <option value="04,07,10,12">
-                      <option value="월">
-                    </datalist>
-                    &nbsp;&nbsp;&nbsp;
-                    <button class="btn btn-outline-secondary">검색</button>
-                    </div>
-                  </th>
-                  <th>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                      등록
-                    </button>  
-                  </th>
-                  <th class="w-10" colspan="14">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" onClick="displayCheck(this)">
-                      <label class="form-check-label" for="inlineCheckbox1">숨기기</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" onClick="visibleCheck(this)">
-                      <label class="form-check-label" for="inlineCheckbox2">감추기</label>
-                    </div>
-                    
-                  </th>
-              </tr>
-              </form>
                 <tr>
                     <th class="w-10" style="display: none;">순번</th>
                     <th class="w-10" >주식명</th>
@@ -119,9 +123,9 @@
                     <th class="w-10">12월</th>
                 </tr>
             </thead>
-            <tbody th:if="${!#lists.isEmpty(sList)}">
+            <tbody th:if="${!#lists.isEmpty(sList)}" id="data-table" >
             <tr th:each="slist : ${sList}">
-                    <td style="display: none;"><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
+                    <td style="display: none;" ><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
                     <td ><input  class="form-control-plaintext td_disable" type="text" th:value="${slist.stockName}" readonly></td><!--주식명-->
                     <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.stockQuantity}"></td><!--주식수-->
                     <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendCycle}"></td><!--배당 주기-->
@@ -136,44 +140,45 @@
                         <button class="btn btn-outline-secondary" onclick="detailsUpdate(this)">수정</button>
                         &nbsp;&nbsp;/&nbsp;&nbsp;
                         <button class="btn btn-outline-danger" onclick="detailsDelete(this);">삭제</button>
+                        <input type="hidden">
                       </div>
                     </td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
-                    <td class="border"
-                    th:classappend="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"
-                    ></td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                    <input type="hidden" th:value="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                    <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border"  th:classappend="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
+                    <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                    </td>
                 </tr>
 
                 
