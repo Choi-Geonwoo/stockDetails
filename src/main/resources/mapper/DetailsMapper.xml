@@ -25,7 +25,7 @@
                         or DIVIDEND_CYCLE = '월'
                         )
                 </if>
-                        order by NO DESC, RGSTDATE desc
+                        order by DIVIDEND_CYCLE
 </select>
 
 <!-- 주식 종목 내역-->
@@ -42,7 +42,7 @@
                 FROM
                         STOCKPORTFOLIO
                 where 1=1
-                        order by STOCK_NAME, RGSTDATE desc
+                        order by STOCK_NAME desc
 </select>
 
 <update id="detailsUpdate" parameterType="com.springboot.spring.dto.StockportfolioDto" >

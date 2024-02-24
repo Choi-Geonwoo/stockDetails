@@ -15,6 +15,10 @@ public interface DividendMapper {
     // 배당 거래내역
     public List<Map> dividendList(TransactionDto tDto);
 
+    // 주별 배당 거래내역
+    public List<Map> byWeekDividendList(Map<String, Object> map);
+
+
     // 배당 거래 상세 내역
     public TransactionDto dividendDtlsInqry(TransactionDto tDto); 
 

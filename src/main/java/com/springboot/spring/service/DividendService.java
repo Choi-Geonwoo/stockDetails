@@ -11,6 +11,9 @@ public interface DividendService {
     //배당 거래내역
     public List<Map>  dividendList(Map<String, Object> map);
     
+    //주별 배당 거래내역
+    public List<Map>  byWeekDividendList(Map<String, Object> map);
+    
     // 배당 거래 상세 내역
     public CombinedDTO dividendDtlsInqry(Map<String, Object> map); 
 

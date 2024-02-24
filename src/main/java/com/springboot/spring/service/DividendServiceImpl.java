@@ -66,7 +66,7 @@ public class DividendServiceImpl implements DividendService {
         return detailsMaper.selectBox(sDto);
     }
 
-    // 배당 거래 내역 등록
+ // 배당 거래 내역 등록
     @Override
     public int transactionInsert(Map<String, Object> map, String files) {
         int cnt = -1;
@@ -78,17 +78,18 @@ public class DividendServiceImpl implements DividendService {
             tDTO.setStockName(String.valueOf(map.get("stockName")));
             tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
             tDTO.setAmount(String.valueOf(map.get("amount")));
+            tDTO.setDividend(String.valueOf(map.get("dividend")));
             tNo = dividendMapper.tNoString(tDTO);
             //tNo ="999";
             tDTO.setNo(Integer.valueOf(tNo));
             fDto.setTNo(tNo);
             fDto.setFName(String.valueOf(map.get("fName")));
-            // 배당 거래 등록
+            // ë°°ëš ęą°ë ?ąëĄ?
             cnt = dividendMapper.transactionInsert(tDTO);
             if(!IsNullCheck.isNull(files)){
-                log.info("1. 요청 값 : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
+                log.info("1. ?ě˛? ę°? : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
                 fDto.setContents(files.getBytes());
-                // 이미지 파일 등록
+                // ?´ëŻ¸ě?? ??ź ?ąëĄ?
                 fileMapper.fileInsert(fDto);
             }
             log.info("========== transactionInsert END ===========");
@@ -136,12 +137,21 @@ public class DividendServiceImpl implements DividendService {
         try {
             log.info("========== transactionUpdate START ===========");
             //log.info("FILE " + files);
-    
-            TransactionDto tDTO = createTransactionDto(map);
+            //log.info("mapmapmapmapmapmap " + map.toString());
+            TransactionDto tDTO = new TransactionDto();
+            tDTO.setStockName(String.valueOf(map.get("stockName")));
+            tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
+            tDTO.setAmount(String.valueOf(map.get("amount")));
+            tDTO.setDividend(String.valueOf(map.get("dividend")));
+            tDTO.setNo(Integer.valueOf(String.valueOf(map.get("no"))));
             cnt = dividendMapper.transactionUpdate(tDTO);
     
             if (!IsNullCheck.isNull(files)) {
-                FileDTO fDTO = createFileDTO(map, files);
+                FileDTO fDTO = new FileDTO();
+                fDTO.setFNo(String.valueOf(map.get("fNo")));
+                fDTO.setFName(String.valueOf(map.get("fName")));
+                fDTO.setContents(files.getBytes());
+                fDTO.setTNo(String.valueOf(map.get("no")));
     
                 if (IsNullCheck.isNull(fDTO.getFNo())) {
                     cnt += fileMapper.fileInsert(fDTO);
@@ -159,59 +169,11 @@ public class DividendServiceImpl implements DividendService {
     
         return cnt;
     }
-/*
-@Override
-    public int transactionUpdate(Map<String, Object> map, String files) {
-        int cnt = -1;
-        try {
-            log.info(" =========== transactionUpdate START =========== ");
-           
-            TransactionDto tDTO = new TransactionDto();
-            FileDTO fDto = new FileDTO();
-            String tNo = String.valueOf(map.get("no"));
-            tDTO.setStockName(String.valueOf(map.get("stockName")));
-            tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
-            tDTO.setAmount(String.valueOf(map.get("amount")));
-            tDTO.setNo(Integer.valueOf(tNo));
-            tDTO.setNo(Integer.valueOf(tNo));
-            // 배당 거래내역 업데이트
-            cnt = dividendMapper.transactionUpdate(tDTO);
-            
-            if(!IsNullCheck.isNull(files)){
-            fDto.setFNo(String.valueOf(map.get("fNo")));
-            fDto.setFName(String.valueOf(map.get("fName")));
-            fDto.setContents(files.getBytes());
-            fDto.setTNo(tNo);                
-            
-                if(IsNullCheck.isNull(fDto.getFNo())){
-                    // 이미지 파일 등록
-                    cnt += fileMapper.fileInsert(fDto);
-                }else{
-                    // 이미지 파일 수정
-                    cnt += fileMapper.fileUpdate(fDto);
-                }
-            }
-            
-            
-            log.info("결과 : " + cnt);
-            log.info(" =========== transactionUpdate EDN =========== ");
-        } catch (Exception e) {
-            cnt = -1;
-            log.error(" === ERROR START === ");
-            log.error(e.toString());
-            log.error(" === ERROR EDN === ");
-        }
-
-        return cnt;
-    }
- */
-
 
     @Override
     public int transactionDelete(String no) throws Exception {
         int cnt = -1;
-        try {
-            
+        try {            
             cnt = dividendMapper.transactionDelete(no);
         } catch (Exception e) {
             log.error("============== transactionDelete ERROR START =====================");
@@ -221,25 +183,11 @@ public class DividendServiceImpl implements DividendService {
         }
         return cnt;
     }
-    
 
-
-    private TransactionDto createTransactionDto(Map<String, Object> map) {
-            TransactionDto tDTO = new TransactionDto();
-            tDTO.setStockName(String.valueOf(map.get("stockName")));
-            tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
-            tDTO.setAmount(String.valueOf(map.get("amount")));
-            tDTO.setNo(Integer.valueOf(String.valueOf(map.get("no"))));
-        return tDTO;
-    }
-
-    private FileDTO createFileDTO(Map<String, Object> map, String files) {
-            FileDTO fDTO = new FileDTO();
-            fDTO.setFNo(String.valueOf(map.get("fNo")));
-            fDTO.setFName(String.valueOf(map.get("fName")));
-            fDTO.setContents(files.getBytes());
-            fDTO.setTNo(String.valueOf(map.get("no")));
-        return fDTO;
+    // 주별 배당 내역 조회
+    @Override
+    public List<Map> byWeekDividendList(Map<String, Object> map) { 
+        return dividendMapper.byWeekDividendList(map);
     }
 
     private void handleException(String str,Exception e) {
@@ -247,4 +195,7 @@ public class DividendServiceImpl implements DividendService {
         log.error(e.toString());
         log.error(" === "+str+" ERROR END === ");
     }
+
+
+
 }

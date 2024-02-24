@@ -40,7 +40,8 @@
     <br><br><br>
     <div>
         <a href="/">홈</a>
-        <a href="/dividend/dividendList">배당화면</a>
+        <a href="/dividend/dividendList">배당화면(전체)</a>
+        <a href="/dividend/byWeekDividendList">배당화면(주별)</a>
         <a href="/clndr/dvdndClndr">일정관리</a>
     </div>
     <br><br><br>  
@@ -137,9 +138,9 @@
                     <!-- th:text="${#temporals.format(item.createDt, 'yyyy-MM-dd HH:mm:ss')}" -->
                     <td name="paragraph">
                       <div class="btn-group" role="group" aria-label="Basic example">
-                        <button class="btn btn-outline-secondary" onclick="detailsUpdate(this)">수정</button>
+                        <button class="btn btn-outline-secondary" onclick="detailsUpdate(this)">수</button>
                         &nbsp;&nbsp;/&nbsp;&nbsp;
-                        <button class="btn btn-outline-danger" onclick="detailsDelete(this);">삭제</button>
+                        <button class="btn btn-outline-danger" onclick="detailsDelete(this);">삭</button>
                         <input type="hidden">
                       </div>
                     </td>
@@ -177,7 +178,7 @@
                       <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
                     </td>
                     <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                      <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
                     </td>
                 </tr>
 

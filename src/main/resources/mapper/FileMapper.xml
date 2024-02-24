@@ -12,7 +12,7 @@
             CONTENTS
             )
         VALUES(
-            (select nvl(max(f_no)+1, 1) from TB_FILE), 
+            (select NVL(MAX(TO_NUMBER(F_NO))+1, 1) from TB_FILE), 
             #{fName}, 
             #{tNo}, 
             #{contents}

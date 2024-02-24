@@ -32,4 +32,6 @@ public class DvdndClndrController {
     public List<Map> transactionList(Model model, @RequestBody Map<String, Object> map){
         return dvdndClndrService.transactionList(map);
     }
+
+    
 }

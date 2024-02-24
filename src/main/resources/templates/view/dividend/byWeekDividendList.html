@@ -1,0 +1,170 @@
+﻿<!--resources/templates/thymeleafEx.html-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배당 거래내역</title>
+  
+  <!--부트스트랩-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+  <!-- 부트 스트랩 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <style>
+    /* 입력 필드를 더 스타일링하기 위한 CSS */
+    .week-picker {
+      display: flex;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    label {
+      margin-right: 10px;
+    }
+    input[type="week"] {
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    input[type="week"]:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+    ._date {
+    /* Apply your desired styles */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  </style>
+  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
+
+  <script th:inline="javascript">
+
+  window.onload = function(){
+    getTotal();
+  }
+  
+  function getTotal(){
+    const table = document.querySelector('#table01');
+    let total  = 0;
+    for(let i = 0; i < table.rows.length; i++)  {
+      if(!isEmpty(table.rows[i].cells[4].innerHTML.replace(/,/g, ""))){
+        total += parseFloat(table.rows[i].cells[4].innerHTML.replace(/,/g, ""))
+      }
+    }
+    document.querySelector('#sumTotal').innerHTML = total.toLocaleString();
+    
+  }
+  </script>
+</head>
+<body>
+  
+    <label th:text="${title}"></label> 
+    
+    <br><br>
+  <div>
+      <a href="/">홈</a>
+      <a href="/dividend/dividendList">배당화면(전체)</a>
+      <a href="/dividend/byWeekDividendList">배당화면(주별)</a>
+      <a href="/clndr/dvdndClndr">일정관리</a>
+      <br>
+  </div>
+
+<div class="w-85 p-3 container">
+  
+  <form th:action="@{/dividend/byWeekDividendList}" method="get">
+      <label for="weekInput">배당 기준일 :</label>
+      <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${startYmd}">
+      ~
+      <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${endYmd}">
+      <button type="submit" class="btn btn-secondary">검색</button>
+  </form>
+  <br>
+
+  <table class="table" th:if="${!#lists.isEmpty(byWeekList)}" >
+    <thead style="background-color:#FFCA9B">
+      <tr >        
+        <th scope="col" class="p-3">순번</th>
+        <th scope="col" class="p-3">배당일</th>
+        <th scope="col" class="p-3">주식명</th>
+        <th scope="col" class="p-3">배당금</th>
+        <th scope="col" class="p-3">금액</th>
+        <th scope="col" class="w-25 p-3">등록일</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider" id="table01">
+      <tr  th:each="byWeekList : ${byWeekList}">    
+            <!----><td th:text="${byWeekList.NO_}"></td>
+            <!----><td th:text="${byWeekList.TRNSCDATE}"></td>
+            <!----><td th:text="${byWeekList.STOCK_NAME}"></td>                  
+            <!----><td th:text="${byWeekList.DIVIDEND}"></td>
+            <!----><td th:text="${byWeekList.AMOUNT}"></td>
+            <!----><td th:text="${byWeekList.RGSTDATE}"></td>
+      </tr>
+    <!-- 기존 데이터가 10개 미만인 경우에만 더미 데이터 생성 -->
+    <th:block th:if="${byWeekList.size() &lt; 10}">
+        <th:block th:each="dummyRow : ${#numbers.sequence(byWeekList.size() + 1, 10)}" th:remove="tag">
+            <tr>
+                <td th:text="${dummyRow}"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </th:block>
+    </th:block>
+    </tbody>
+    <tfoot>
+      <!----><td></td>
+      <!----><td>합계 : </td>
+      <!----><td></td>                  
+      <!----><td></td>
+      <!----><td><span id="sumTotal"></span></td>
+      <!----><td></td>
+    </tfoot>
+  </table>
+</div>
+
+        <!-- 페이징 처리 -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <!-- 맨 처음 페이지로 이동하는 버튼 -->
+              <li class="page-item">
+                <span th:if="${pageVo.startPage > 1}">
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=1'}" th:text="'처음'"></a>
+                </span>
+              </li>
+              <!-- 이전 블록으로 이동하는 버튼 -->
+              <li class="page-item">
+                <span th:if="${pageVo.isPrev == true}">
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.startPage - 1}}" th:text="'이전'"></a>
+                </span>
+              </li>
+              <!-- 시퀀스 보여주는 값을 변경. -->
+              <li class="page-item" th:each="pageNum : ${#numbers.sequence(pageVo.startPage, pageVo.endPage)}">
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageNum}}" th:text="|&emsp;${pageNum}&emsp;|"></a>
+              </li>
+              <li class="page-item">
+              <!-- 다음 블록으로 이동하는 버튼 -->
+              <span th:if="${pageVo.isNext == true}">
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.endPage + 1}}" th:text="'다음'"></a>
+              </span>
+              </li>
+              <!-- 맨 뒷 페이지로 이동하는 버튼 -->
+              <li class="page-item">
+                <span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.totalPageCount}}" th:text="|&emsp;끝|"></a>
+                </span>
+              </li>
+            </ul>
+          </nav>
+</body>
+</html>

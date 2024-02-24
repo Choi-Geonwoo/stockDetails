@@ -66,7 +66,9 @@ function createBarChart(dataArray, months) {
     var imageInput = document.getElementById('inputFile');
     var selectedFile = imageInput.files[0];
     const inputAmount = document.getElementById('inputAmount').value;
+    const inputDiviend = document.getElementById('inputDiviend').value;
     const inputTrnscdate = document.querySelector('input[type="date"]');
+    //inputDiviend
        
     const imageFileInput = document.getElementById('inputFile');
     if(isEmpty(inputAmount)){
@@ -79,12 +81,12 @@ function createBarChart(dataArray, months) {
       fileName = imageFileInput.files[0].name;
     }
     let data = {
-                stockName : stockName, // 주식명
+                stockName : stockName,  // 주식명
                 trnscdate : inputTrnscdate.value, //거래일자
-                amount : inputAmount, // 거래 금액
-                fName : fileName // 파일명
+                amount : inputAmount,   // 거래 금액
+                fName : fileName,       // 파일명
+                dividend : inputDiviend  // 배당금
     }
-
       // 이미지 수정하는 경우
   if(!isEmpty(imageFileInput.files[0])){
     imgFile(selectedFile, data, "/dividendInsert.do");
@@ -93,7 +95,7 @@ function createBarChart(dataArray, months) {
     dataTransfer(data, "/dividendInsert.do");
   }
   
-  
+    
 }
 
 
@@ -103,6 +105,7 @@ function fetchCall(event, exampleModal){
             var button = event.relatedTarget;
             var modalTitle = exampleModal.querySelector('.modal-title');
             var modalBodyStockNameInput = exampleModal.querySelector('.modal-body-stockName input');
+            var modalDiviend = exampleModal.querySelector('.modal-body-Diviend input');
             var modalBodyAmountInput = exampleModal.querySelector('.modal-body-Amount input');
             var modalBodyNoInput = exampleModal.querySelector('.modal-body-no input');
             var modalBodyFNoInput = exampleModal.querySelector('.modal-body-fno input');
@@ -162,6 +165,7 @@ function fetchCall(event, exampleModal){
            //modalBodyStockNameInput.value = parsedData.transactionDto.stockName; // 배당 거래내역 주식명
            modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
            modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
+           modalDiviend.value = parsedData.transactionDto.dividend; // 배당금
            //debugger;
            // // 입력 요소에 날짜 설정
            updateTrnscdate.value = parsedData.transactionDto.trnscdate;
@@ -186,6 +190,7 @@ function fetchCall(event, exampleModal){
         .catch(error => {
           console.error(error);
           alert("오류가 발생했습니다.");
+          return;
         });
 }
 
@@ -198,6 +203,7 @@ function transactionUpdate(){
   let updatestockName = document.getElementById('updatestockName').value;
   let updateTrnscdate = document.getElementById('updateTrnscdate').value;
   let updateAmount = document.getElementById('updateAmount').value;
+  let updateDiviend = document.getElementById('updateDiviend').value;
 
   var fileName;
   const updateFile = document.getElementById('updateFile');
@@ -206,12 +212,13 @@ function transactionUpdate(){
     fileName = updateFile.files[0].name;
   }
   let data = {
-              no : updateTno, //배당 거래내역 순번
+              no : updateTno,           //배당 거래내역 순번
               stockName : updatestockName, // 주식명
               trnscdate : updateTrnscdate, //거래일자
-              amount : updateAmount, // 거래 금액
-              fName : fileName, // 파일명
-              fNo : updateFno   // 파일 순번
+              amount : updateAmount,    // 거래 금액
+              fName : fileName,         // 파일명
+              fNo : updateFno,          // 파일 순번
+              dividend : updateDiviend   // 배당금
   }
   // 이미지 수정하는 경우
   if(!isEmpty(updateFile.files[0])){

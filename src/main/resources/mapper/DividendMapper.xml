@@ -47,18 +47,74 @@
                 ORDER BY TRNSCDATE, STOCK_NAME
 </select>
 
+<!-- 주별 배당 내역-->
+<select id = "byWeekDividendList"  resultType="Map" parameterType="Map" >
+<!--
+         
+                    SELECT /* DividendMapper.byWeekDividendList */
+                        ROWNUM AS NO,
+                        to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+                        STOCK_NAME,
+                        AMOUNT,
+                        RGSTDATE,
+                        DIVIDEND
+                    FROM TRANSACTION
+                where 1=1
+                <if test='(startYmd != null and startYmd != "" ) and (endYmd != null and endYmd != "" )'>
+                    and TRNSCDATE BETWEEN #{startYmd} and #{endYmd}
+                </if>
+    -->   
+            SELECT
+                *
+            FROM
+                (
+                SELECT
+                    *
+                FROM
+                    (
+                    SELECT
+                        /* DividendMapper.byWeekDividendList */
+                        ROW_NUMBER() OVER (
+                        ORDER BY TRNSCDATE,
+                        STOCK_NAME) AS NO_,
+                        ROW_NUMBER() OVER (
+                        ORDER BY TRNSCDATE,
+                        STOCK_NAME) AS currentPage,
+                        to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+                        STOCK_NAME,
+                        AMOUNT,
+                        RGSTDATE,
+                        DIVIDEND,
+                        COUNT(*) OVER() AS totalPages
+                    FROM
+                        TRANSACTION
+                    WHERE
+                        1 = 1
+                        <if test='(startYmd != null and startYmd != "" ) and (endYmd != null and endYmd != "" )'>
+                        AND TRNSCDATE BETWEEN #{startYmd} AND #{endYmd}
+                        </if>
+                        )
+                WHERE
+                    NO_  <![CDATA[ <=  ]]>  (#{page} * #{rowCount})
+                                    )
+                WHERE (((#{page}-1) * #{rowCount}) + 1) <![CDATA[  <=	]]>   NO_
+
+</select>
+
 <insert id="transactionInsert" parameterType="com.springboot.spring.dto.TransactionDto" >
         INSERT  INTO transaction /* com.springboot.spring.mapper.DividendMapper.transactionInsert 배당 거래일자 등록*/
         (   NO,
             TRNSCDATE,
             STOCK_NAME,
-            AMOUNT
+            AMOUNT,
+            DIVIDEND
         )
         VALUES(
             #{no},
             #{trnscdate},
             #{stockName},
-            #{amount}
+            #{amount},
+            #{dividend}
         )
 </insert>
 
@@ -72,7 +128,8 @@
             NO,
             A.STOCK_NAME,
             to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
-            AMOUNT
+            AMOUNT,
+            DIVIDEND
         FROM TRANSACTION A
             WHERE  A.STOCK_NAME = #{stockName}
                 AND TRNSCDATE BETWEEN TO_DATE(#{trnscdate}, 'yyyy-MM-dd') AND 
@@ -85,6 +142,7 @@
     set   STOCK_NAME =  #{stockName}
         , AMOUNT     =  #{amount}
         , TRNSCDATE  =  #{trnscdate}
+        , DIVIDEND   =  #{dividend}
         , RGSTDATE   =  sysdate
     where no = #{no}
 </update>
