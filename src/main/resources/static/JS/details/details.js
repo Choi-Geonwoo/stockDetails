@@ -1,4 +1,10 @@
 
+
+window.onload = function(){
+   
+}
+
+
 // 주식 검색
 function stockSrch(){
     // 폼 요소와 셀렉트 박스 요소 가져오기
@@ -396,3 +402,110 @@ function visibleCheck(box){
         }
     }
 }
+
+
+ /* 모달창 호출 */
+ const removeModal = () => {
+    const modal = document.querySelector('.modal-background01');
+    document.body.removeChild(modal);
+  };
+
+  const handleButtonClick = (event) => {
+    const { target } = event;
+    if (target.classList.contains('close-btn01')) {
+      removeModal();
+    } else if (target.classList.contains('confirm-btn01')) {
+      // 처리 로직 추가
+      // alert('Confirmed!');
+      removeModal();
+    }
+  };
+
+  const showModal = (data) => {
+        // data-stockName 속성을 통해 Thymeleaf 변수를 가져옵니다
+        var stockName = data.getAttribute('data-stockName');
+        var parsedData;
+        // 파라미터를 담을 객체 생성
+        const params = {
+           stockName: stockName // 주식명
+        };
+
+        // 파라미터를 URL 형식으로 인코딩
+        const queryString = new URLSearchParams(params).toString();
+        // Fetch API를 사용하여 GET 요청 보내기
+        fetch(`/stockDetailList.do?${queryString}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('네트워크 오류');
+          }
+          return response.text();
+        })
+        .then(data => {
+          if('' != data){
+            //# JSON 데이터 파싱
+            parsedData= JSON.parse(data);        
+            //alert(JSON.stringify(parsedData));   
+            //{"AMOUNT":0,"PURCHASE_PRICE":"52.98","STOCK_NAME":"드래프트킹스(DKNG)","STOCK_QUANTITY":"3"}
+            const modal = document.createElement('div');
+            modal.classList.add('modal-background01');
+            modal.innerHTML = `
+            <div class="modal-content01">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModal66Label"> 상세보기 : `+stockName+` </h5>
+                        <button type="button" class="btn-close close-btn01" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">종목</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputPassword" value="`+parsedData.STOCK_NAME+`" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">주식수</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputPassword" value="`+parsedData.STOCK_QUANTITY+`" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">매입금</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputPassword" value="`+parsedData.PURCHASE_PRICE+`" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">매입금(합계)</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputPassword" value="`+parsedData.PURCHASE_PRICE_SUM+`" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPassword" class="col-sm-3 col-form-label">배당금(누적)</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputPassword" value="`+parsedData.AMOUNT+`" disabled>
+                            </div>
+                        </div>
+                        <div class="modal-buttons01">
+                            <button class="close-btn01">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+            document.body.appendChild(modal);
+    
+            modal.addEventListener('click', handleButtonClick);
+
+
+          }else{
+            alert('결과가 없습니다.');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("오류가 발생했습니다.");
+          return;
+        });
+
+  };

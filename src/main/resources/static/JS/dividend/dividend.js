@@ -7,13 +7,23 @@ function dividendList(data, monthSelect) {
       TRNSCDATE.push(item.TRNSCDATE);
       
       const label = `${item.TRNSCDATE} - ${item.STOCK_NAME}`;
-      if(!isEmpty(monthSelect)){
+      if(!isEmpty(monthSelect) ){
         dataValues = [item[monthToNumber(monthSelect)]];
       }
       else{
       dataValues = [
-          item.JANUARY, item.FEBRUARY, item.MARCH, item.APRIL, item.MAY,
-          item.JUNE, item.JULY, item.AUGUST, item.SEPTEMBER, item.OCTOBER, item.NOVEMBER, item.DECEMBER
+          item.JANUARY, 
+          item.FEBRUARY, 
+          item.MARCH, 
+          item.APRIL, 
+          item.MAY,
+          item.JUNE, 
+          item.JULY, 
+          item.AUGUST, 
+          item.SEPTEMBER, 
+          item.OCTOBER, 
+          item.NOVEMBER, 
+          item.DECEMBER
       ];
     }
       
@@ -185,6 +195,7 @@ function fetchCall(event, exampleModal){
             updateTrnscdate.value = "";
             spinner.style.display = 'none';
             image1.style.display = 'none'; 	
+            exampleModal.hide();
           }
         })
         .catch(error => {

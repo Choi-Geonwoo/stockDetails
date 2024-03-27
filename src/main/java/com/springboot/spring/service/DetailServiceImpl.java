@@ -90,5 +90,18 @@ public class DetailServiceImpl implements DetailsService {
         StockportfolioDto sDto = null;
         return detailsMapper.selectBox(sDto);
     }
+
+    // 주식 상세 조회
+    @Override
+    public Map stockDetailList(Map<String, Object> map) {
+        log.info("DetailServiceImpl.stockDetailList");
+        try {
+            return detailsMapper.stockDetailList(map);
+        } catch (Exception e) {
+            log.error("error ", e.toString());
+            throw new UnsupportedOperationException("Unimplemented method 'stockDetailList'");
+        }
+        
+    }
     
 }

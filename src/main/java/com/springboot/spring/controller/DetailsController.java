@@ -1,8 +1,10 @@
-package com.springboot.spring.controller;
+﻿package com.springboot.spring.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +78,16 @@ public class DetailsController {
         //log.info("registration_order : : : : : : " + registration_order);
         return String.valueOf(detailsService.detailsDelete(registration_order));
     }   
-
+     // 주식 상세 조회
+     @GetMapping("/stockDetailList.do")
+     public ResponseEntity<Map<String, Object>> stockDetailList(@RequestParam String stockName, Model model){
+         Map<String, Object> map = new HashMap<>();
+         Map<String, Object> mapList = new HashMap();
+         map.put("STOCK_NAME", stockName);
+         log.info("stockDetailList : :  "+stockName+" : : : : " + map.toString());
+         mapList = detailsService.stockDetailList(map);
+         return ResponseEntity.ok(mapList);
+     }   
+    
 
 }

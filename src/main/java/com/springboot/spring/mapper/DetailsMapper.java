@@ -1,6 +1,7 @@
 package com.springboot.spring.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,4 +27,7 @@ public interface DetailsMapper {
 
     // 주식 거랙내역 삭제
     public int detailsDelete(int registration_order);
+    
+    // 주식 상세 조회
+    public Map stockDetailList(Map<String, Object> map);
 }

@@ -69,7 +69,7 @@
     <label th:text="${title}"></label> 
     
     <br><br>
-  <div>
+  <div>&emsp;&emsp;
       <a href="/">홈</a>
       <a href="/dividend/dividendList">배당화면(전체)</a>
       <a href="/dividend/byWeekDividendList">배당화면(주별)</a>
@@ -79,42 +79,50 @@
 
 <div class="w-85 p-3 container">
   
-  <form th:action="@{/dividend/byWeekDividendList}" method="get">
-      <label for="weekInput">배당 기준일 :</label>
-      <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${startYmd}">
-      ~
-      <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${endYmd}">
-      <button type="submit" class="btn btn-secondary">검색</button>
-  </form>
+  
+  <div class="row">
+    <div class="col">
+      <form th:action="@{/dividend/byWeekDividendList}" method="get">
+        <label for="weekInput">배당 기준일 :</label>
+        <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${startYmd}">
+        ~
+        <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${endYmd}">
+        <button type="submit" class="btn btn-secondary">검색</button>
+    </form>
+    </div>
+    <div class="col">
+      
+      <p class="fw-bold" th:text="${'누적 배당금(합계) : ' + byWeekList[0].TOTAL}">
+    </div>
+  </div>
   <br>
-
-  <table class="table" th:if="${!#lists.isEmpty(byWeekList)}" >
-    <thead style="background-color:#FFCA9B">
+  <table class="table  table-hover" th:if="${!#lists.isEmpty(byWeekList)}" >
+    <thead style="background-color:#FFDAB9">
       <tr >        
-        <th scope="col" class="p-3">순번</th>
-        <th scope="col" class="p-3">배당일</th>
-        <th scope="col" class="p-3">주식명</th>
-        <th scope="col" class="p-3">배당금</th>
-        <th scope="col" class="p-3">금액</th>
-        <th scope="col" class="w-25 p-3">등록일</th>
+        <th scope="col" class="p-3 text-center">순번</th>
+        <th scope="col" class="p-3 text-center">배당일</th>
+        <th scope="col" class="p-3 text-center">주식명</th>
+        <th scope="col" class="p-3 text-center">배당금</th>
+        <th scope="col" class="p-3 text-center">금액</th>
+        <th scope="col" class="w-25 p-3 text-center">등록일</th>
       </tr>
     </thead>
     <tbody class="table-group-divider" id="table01">
       <tr  th:each="byWeekList : ${byWeekList}">    
-            <!----><td th:text="${byWeekList.NO_}"></td>
-            <!----><td th:text="${byWeekList.TRNSCDATE}"></td>
-            <!----><td th:text="${byWeekList.STOCK_NAME}"></td>                  
-            <!----><td th:text="${byWeekList.DIVIDEND}"></td>
-            <!----><td th:text="${byWeekList.AMOUNT}"></td>
-            <!----><td th:text="${byWeekList.RGSTDATE}"></td>
+            <!----><td class="text-center" th:text="${byWeekList.NO_}"></td>
+            <!----><td class="text-center" th:text="${byWeekList.TRNSCDATE}"></td>
+            <!----><td class="text-center" th:text="${byWeekList.STOCK_NAME}"></td>                  
+            <!----><td class="text-center" th:text="${byWeekList.DIVIDEND}"></td>
+            <!----><td class="text-center" th:text="${byWeekList.AMOUNT}"></td>
+            <!----><td class="text-center" th:text="${byWeekList.RGSTDATE}"></td>
       </tr>
     <!-- 기존 데이터가 10개 미만인 경우에만 더미 데이터 생성 -->
     <th:block th:if="${byWeekList.size() &lt; 10}">
         <th:block th:each="dummyRow : ${#numbers.sequence(byWeekList.size() + 1, 10)}" th:remove="tag">
             <tr>
-                <td th:text="${dummyRow}"></td>
-                <td></td>
-                <td></td>
+                <td class="text-center" th:text="${pageVo.totalCount + dummyRow - byWeekList.size()}"></td>
+                <td ></td>
+                <td ></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -127,42 +135,43 @@
       <!----><td>합계 : </td>
       <!----><td></td>                  
       <!----><td></td>
-      <!----><td><span id="sumTotal"></span></td>
+      <!----><td class="text-center"><span id="sumTotal"></span></td>
       <!----><td></td>
     </tfoot>
   </table>
 </div>
 
         <!-- 페이징 처리 -->
-          <nav aria-label="Page navigation example">
+          <nav aria-label="Page navigation example" th:if="${!#lists.isEmpty(byWeekList)}">
             <ul class="pagination justify-content-center">
               <!-- 맨 처음 페이지로 이동하는 버튼 -->
               <li class="page-item">
                 <span th:if="${pageVo.startPage > 1}">
-                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=1'}" th:text="'처음'"></a>
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=1'+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'처음'"></a>
                 </span>
               </li>
               <!-- 이전 블록으로 이동하는 버튼 -->
               <li class="page-item">
                 <span th:if="${pageVo.isPrev == true}">
-                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.startPage - 1}}" th:text="'이전'"></a>
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.startPage - 1} + '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'이전'"></a>
                 </span>
               </li>
               <!-- 시퀀스 보여주는 값을 변경. -->
               <li class="page-item" th:each="pageNum : ${#numbers.sequence(pageVo.startPage, pageVo.endPage)}">
-                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageNum}}" th:text="|&emsp;${pageNum}&emsp;|"></a>
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageNum}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;${pageNum}&emsp;|"></a>
               </li>
               <li class="page-item">
               <!-- 다음 블록으로 이동하는 버튼 -->
               <span th:if="${pageVo.isNext == true}">
-                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.endPage + 1}}" th:text="'다음'"></a>
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.endPage + 1}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'다음'"></a>
               </span>
               </li>
               <!-- 맨 뒷 페이지로 이동하는 버튼 -->
               <li class="page-item">
                 <span th:if="${pageVo.endPage < pageVo.totalPageCount}">
-                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.totalPageCount}}" th:text="|&emsp;끝|"></a>
+                  <a class="page-link" th:href="@{'/dividend/byWeekDividendList?page=' + ${pageVo.totalPageCount}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;끝|"></a>
                 </span>
+                <!--<a th:href="@{'/bank/bankList?searchType='+${pageVo.searchType} +'&keyword='+${pageVo.keyword}+'&page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|"></a>-->
               </li>
             </ul>
           </nav>

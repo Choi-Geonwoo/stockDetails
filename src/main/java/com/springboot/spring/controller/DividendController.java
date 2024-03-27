@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.springboot.spring.com.CnvrsData;
 import com.springboot.spring.com.PaginationService;
 import com.springboot.spring.dto.CombinedDTO;
 import com.springboot.spring.dto.PaginationVo;
@@ -135,10 +136,13 @@ public class DividendController {
         map.put("page", page);
         map.put("rowCount", 10);
         List<Map> list = dividendService.byWeekDividendList(map);
+        
         /* ### 페이징 처리 ### */
         int currentPage = page; // 현재 페이지
-        int totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // 총 게시물 개수
-        
+        int totalCount = 0; // 총 게시물 개수
+        if(!list.isEmpty()){
+            totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // 총 게시물 개수
+        }
         // Pagination 정보를 계산합니다.
         // PaginationService 객체를 생성합니다.
         Map<String, Object> paginationMap = paginationService.calculatePagination(totalCount, currentPage);

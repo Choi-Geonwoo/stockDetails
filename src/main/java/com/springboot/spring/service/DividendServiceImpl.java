@@ -43,17 +43,19 @@ public class DividendServiceImpl implements DividendService {
         }else{
             tDto.setStockName(String.valueOf(map.get("stockName")));
         }
+        log.info("전체 : ", map);
         //년도 공백 인경우
-        if(IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("trnscdate"))){
+        if(IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("monthSelect"))){
             tDto.setTrnscdate("");
         }else if(!IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("trnscdate"))){
             tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"));
-        }else if(IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("trnscdate")) ){
+        }else if(IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("monthSelect")) ){
             tDto.setTrnscdate(String.valueOf("-"+map.get("monthSelect")));
-        }else if(!IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("trnscdate")) ){
+        }else if(!IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("monthSelect")) ){
             tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"+map.get("monthSelect")));
         }
-
+        //tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"+map.get("monthSelect")));
+        
         // tDto
         //log.info("toString : : : : : " + tDto.toString());
         return dividendMapper.dividendList(tDto);
@@ -187,6 +189,8 @@ public class DividendServiceImpl implements DividendService {
     // 주별 배당 내역 조회
     @Override
     public List<Map> byWeekDividendList(Map<String, Object> map) { 
+        map.put("startYmd", ("null".equals(map.get("startYmd")) ? null :  map.get("startYmd")));
+        map.put("endYmd", ("null".equals(map.get("endYmd")) ? null :  map.get("endYmd")));
         return dividendMapper.byWeekDividendList(map);
     }
 

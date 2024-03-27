@@ -22,5 +22,8 @@ public interface DetailsService {
 
     // 주식 거랙내역 삭제
     public int detailsDelete(int registration_order);
+    
+    // 주식 상세 조회
+    public Map<String, Object> stockDetailList(Map<String, Object> map);
 
 }

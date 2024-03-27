@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(newData => {
           // 새로운 데이터로 이벤트 업데이트
           calendar.setOption('events', newData);
-          //console.log('결과 : ' + JSON.stringify(newData));
+          console.log('결과 : ' + JSON.stringify(newData));
           add_menu(newData);
         })
         .catch(error => {
@@ -83,7 +83,7 @@ function dateFormat(date) {
 function add_menu(json){
       // 테이블 이름 정의 
       const table = document.getElementById('tbody_00');
-
+      var sum = 0;
 
       // 테이블의 기존 내용을 모두 지움
       while (table.firstChild) {
@@ -98,10 +98,13 @@ function add_menu(json){
           const newRow = table.insertRow();
           for (const key in currentItem) {
               if (Object.hasOwnProperty.call(currentItem, key)) {
-                  //console.log(`${key}: ${currentItem[key]}`);
+                  console.log(`${key}: ${currentItem[key]}`);
                   newRow.insertCell(key).innerText = currentItem[key];
+                  //if("amount" == key) sum += parseFloat(currentItem[key]);
               }
           }
           console.log('---');
       }
+      
+      document.querySelector('#sumTotal').innerHTML = sum;
 }
