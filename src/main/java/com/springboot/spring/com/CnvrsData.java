@@ -14,6 +14,8 @@ public class CnvrsData {
         System.out.println("결과 년도 : : : " + year + " | "+ IsNullCheck.isNull(year));
         if(IsNullCheck.isNull(year)){
             dataYear = String.valueOf(now.getYear());;
+        }else{
+            dataYear = year;
         }
         return dataYear;
     }
@@ -26,6 +28,8 @@ public class CnvrsData {
         System.out.println("결과  월 : : : "+ month+ " | " + IsNullCheck.isNull(month));
         if(IsNullCheck.isNull(month)){
             dataMonth = String.valueOf(now.getMonthValue());;
+        }else{
+            dataMonth = month;
         }
         return dataMonth;
     }

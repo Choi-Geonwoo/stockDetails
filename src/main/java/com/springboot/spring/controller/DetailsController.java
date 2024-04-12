@@ -19,6 +19,7 @@ import com.springboot.spring.service.DetailsService;
 import lombok.extern.slf4j.Slf4j;
 
 // 주식  거래내역
+/* 자바 컴파일 오류 발생시 : java:Clean Java Language Server Workspace */
 @Slf4j
 @Controller
 public class DetailsController {

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.spring.com.CnvrsData;
 import com.springboot.spring.com.DateRltd;
 import com.springboot.spring.com.IsNullCheck;
 import com.springboot.spring.dto.CombinedDTO;
@@ -45,17 +46,19 @@ public class DividendServiceImpl implements DividendService {
         }
         log.info("전체 : ", map);
         //년도 공백 인경우
+        
         if(IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("monthSelect"))){
             tDto.setTrnscdate("");
-        }else if(!IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("trnscdate"))){
+        }else if(!IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("monthSelect"))){
             tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"));
         }else if(IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("monthSelect")) ){
             tDto.setTrnscdate(String.valueOf("-"+map.get("monthSelect")));
         }else if(!IsNullCheck.isNull(map.get("trnscdate")) && !IsNullCheck.isNull(map.get("monthSelect")) ){
             tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"+map.get("monthSelect")));
         }
-        //tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"+map.get("monthSelect")));
         
+        //tDto.setTrnscdate(String.valueOf(map.get("trnscdate")+"-"+map.get("monthSelect")));
+        //tDto.setTrnscdate(String.valueOf(CnvrsData.toMonth(map.get("trnscdate"))));
         // tDto
         //log.info("toString : : : : : " + tDto.toString());
         return dividendMapper.dividendList(tDto);

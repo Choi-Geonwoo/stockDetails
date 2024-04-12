@@ -5,21 +5,21 @@
 
 <select id="transactionList" resultType="com.springboot.spring.dto.TransactionDto" parameterType="Map">
 
-SELECT
-	/* DVDNDCLNDRMAPPER.TRANSACTIONLIST */
-		DECODE(GROUPING(STOCK_NAME), 1, '합계', STOCK_NAME) AS STOCK_NAME,
-        TO_CHAR(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
-        SUM(AMOUNT) AS AMOUNT
-FROM
-	TRANSACTION
-WHERE
-	1 = 1
-        <if test='YMD != null and YMD != "" '>
-        AND TRNSCDATE BETWEEN  TRUNC(TO_DATE(#{YMD}, 'YYYY-MM-DD'), 'MM') AND LAST_DAY(TO_DATE(#{YMD}, 'YYYY-MM-DD'))
-        </if>
-GROUP BY	ROLLUP (TO_CHAR(TRNSCDATE, 'YYYY-MM-DD'),STOCK_NAME)
-HAVING GROUPING_ID(TO_CHAR(TRNSCDATE, 'YYYY-MM-DD'), STOCK_NAME) IN (0, 3)
-ORDER BY 1,2
+                SELECT
+                        /* DVDNDCLNDRMAPPER.TRANSACTIONLIST */
+                                DECODE(GROUPING(STOCK_NAME), 1, '합계', STOCK_NAME) AS STOCK_NAME,
+                        TO_CHAR(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+                        SUM(AMOUNT) AS AMOUNT
+                FROM
+                        TRANSACTION
+                WHERE
+                        1 = 1
+                        <if test='YMD != null and YMD != "" '>
+                        AND TRNSCDATE BETWEEN  TRUNC(TO_DATE(#{YMD}, 'YYYY-MM-DD'), 'MM') AND LAST_DAY(TO_DATE(#{YMD}, 'YYYY-MM-DD'))
+                        </if>
+                GROUP BY	ROLLUP (TO_CHAR(TRNSCDATE, 'YYYY-MM-DD'),STOCK_NAME)
+                HAVING GROUPING_ID(TO_CHAR(TRNSCDATE, 'YYYY-MM-DD'), STOCK_NAME) IN (0, 3)
+                ORDER BY TRNSCDATE,STOCK_NAME
 </select>
 
 </mapper>
