@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.springboot.spring.com.CnvrsData;
 import com.springboot.spring.com.PaginationService;
 import com.springboot.spring.dto.CombinedDTO;
-import com.springboot.spring.dto.PaginationVo;
 import com.springboot.spring.service.DividendService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -129,7 +127,6 @@ public class DividendController {
      )
     {
 
-
         Map<String, Object> map = new HashMap<>();
         map.put("startYmd", startYmd);
         map.put("endYmd", endYmd);
@@ -158,5 +155,23 @@ public class DividendController {
         model.addAttribute("pageVo", paginationMap);
         
         return "view/dividend/byWeekDividendList";
+    }
+
+    //yearComparison
+
+
+    // 년도 베당 거래 내역
+    @GetMapping("/dividend/yearComparison")
+    public String yearComparisonView(Model model 
+        ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate)
+    {
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("trnscdate", trnscdate);
+        log.info("배당내역비교(년도)");
+        model.addAttribute("title", "배당내역비교(년도)");
+        model.addAttribute("dList", dividendService.yearComparison(map));
+        return "view/dividend/yearComparison";
+        //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
 }

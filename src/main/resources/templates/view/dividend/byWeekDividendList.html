@@ -69,13 +69,26 @@
     <label th:text="${title}"></label> 
     
     <br>
-  <div>&emsp;&emsp;
-      <a href="/">홈</a>
-      <a href="/dividend/dividendList">배당화면(전체)</a>
-      <a href="/dividend/byWeekDividendList">배당화면(주별)</a>
-      <a href="/clndr/dvdndClndr">캘린더</a>
-      <br>
-  </div>
+    <div>&emsp;&emsp;&emsp;&emsp;
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">홈</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dividend/dividendList">배당화면(전체)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dividend/byWeekDividendList">배당화면(주별)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dividend/yearComparison">배당화면(년도)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/clndr/dvdndClndr">캘린더</a>
+          </li>
+        </ul>
+    </div>
+    <br>
 
 <div class="w-85 p-3 container">
   

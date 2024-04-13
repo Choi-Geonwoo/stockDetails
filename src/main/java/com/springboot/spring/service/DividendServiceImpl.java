@@ -197,6 +197,18 @@ public class DividendServiceImpl implements DividendService {
         return dividendMapper.byWeekDividendList(map);
     }
 
+
+    //년도 배당금
+    @Override
+    public List<Map> yearComparison(Map<String, Object> map) {
+        try {
+            return dividendMapper.yearComparison(map);
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("Unimplemented method 'yearComparison'");
+        }
+    }
+
+    
     private void handleException(String str,Exception e) {
         log.error(" === "+str+" ERROR START === ");
         log.error(e.toString());

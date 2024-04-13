@@ -1,0 +1,108 @@
+<!--resources/templates/thymeleafEx.html-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배당 거래내역</title>
+  
+  <!--부트스트랩-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+  <!-- 부트 스트랩 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+  <script type="text/javascript" th:src="@{/JS/dividend/yearComparison.js}"></script>
+  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
+  <style>
+    
+  </style>
+
+  <script th:inline="javascript">
+    window.onload = function(){
+    const data = /*[[${dList}]]*/;
+    yearComparisonBarChart(data);
+    
+    }
+
+  </script>
+</head>
+<body>
+  
+    <label th:text="${title}"></label> 
+    
+    <br>
+    <div>&emsp;&emsp;&emsp;&emsp;
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">홈</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dividend/dividendList">배당화면(전체)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dividend/byWeekDividendList">배당화면(주별)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/dividend/yearComparison">배당화면(년도)</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/clndr/dvdndClndr">캘린더</a>
+          </li>
+        </ul>
+    </div>
+    <br>
+
+  
+  <table class="table table-bordered" th:if="${!#lists.isEmpty(dList)}">
+    <thead class="text-center">
+      <tr >        
+      <!--년도--><th >년도</th>
+      <!--1월--> <th>01월</th>
+      <!--2월--> <th>02월</th>
+      <!--3월--> <th>03월</th>
+      <!--4월--> <th>04월</th>
+      <!--5월--> <th>05월</th>
+      <!--6월--> <th>06월</th>
+      <!--7월--> <th>07월</th>
+      <!--8월--> <th>08월</th>
+      <!--9월--> <th>09월</th>
+      <!--10월--><th>10월</th>
+      <!--11월--><th>11월</th>
+      <!--12월--><th>12월</th>
+      <!--12월--><th>합계</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr  th:each="dlist : ${dList}">    
+            <!--년도--><td  th:text="${dlist.TRNSCDATE}"></td>
+            <!--1월--><td  th:text="${dlist.JANUARY}"></td>
+            <!--2월--> <td  th:text="${dlist.FEBRUARY}"></td>
+            <!--3월--> <td  th:text="${dlist.MARCH}"></td>
+            <!--4월--> <td  th:text="${dlist.APRIL}"></td>
+            <!--5월--> <td  th:text="${dlist.MAY}"></td>
+            <!--6월--> <td  th:text="${dlist.JUNE}" ></td>
+            <!--7월--> <td  th:text="${dlist.JULY}" ></td>
+            <!--8월--> <td  th:text="${dlist.AUGUST}" ></td>
+            <!--9월--> <td  th:text="${dlist.SEPTEMBER}" ></td>
+            <!--10월--><td  th:text="${dlist.OCTOBER}" ></td>
+            <!--11월--><td  th:text="${dlist.NOVEMBER}" ></td>
+            <!--12월--><td  th:text="${dlist.DECEMBER}" ></td>
+            <!--12월--><td  th:text="${dlist.ALL_SUM}" ></td>
+      </tr>
+  </tr>
+    </tbody>
+  </table>
+
+  <!-- 바차트-->
+  <br>
+  <div  th:if="${!#lists.isEmpty(dList)}" class="container">
+    <canvas id="bar_chart"></canvas>
+  </div>
+  <br>
+
+</body>
+</html>

@@ -30,4 +30,6 @@ public interface DividendService {
     public int  transactionDelete(String no)  throws Exception;
     
 
+    //배당 거래내역(년도)
+    public List<Map>  yearComparison(Map<String, Object> map);
 }
