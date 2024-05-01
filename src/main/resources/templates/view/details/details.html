@@ -35,29 +35,8 @@
 </head>
 <body>
   
-    <label th:text="${title}"></label> 
 
-    <br>
-    <div>&emsp;&emsp;&emsp;&emsp;
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">홈</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/dividend/dividendList">배당화면(전체)</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/dividend/byWeekDividendList">배당화면(주별)</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/dividend/yearComparison">배당화면(년도)</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/clndr/dvdndClndr">캘린더</a>
-          </li>
-        </ul>
-    </div>
-    <br>
+    <p th:replace="view/layout/top.html :: head"></p>
     
         <table id="myTable" class="table table-bordered w-100">
           <form if="myForm" th:action="@{/details/details}" method="get">
@@ -155,7 +134,7 @@
                     <td name="paragraph">
                       <div class="btn-group" role="group" aria-label="Basic example">
                         <button class="btn btn-outline-secondary" onclick="detailsUpdate(this)">수</button>
-                        &nbsp;&nbsp;/&nbsp;&nbsp;
+                        &nbsp;
                         <button class="btn btn-outline-danger" onclick="detailsDelete(this);">삭</button>
                         <input type="hidden">
                       </div>

@@ -5,24 +5,40 @@
 
 <!-- 주식 거래 내역-->
 <select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
-        SELECT          /* DetailsMapper.stockDetailsList */
-                        NO,
-                        STOCK_NAME,
-                        STOCK_QUANTITY,
-                        DIVIDEND_CYCLE,
-                        PURCHASE_PRICE,
-                        DIVIDEND_AMOUNT,
-                        CLSCD,
-                        RGSTDATE
+                SELECT
+                        /* DETAILSMAPPER.STOCKDETAILSLIST */
+                        A.NO,
+                        A.STOCK_NAME,
+                        A.STOCK_QUANTITY,
+                        A.DIVIDEND_CYCLE,
+                        A.PURCHASE_PRICE,
+                        NVL(B.DIVIDEND, A.DIVIDEND_AMOUNT) AS DIVIDEND_AMOUNT,
+                        A.CLSCD,
+                        A.RGSTDATE
                 FROM
-                        STOCKPORTFOLIO
-                where CLSCD != 'N'
+                        STOCKPORTFOLIO A
+                        , (
+                                SELECT * FROM 
+                                                (
+                                                        SELECT
+                                                        ROW_NUMBER() OVER(PARTITION BY STOCK_NAME ORDER BY TRNSCDATE DESC) AS RNK,
+                                                                STOCK_NAME,
+                                                                AMOUNT,
+                                                                DIVIDEND
+                                                        FROM
+                                                                TRANSACTION
+                                                ) W 
+                                                        WHERE RNK = 1
+                        ) B
+                WHERE
+                        A.CLSCD != 'N'
+                        AND A.STOCK_NAME  = B.STOCK_NAME(+) 
                 <if test='stockName != null and stockName != "" '>
-                        and STOCK_NAME = #{stockName}
+                        AND STOCK_NAME = #{stockName}
                 </if>
                 <if test='dividendCycle != null and dividendCycle != "" '>
-                        and (DIVIDEND_CYCLE like #{dividendCycle} || '%'
-                        or DIVIDEND_CYCLE = '월'
+                        AND (DIVIDEND_CYCLE like #{dividendCycle} || '%'
+                        OR DIVIDEND_CYCLE = '월'
                         )
                 </if>
                         order by DIVIDEND_CYCLE
@@ -104,10 +120,10 @@
                         STOCKPORTFOLIO  A
                         , TRANSACTION B
                 WHERE 
-                A.STOCK_NAME  = B.STOCK_NAME(+) 
-                AND A.STOCK_QUANTITY  >  0
-                AND  A.STOCK_NAME  <> '테스트'
-                AND A.STOCK_NAME = #{STOCK_NAME}
+                        A.STOCK_NAME  = B.STOCK_NAME(+) 
+                        AND A.STOCK_QUANTITY  >  0
+                        AND  A.STOCK_NAME  <> '테스트'
+                        AND A.STOCK_NAME = #{STOCK_NAME}
                 GROUP BY 
                         A.STOCK_NAME ,
                         A.STOCK_QUANTITY,
