@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.spring.com.PaginationService;
 import com.springboot.spring.dto.CombinedDTO;
-import com.springboot.spring.service.DividendService;
+import com.springboot.spring.service.dividend.DividendService;
 
 import lombok.extern.slf4j.Slf4j;
 

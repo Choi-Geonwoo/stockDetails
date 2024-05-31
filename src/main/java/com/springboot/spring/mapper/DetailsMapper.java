@@ -17,7 +17,6 @@ public interface DetailsMapper {
     // 주식 종목 조회
     public List<StockportfolioVO>  selectBox(StockportfolioDto sDto);
 
-    
     // 주식 거래내역 수정
     public int  detailsUpdate(StockportfolioDto stockDTO);
 

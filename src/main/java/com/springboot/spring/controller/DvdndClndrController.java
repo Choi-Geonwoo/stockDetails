@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.springboot.spring.service.DvdndClndrService;
+import com.springboot.spring.service.dvdnd.DvdndClndrService;
 
 import lombok.extern.slf4j.Slf4j;
 

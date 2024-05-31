@@ -34,8 +34,7 @@
       
     <p th:replace="view/layout/top.html :: head"></p>
 
-  
-  <table class="table table-bordered" th:if="${!#lists.isEmpty(dList)}">
+  <table class="table table-bordered container" th:if="${!#lists.isEmpty(dList)}" style="width: 95%;">
     <thead class="text-center">
       <tr >        
       <!--년도--><th >년도</th>

@@ -76,19 +76,20 @@
     <div class="col">
       <form th:action="@{/dividend/byWeekDividendList}" method="get">
         <label for="weekInput">배당 기준일 :</label>
-        <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${startYmd}">
+        <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}">
         ~
-        <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${endYmd}">
+        <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">
         <button type="submit" class="btn btn-secondary">검색</button>
     </form>
     </div>
     <div class="col">
       
-      <p class="fw-bold" th:text="${'누적 배당금(합계) : ' + byWeekList[0].TOTAL}">
+      <p class="fw-bold" th:if="${!#lists.isEmpty(byWeekList)}" th:text="${'누적 배당금(합계) : ' + byWeekList[0].TOTAL}">
+
     </div>
   </div>
   <br>
-  <table class="table  table-hover" th:if="${!#lists.isEmpty(byWeekList)}" >
+  <table class="table  table-hover"  >
     <thead style="background-color:#FFDAB9">
       <tr >        
         <th scope="col" class="p-3 text-center">순번</th>
@@ -99,7 +100,7 @@
         <th scope="col" class="w-25 p-3 text-center">등록일</th>
       </tr>
     </thead>
-    <tbody class="table-group-divider" id="table01">
+    <tbody class="table-group-divider" id="table01" th:if="${!#lists.isEmpty(byWeekList)}">
       <tr  th:each="byWeekList : ${byWeekList}">    
             <!----><td class="text-center" th:text="${byWeekList.NO_}"></td>
             <!----><td class="text-center" th:text="${byWeekList.TRNSCDATE}"></td>

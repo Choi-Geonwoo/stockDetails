@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.spring.dto.StockportfolioDto;
-import com.springboot.spring.service.DetailsService;
+import com.springboot.spring.service.detail.DetailsService;
 
 import lombok.extern.slf4j.Slf4j;
 

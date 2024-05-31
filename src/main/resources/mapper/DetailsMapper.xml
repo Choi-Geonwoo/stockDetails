@@ -3,7 +3,6 @@
 
 <mapper namespace="com.springboot.spring.mapper.DetailsMapper">
 
-<!-- 주식 거래 내역-->
 <select id = "stockDetailsList"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
                 SELECT
                         /* DETAILSMAPPER.STOCKDETAILSLIST */
@@ -34,17 +33,16 @@
                         A.CLSCD != 'N'
                         AND A.STOCK_NAME  = B.STOCK_NAME(+) 
                 <if test='stockName != null and stockName != "" '>
-                        AND STOCK_NAME = #{stockName}
+                        AND A.STOCK_NAME = #{stockName}
                 </if>
                 <if test='dividendCycle != null and dividendCycle != "" '>
-                        AND (DIVIDEND_CYCLE like #{dividendCycle} || '%'
-                        OR DIVIDEND_CYCLE = '월'
+                        AND (A.DIVIDEND_CYCLE like #{dividendCycle} || '%'
+                        OR A.DIVIDEND_CYCLE = '월'
                         )
                 </if>
-                        order by DIVIDEND_CYCLE
+                        order by A.DIVIDEND_CYCLE
 </select>
 
-<!-- 주식 종목 내역-->
 <select id = "selectBox"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
         SELECT          /* DetailsMapper.selectBox */
                         NO,

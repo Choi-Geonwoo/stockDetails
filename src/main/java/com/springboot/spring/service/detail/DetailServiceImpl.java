@@ -1,4 +1,4 @@
-package com.springboot.spring.service;
+package com.springboot.spring.service.detail;
 
 import java.util.List;
 import java.util.Map;
