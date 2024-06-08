@@ -20,7 +20,7 @@ public class ComServiceImpl implements ComService {
     
     @Override
     public List<Map<Object, Object>>  sectionSelect(Map<String, Object> map) {
-        log.debug("return " + map.toString());
+        //log.debug("return " + map.toString());
         return comMapper.sectionSelect(map);
     }
 
