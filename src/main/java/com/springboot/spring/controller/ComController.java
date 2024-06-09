@@ -1,5 +1,6 @@
 package com.springboot.spring.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,4 +54,16 @@ public class ComController {
         model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
         return "/com/comonCode";
     }
+
+        // 대분류 수정
+        @PostMapping("/com/comonCodeUpdate.do")
+        @ResponseBody
+        public Map<String, String> comonCodeUpdate(@RequestParam Map<String, Object> formMap, Model model){
+            log.info("formMap + " + formMap.toString());
+             new HashMap<>();
+            model.addAttribute("title", "공통코드 관리");
+            //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
+            Map<String, String> reMap = comService.sectionUpdate(formMap);
+            return reMap;
+        }
 }

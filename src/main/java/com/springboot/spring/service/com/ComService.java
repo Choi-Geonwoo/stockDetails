@@ -11,4 +11,7 @@ public interface ComService {
     
     // 대분류 등록
     public String  sectionInsert(Map<String, Object> map);
+    
+    // 대분류 수정
+    public Map<String, String>  sectionUpdate(Map<String, Object> map);
 }
