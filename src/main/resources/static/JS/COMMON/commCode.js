@@ -1,24 +1,34 @@
 function sendRowData(button) {
-    // ¹öÆ°ÀÌ ¼ÓÇÑ Çà(row)À» Ã£½À´Ï´Ù.
+    // ë²„íŠ¼ì´ ì†í•œ í–‰(row)ì„ ì°¾ìŠµë‹ˆë‹¤.
     const row = button.closest('tr');
     const cells = row.getElementsByTagName('td');
-    const data = {};
-    for (let i = 0; i < cells.length - 1; i++) { // ¸¶Áö¸· ¼¿Àº ¹öÆ°ÀÌ¹Ç·Î Á¦¿ÜÇÕ´Ï´Ù.
-        data['column' + i] = cells[i].innerText;
+    const inputs = row.getElementsByTagName('input');
+    //const data = {};
+    const dataAry = {};
+    const values = [];
+    for (let i = 0; i < cells.length - 1; i++) { // ë§ˆì§€ë§‰ ì…€ì€ ë²„íŠ¼ì´ë¯€ë¡œ ì œì™¸í•©ë‹ˆë‹¤.
+        //data['column' + i] = cells[i].innerText;
+        //values.push(inputs[i].value);
+        if (inputs[i].type === 'text') {
+            dataAry['value' + i] = inputs[i].value;
+        } else if (inputs[i].type === 'checkbox') {
+            dataAry['value' + i] = inputs[i].checked ? "Y" : "N";
+        }
     }
-
-    // ¼­¹ö·Î µ¥ÀÌÅÍ¸¦ Àü¼ÛÇÕ´Ï´Ù.
+    // ì„œë²„ë¡œ ë°ì´í„°ë¥¼ ì „ì†¡í•©ë‹ˆë‹¤.
     fetch('/com/comonCodeUpdate.do', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(dataAry)
     })
     .then(response => response.json())
     .then(result => {
-        console.log('Success:', result);
-        alert('Row updated successfully!');
+        console.log('Success:', JSON.stringify(result));
+        //alert(JSON.stringify(result));
+        alert(result.str);
+        location.href = location.href;
     })
     .catch(error => {
         console.error('Error:', error);

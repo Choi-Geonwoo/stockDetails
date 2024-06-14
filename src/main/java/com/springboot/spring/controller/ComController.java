@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,13 +58,11 @@ public class ComController {
 
         // 대분류 수정
         @PostMapping("/com/comonCodeUpdate.do")
-        @ResponseBody
-        public Map<String, String> comonCodeUpdate(@RequestParam Map<String, Object> formMap, Model model){
-            log.info("formMap + " + formMap.toString());
-             new HashMap<>();
+        public ResponseEntity<Map> comonCodeUpdate(@RequestBody  Map<String, Object> formMap, Model model){
+            
             model.addAttribute("title", "공통코드 관리");
             //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
             Map<String, String> reMap = comService.sectionUpdate(formMap);
-            return reMap;
+            return ResponseEntity.ok(reMap);
         }
 }

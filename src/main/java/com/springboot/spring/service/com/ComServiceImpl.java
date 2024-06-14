@@ -51,20 +51,40 @@ public class ComServiceImpl implements ComService {
     public Map<String, String> sectionUpdate(Map<String, Object> map) {
         int cnt = 0;
         Map<String, String> retMap = new HashMap<>();
+        Map<String, Object> paMap = new HashMap<>();
         try {
-            cnt = comMapper.sectionUpdate(map);
-            if(0 == cnt){
-                retMap.put("strYn", "N");
-                retMap.put("str", "실패했습니다.");
-            }else{
-                retMap.put("strYn", "Y");
-                retMap.put("str", "성공했습니다.");
-            }
+                if(map.isEmpty()){
+                    throw new UnsupportedOperationException("Unimplemented method 'is   NULL '");
+                }
+                paMap.put("NO",         String.valueOf(map.get("value0")));
+                paMap.put("SECTION_CD", String.valueOf(map.get("value1")));
+                paMap.put("SECTION_NM", null);
+                paMap.put("USE_YN",     String.valueOf(map.get("value3")));
+                log.info("paMap + " + paMap.toString());
+                
+                List<Map<Object, Object>>  liatMap = comMapper.sectionSelect(paMap);
+
+                if((0 != liatMap.size()) && !(String.valueOf(map.get("value0")).equals(liatMap.get(0).get("NO")))){
+                    retMap.put("strYn", "N");
+                    retMap.put("str", "대분류코드가 중복되었습니다.\n대분류코드 : "+ paMap.get("SECTION_CD")+"");
+                    return retMap;
+
+                }
+                paMap.put("SECTION_NM", String.valueOf(map.get("value2")));
+                cnt = comMapper.sectionUpdate(paMap);
+
+                if(0 == cnt){
+                    retMap.put("strYn", "N");
+                    retMap.put("str", "실패했습니다.");
+                }else{
+                    retMap.put("strYn", "Y");
+                    retMap.put("str", "성공했습니다.");
+                }
             } catch (Exception e) {
                 retMap.put("strYn", "F");
                 retMap.put("str", "오류가 발생하였습니다.");
                 log.error("e", e.toString());
-                throw new UnsupportedOperationException("Unimplemented method 'sectionUpdate'");
+                throw new UnsupportedOperationException("Unimplemented method 'sectionUpdate 01 '");
                 }
             return retMap;
     }

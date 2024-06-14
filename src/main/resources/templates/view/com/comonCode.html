@@ -26,11 +26,12 @@
   <p th:replace="view/layout/top.html :: head"></p>
   <form class="d-flex" role="search" th:action="@{/com/detailsSearch.do}"  method="get">
     <span class="input-group-text" id="basic-addon3">대분류코드</span>
-    <input class="form-control w-25 p-1" type="search" id="SECTION_CD" name="SECTION_CD" placeholder="대분류코드" aria-label="Search">
-    
+    <input class="form-control w-25 p-20" type="search" id="SECTION_CD" name="SECTION_CD" placeholder="대분류코드" aria-label="Search">
+    <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+    &emsp;&emsp;&emsp;&emsp;&emsp;
     <span class="input-group-text" id="basic-addon3">대분류명</span>
-    <input class="form-control w-25 p-1" type="search" id="SECTION_NM" name="SECTION_NM" placeholder="대분류명" aria-label="Search">
-
+    <input class="form-control w-25 p-20" type="search" id="SECTION_NM" name="SECTION_NM" placeholder="대분류명" aria-label="Search">
+    &emsp;
     <button class="btn btn-outline-success" type="submit">검색</button>
   </form>
   <form action="#" th:action="@{/com/comonCodeInster.do}"  method="post" >
@@ -81,9 +82,10 @@
       </thead>
       <tbody>
         <th:block th:if="${!#lists.isEmpty(cList)}" >
-          <tr th:each="cList : ${cList}">
+          <tr th:each="cList, userStat  : ${cList}">
             <th scope="col">
               <p th:text="${cList.NO}"></p>
+              <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
             </th>
             <td scope="col">
               <input class="form-control" type="text" name="SECTION_CD" th:value="${cList.SECTION_CD}"  >
@@ -93,9 +95,9 @@
             </td>
             <td scope="col">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Y" name="USE_YN"
+                <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:id="${userStat.index}"
                 th:checked="${cList} and (${cList.USE_YN} == 'Y')">
-                <label class="form-check-label" for="flexCheckDefault">
+                <label class="form-check-label" th:for="${userStat.index}">
                   사용여부
                 </label>
               </div>

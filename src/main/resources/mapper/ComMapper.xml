@@ -34,8 +34,8 @@
                         REG_YMD     /*등록일자*/
                 )
                 VALUES(
-                        (SELECT NVL(MAX(NO), 0)+1 FROM SECTION WHERE SECTION_CD = #{SECTION_CD}) /*순번*/
                         ,#{SECTION_CD} /*대분류코드*/
+                        (SELECT NVL(MAX(NO), 0)+1 FROM SECTION WHERE SECTION_CD = #{SECTION_CD}) /*순번*/
                         ,#{SECTION_NM} /*대분류명*/
                         ,#{USE_YN}     /*사용여부*/
                         ,SYSDATE       /*등록일자*/
@@ -44,14 +44,14 @@
 
 
 
-<update id="sectionUpdate" parameterType="int">
+<update id="sectionUpdate" parameterType="Map">
        UPDATE   /* ComMapper.sectionUpdate */
                  SECTION
         SET 
-                SECTION_CD = #{SECTION_CD} /*대분류코드*/
-                SECTION_NM = #{SECTION_NM} /*대분류명*/
-                USE_YN     = #{USE_YN}     /*사용여부*/
-                RGSTDATE   = sysdate
+                SECTION_CD  = #{SECTION_CD} /*대분류코드*/
+                ,SECTION_NM = #{SECTION_NM} /*대분류명*/
+                ,USE_YN     = #{USE_YN}     /*사용여부*/
+                ,REG_YMD    = sysdate
         WHERE NO = #{NO}
 </update>
 
