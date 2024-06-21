@@ -43,17 +43,19 @@ public class ComController {
         log.info("공통코드 검색 : : : " + map.toString());
         model.addAttribute("title", "공통코드 관리");
         model.addAttribute("cList", comService.sectionSelect(map));
+        model.addAttribute("SECTION_NM", String.valueOf(map.get("SECTION_NM")));
+        model.addAttribute("SECTION_CD", String.valueOf(map.get("SECTION_CD")));
         return "view/com/comonCode";
     }
 
     // 대분류 등록
     @PostMapping("/com/comonCodeInster.do")
-    @ResponseBody
+    //@ResponseBody
     public String comonCodeInster(@RequestParam Map<String, Object> formMap, Model model){
         log.info("formMap + " + formMap.toString());
         model.addAttribute("title", "공통코드 관리");
         model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
-        return "/com/comonCode";
+        return "view/com/comonCode";
     }
 
         // 대분류 수정

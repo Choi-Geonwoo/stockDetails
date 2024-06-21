@@ -30,11 +30,14 @@ public class ComServiceImpl implements ComService {
     public String sectionInsert(Map<String, Object> map) {
         int cnt = 0;
         String str = "N";
+        Map<String, Object> paMap = new HashMap<>();
         try {
-            map.put("SECTION_NM", null);
-            cnt = comMapper.sectionSelect(map).size();
+            paMap.put("SECTION_NM", null);
+            paMap.put("SECTION_NM", map.get("SECTION_CD"));
+            cnt = comMapper.sectionSelect(paMap).size();
+            paMap.putAll(map);
             if(cnt == 0){
-                cnt = comMapper.sectionInsert(map);
+                cnt = comMapper.sectionInsert(paMap);
             }
             if(cnt != 0){
                 str="Y";

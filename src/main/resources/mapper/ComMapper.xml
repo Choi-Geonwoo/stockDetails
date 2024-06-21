@@ -13,10 +13,10 @@
                         SECTION
                 where 1=1
                 <if test='SECTION_CD != null and SECTION_CD != "" '>
-                        AND SECTION_CD = #{SECTION_CD}
+                        AND SECTION_CD LIKE '%'|| #{SECTION_CD} ||'%'
                 </if>
                 <if test='SECTION_NM != null and SECTION_NM != "" '>
-                        AND SECTION_NM = #{SECTION_NM}
+                        AND SECTION_NM LIKE '%'|| #{SECTION_NM} ||'%'
                 </if>
                         order by NO desc
 </select>
@@ -34,10 +34,10 @@
                         REG_YMD     /*등록일자*/
                 )
                 VALUES(
+                         (SELECT NVL(MAX(NO), 0)+1 FROM SECTION WHERE SECTION_CD = #{SECTION_CD}) /*순번*/
                         ,#{SECTION_CD} /*대분류코드*/
-                        (SELECT NVL(MAX(NO), 0)+1 FROM SECTION WHERE SECTION_CD = #{SECTION_CD}) /*순번*/
                         ,#{SECTION_NM} /*대분류명*/
-                        ,#{USE_YN}     /*사용여부*/
+                        ,NVL(#{USE_YN}, 'N')     /*사용여부*/
                         ,SYSDATE       /*등록일자*/
                 )
 </insert>
