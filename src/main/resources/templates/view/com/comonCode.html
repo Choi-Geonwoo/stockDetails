@@ -7,7 +7,7 @@
   <style>
 
     </style>
-  <!--<link rel="stylesheet" type="text/css" th:href="@{/CSS/dvdndClndr.css}">-->
+  <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/comonCode.css}">
   <!--부트스트랩-->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
@@ -33,6 +33,22 @@
               //answer ="stuff"; 
               break;
           }
+     
+    // 테이블 요소 가져오기
+    var table = document.getElementById('myTable');
+    
+    // 테이블 행에 클릭 이벤트 추가
+    for (var i = 1; i < table.rows.length; i++) {
+      table.rows[i].onclick = function() {
+        var cells = this.cells;
+        var cellData = [];
+        for (var j = 0; j < cells.length; j++) {
+          cellData.push(cells[j].innerHTML);
+        }
+        alert('You clicked on row with data: ' + cellData.join(', '));
+      };
+    }
+
     }
   </script>
   <title>공통코드 등록</title>
@@ -50,20 +66,21 @@
     <button class="btn btn-outline-success" type="submit">검색</button>
   </form>
   
+  <br>
   <form action="#" th:action="@{/com/comonCodeInster.do}"  method="post" >
     <table class="table w-75 p-3">
       <thead>
         <tr>
-          <th scope="col">순번</th>
-          <th scope="col">대분류코드</th>
-          <th scope="col">대분류명</th>
-          <th scope="col">사용여부</th>
-          <th scope="col">구분</th>
+          <th scope="col" >순번</th>
+          <th scope="col" >대분류코드</th>
+          <th scope="col" >대분류명</th>
+          <th scope="col" >사용여부</th>
+          <th scope="col" >구분</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th><p>1</p></th>
+          <th  class="th01"><p>1</p></th>
           <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="대분류 코드" ></td>
           <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="대분류 명" ></td>
           <td>
@@ -83,33 +100,35 @@
       </tbody>
     </table>  
   </form> 
+  <br>
 
 
-    <table class="table w-75 p-3">
-      <thead>
+  <div class="table-container">
+    <table class="table w-75 p-3 table01" id="myTable001">
+      <thead class="thead01" >
         <tr>
-          <th scope="col">순번</th>
-          <th scope="col">대분류 코드</th>
-          <th scope="col">대분류 명</th>
-          <th scope="col">사용여부</th>
-          <th scope="col">구분</th>
-          <th scope="col">등록일시</th>
+          <th scope="col" class="th01">순번</th>
+          <th scope="col" class="th01">대분류 코드</th>
+          <th scope="col" class="th01">대분류 명</th>
+          <th scope="col" class="th01">사용여부</th>
+          <th scope="col" class="th01">구분</th>
+          <th scope="col" class="th01">등록일시</th>
         </tr>
       </thead>
-      <tbody class="overflow-auto">
+      <tbody class="tbody01">
         <th:block th:if="${!#lists.isEmpty(cList)}" >
-          <tr th:each="cList, userStat  : ${cList}">
-            <th scope="col">
+          <tr th:each="cList, userStat  : ${cList}" onclick="tableCheck(this)">
+            <th scope="col" class="th01">
               <p th:text="${cList.NO}"></p>
               <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
             </th>
-            <td scope="col">
+            <td scope="col" class="td01">
               <input class="form-control" type="text" name="SECTION_CD" th:value="${cList.SECTION_CD}"  >
             </td>
-            <td scope="col">
+            <td scope="col" class="td01">
               <input class="form-control " type="text" name="SECTION_NM" th:value="${cList.SECTION_NM}">
             </td>
-            <td scope="col">
+            <td scope="col" class="td01">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:id="${userStat.index}"
                 th:checked="${cList} and (${cList.USE_YN} == 'Y')">
@@ -118,20 +137,19 @@
                 </label>
               </div>
             </td>
-            <td scope="col">
+            <td scope="col" class="td01">
               <label for="staticEmail2" class="">
                 <input type="button" value="수정" onclick="sendRowData(this)"/>
               </label>
             </td>
-            <td scope="col" th:text="${cList.REG_YMD}">
+            <td scope="col" th:text="${cList.REG_YMD}" class="td01">
             </td>
           </tr>
         <th:block>
       </tbody>
     </table>  
+</div>
 
-    <br>
-    <br>
     <br>
     <br>
 
@@ -149,6 +167,7 @@
         <thead>
           <tr>
             <th scope="col">순번</th>
+            <th scope="col">대분류코드</th>
             <th scope="col">중분류코드</th>
             <th scope="col">중분류명</th>
             <th scope="col">사용여부</th>
@@ -156,10 +175,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr >
             <th><p>1</p></th>
             <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="대분류 코드" ></td>
-            <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="대분류 명" ></td>
+            <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="중분류 코드" ></td>
+            <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="중분류 명" ></td>
             <td>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="Y" name="USE_YN">

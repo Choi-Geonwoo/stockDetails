@@ -1,3 +1,9 @@
+
+window.onload = function(){
+    
+    
+}
+
 function sendRowData(button) {
     // 버튼이 속한 행(row)을 찾습니다.
     const row = button.closest('tr');
@@ -34,4 +40,27 @@ function sendRowData(button) {
         console.error('Error:', error);
         alert('Failed to update row.');
     });
+};
+
+
+
+
+
+
+function tableCheck(button) { // 버튼이 속한 행(row)을 찾습니다.
+    const row = button.closest('tr');
+    const cells = row.getElementsByTagName('td');
+    const inputs = row.getElementsByTagName('input');
+    const dataAry = {};
+    const values = [];
+    for (let i = 0; i < cells.length - 1; i++) { // 마지막 셀은 버튼이므로 제외합니다.
+        //data['column' + i] = cells[i].innerText;
+        //values.push(inputs[i].value);
+        if (inputs[i].type === 'text') {
+            dataAry['value' + i] = inputs[i].value;
+        } else if (inputs[i].type === 'checkbox') {
+            dataAry['value' + i] = inputs[i].checked ? "Y" : "N";
+        }
+    }
+    alert(JSON.stringify(dataAry));
 }

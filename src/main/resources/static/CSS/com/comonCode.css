@@ -1,0 +1,37 @@
+.table-container {
+    width: 100%;
+  }
+
+.table01 {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+.th01, .td01 {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .th01 {
+    background-color: #f2f2f2;
+  }
+
+  /* tbody에 스크롤 추가 */
+ .tbody01 {
+    display: block;
+    height: 232px; /* 원하는 높이로 설정 */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .thead01, .tbody01 tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* 열 너비를 고정 */
+  }
+
+  /* 스크롤 막대가 있는 경우 헤더 정렬 */
+ .thead01 {
+    width: calc(100% - 1em);
+  }
