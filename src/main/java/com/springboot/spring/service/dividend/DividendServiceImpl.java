@@ -13,9 +13,9 @@ import com.springboot.spring.dto.CombinedDTO;
 import com.springboot.spring.dto.FileDTO;
 import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.dto.TransactionDto;
-import com.springboot.spring.mapper.DetailsMapper;
-import com.springboot.spring.mapper.DividendMapper;
-import com.springboot.spring.mapper.FileMapper;
+import com.springboot.spring.mapper.details.DetailsMapper;
+import com.springboot.spring.mapper.dividend.DividendMapper;
+import com.springboot.spring.mapper.file.FileMapper;
 import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;

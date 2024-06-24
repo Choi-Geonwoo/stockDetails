@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springboot.spring.dto.TransactionDto;
-import com.springboot.spring.mapper.DvdndClndrMapper;
+import com.springboot.spring.mapper.dvdnd.DvdndClndrMapper;
 
 import lombok.extern.slf4j.Slf4j;
 

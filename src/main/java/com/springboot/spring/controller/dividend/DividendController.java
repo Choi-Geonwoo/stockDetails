@@ -1,4 +1,4 @@
-﻿package com.springboot.spring.controller;
+﻿package com.springboot.spring.controller.dividend;
 
 import java.util.HashMap;
 import java.util.List;

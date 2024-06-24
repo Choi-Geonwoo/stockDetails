@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.spring.dto.StockportfolioDto;
-import com.springboot.spring.mapper.DetailsMapper;
+import com.springboot.spring.mapper.details.DetailsMapper;
 import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;

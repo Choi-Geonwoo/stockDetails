@@ -35,5 +35,15 @@ mybatis:
     call-setters-on-nulls: true        
     jdbc-type-for-null: varchar    
     default-fetch-size: 500  
-  mapper-locations: classpath:/mapper/*.xml
+  mapper-locations: classpath:/mapper/**/*.xml
   type-aliases-package : com.springboot.spring.mapper.*
+
+## 로그 조정
+logging:
+  level:
+    org:
+      springframework : INFO
+    com:
+      yourcompany : DEBUG
+    jdbc : 
+      resultset: OFF
