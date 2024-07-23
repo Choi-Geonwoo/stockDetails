@@ -130,4 +130,12 @@
                  ]]>
 </select>
 
+<select id="selectSum01" resultType="String" parameterType="com.springboot.spring.vo.StockportfolioVO">
+        SELECT /*DetailsMapper.selectSum01*/
+                TO_CHAR(SUM(STOCK_QUANTITY * PURCHASE_PRICE), 'FM999,999,999,999') AS SUM01 
+        FROM STOCKPORTFOLIO 
+        WHERE 
+                CLSCD  = 'Y'
+</select>
+
 </mapper>

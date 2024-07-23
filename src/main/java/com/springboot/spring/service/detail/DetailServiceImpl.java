@@ -103,5 +103,11 @@ public class DetailServiceImpl implements DetailsService {
         }
         
     }
+
+    @Override
+    public String selectSum01(StockportfolioDto sDto) {
+        // 주식 투자 금액 합계 조회
+        return detailsMapper.selectSum01(sDto);
+    }
     
 }

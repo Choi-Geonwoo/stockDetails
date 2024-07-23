@@ -26,4 +26,6 @@ public interface DetailsService {
     // 주식 상세 조회
     public Map<String, Object> stockDetailList(Map<String, Object> map);
 
+    // 주식 투자 금액 합계 조회
+    public String selectSum01(StockportfolioDto sDto);
 }
