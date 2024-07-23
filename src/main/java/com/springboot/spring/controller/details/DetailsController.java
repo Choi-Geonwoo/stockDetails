@@ -1,4 +1,4 @@
-﻿package com.springboot.spring.controller;
+﻿package com.springboot.spring.controller.details;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +53,24 @@ public class DetailsController {
         model.addAttribute("sList", detailsService.stockDetailsList(sDto));
         return "view/details/details";
     }
+
+    
+// 주식 거래 내역 
+ @GetMapping("/details/detailsNew")
+ public String detailsSearchNewView(Model model
+ ,@RequestParam(value = "stockName" ,required=false) String stockName
+ ,@RequestParam(value = "dividendCycle" ,required=false) String dividendCycle
+ ){
+     StockportfolioDto sDto = new StockportfolioDto();
+     sDto.setStockName(stockName);
+     sDto.setDividendCycle(dividendCycle);
+     model.addAttribute("title", "주식내역");
+     model.addAttribute("reStockName", stockName);
+     model.addAttribute("reDividendCycle", dividendCycle);
+     model.addAttribute("selectBox", detailsService.selectBox()); 
+     model.addAttribute("sList", detailsService.stockDetailsList(sDto));
+     return "view/details/detailsNew";
+ }
 
 
     // 주식 내역 등록

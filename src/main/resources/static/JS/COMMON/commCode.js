@@ -1,18 +1,17 @@
 
 window.onload = function(){
-    
+    addRow(tableId)
     
 }
 
 function sendRowData(button) {
-    // ¹öÆ°ÀÌ ¼ÓÇÑ Çà(row)À» Ã£½À´Ï´Ù.
+    // ë²„íŠ¼ì´ ì†í•œ í–‰(row)ì„ ì°¾ìŠµë‹ˆë‹¤.
     const row = button.closest('tr');
     const cells = row.getElementsByTagName('td');
     const inputs = row.getElementsByTagName('input');
     //const data = {};
     const dataAry = {};
-    const values = [];
-    for (let i = 0; i < cells.length - 1; i++) { // ¸¶Áö¸· ¼¿Àº ¹öÆ°ÀÌ¹Ç·Î Á¦¿ÜÇÕ´Ï´Ù.
+    for (let i = 0; i < cells.length - 1; i++) { // ë§ˆì§€ë§‰ ì…€ì€ ë²„íŠ¼ì´ë¯€ë¡œ ì œì™¸í•©ë‹ˆë‹¤.
         //data['column' + i] = cells[i].innerText;
         //values.push(inputs[i].value);
         if (inputs[i].type === 'text') {
@@ -21,7 +20,7 @@ function sendRowData(button) {
             dataAry['value' + i] = inputs[i].checked ? "Y" : "N";
         }
     }
-    // ¼­¹ö·Î µ¥ÀÌÅÍ¸¦ Àü¼ÛÇÕ´Ï´Ù.
+    // ì„œë²„ë¡œ ë°ì´í„°ë¥¼ ì „ì†¡í•©ë‹ˆë‹¤.
     fetch('/com/comonCodeUpdate.do', {
         method: 'POST',
         headers: {
@@ -47,20 +46,94 @@ function sendRowData(button) {
 
 
 
-function tableCheck(button) { // ¹öÆ°ÀÌ ¼ÓÇÑ Çà(row)À» Ã£½À´Ï´Ù.
+function tableCheck(button, tableId) { // ë²„íŠ¼ì´ ì†í•œ í–‰(row)ì„ ì°¾ìŠµë‹ˆë‹¤.
     const row = button.closest('tr');
     const cells = row.getElementsByTagName('td');
     const inputs = row.getElementsByTagName('input');
     const dataAry = {};
     const values = [];
-    for (let i = 0; i < cells.length - 1; i++) { // ¸¶Áö¸· ¼¿Àº ¹öÆ°ÀÌ¹Ç·Î Á¦¿ÜÇÕ´Ï´Ù.
+    for (let i = 0; i < cells.length - 1; i++) { // ë§ˆì§€ë§‰ ì…€ì€ ë²„íŠ¼ì´ë¯€ë¡œ ì œì™¸í•©ë‹ˆë‹¤.
         //data['column' + i] = cells[i].innerText;
         //values.push(inputs[i].value);
         if (inputs[i].type === 'text') {
             dataAry['value' + i] = inputs[i].value;
-        } else if (inputs[i].type === 'checkbox') {
+        } else if (0 != i && (inputs[i].type === 'checkbox')) {
             dataAry['value' + i] = inputs[i].checked ? "Y" : "N";
         }
     }
+
+    var table = document.querySelector(tableId);
+  
+    // í…Œì´ë¸”ì˜ ëª¨ë“  í–‰ì„ ì œê±°
+    while (table.rows.length > 0) {
+      table.deleteRow(2);
+    }
     alert(JSON.stringify(dataAry));
 }
+
+
+
+
+
+//  í…Œì´ë¸” í–‰ì¶”ê°€
+function addRow(tableId) {
+    //var table = document.getElementById(tableId);
+    var table = document.querySelector(tableId);
+    //alert(table);
+    var rowCount = table.rows.length;
+  
+    var row = table.insertRow(rowCount);
+    var cellCount = 6; // Number of cells to create
+  
+    for (var i = 0; i < cellCount; i++) {
+        var cell = row.insertCell(i);
+        var cellContent;
+  
+        if (i === 0) {
+            cellContent = document.createElement("p");
+            cellContent.textContent = rowCount;
+        } else if (i >= 1 && i <= 3) {
+            cellContent = document.createElement("input");
+            cellContent.type = "text";
+            cellContent.className = "form-control";
+  
+            if (i === 1) {
+                cellContent.id = "SECTION_CD_" + rowCount;
+                cellContent.name = "SECTION_CD_" + rowCount;
+                cellContent.placeholder = "ëŒ€ë¶„ë¥˜ ì½”ë“œ";
+            } else if (i === 2) {
+                cellContent.id = "SECTION_CD_" + rowCount;
+                cellContent.name = "SECTION_CD_" + rowCount;
+                cellContent.placeholder = "ì¤‘ë¶„ë¥˜ ì½”ë“œ";
+            } else if (i === 3) {
+                cellContent.id = "SECTION_NM_" + rowCount;
+                cellContent.name = "SECTION_NM_" + rowCount;
+                cellContent.placeholder = "ì¤‘ë¶„ë¥˜ ëª…";
+            }
+        } else if (i === 4) {
+            cellContent = document.createElement("div");
+            cellContent.className = "form-check";
+  
+            var checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = "Y";
+            checkbox.name = "USE_YN_" + rowCount;
+            checkbox.className = "form-check-input";
+  
+            var label = document.createElement("label");
+            label.className = "form-check-label";
+            label.textContent = "ì‚¬ìš©ì—¬ë¶€";
+  
+            cellContent.appendChild(checkbox);
+            cellContent.appendChild(label);
+        } else if (i === 5) {
+            cellContent = document.createElement("button");
+            cellContent.type = "button";
+            cellContent.className = "btn btn-outline-success";
+            cellContent.textContent = "ë“±ë¡";
+            cellContent.addEventListener("click", addRow); // Add listener for dynamically added rows
+        }
+  
+        cell.appendChild(cellContent);
+    }
+  }
