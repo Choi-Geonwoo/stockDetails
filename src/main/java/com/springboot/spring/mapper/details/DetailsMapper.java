@@ -1,5 +1,6 @@
 package com.springboot.spring.mapper.details;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,12 @@ public interface DetailsMapper {
     // 주식 상세 조회
     public Map stockDetailList(Map<String, Object> map);
 
-    // 주식 투자 금액 합계 조회
-    public String selectSum01(StockportfolioDto sDto);
+    // 자산관리 총 자산, 누적 배당금
+    public Map selectSum01(StockportfolioDto sDto);
+    
+    // 자산관리 개별 배당금
+    public List<Map> selectSum02(StockportfolioDto sDto);
+    
+    // 자산관리 배당금 추이
+    public List<Map> selectSum03(StockportfolioDto sDto);
 }

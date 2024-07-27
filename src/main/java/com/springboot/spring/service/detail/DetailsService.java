@@ -1,5 +1,6 @@
 package com.springboot.spring.service.detail;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,5 +28,5 @@ public interface DetailsService {
     public Map<String, Object> stockDetailList(Map<String, Object> map);
 
     // 주식 투자 금액 합계 조회
-    public String selectSum01(StockportfolioDto sDto);
+    public List<Map> selectSum01(StockportfolioDto sDto);
 }

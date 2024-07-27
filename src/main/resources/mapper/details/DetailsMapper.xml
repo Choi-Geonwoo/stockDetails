@@ -130,12 +130,35 @@
                  ]]>
 </select>
 
-<select id="selectSum01" resultType="String" parameterType="com.springboot.spring.vo.StockportfolioVO">
-        SELECT /*DetailsMapper.selectSum01*/
-                TO_CHAR(SUM(STOCK_QUANTITY * PURCHASE_PRICE), 'FM999,999,999,999') AS SUM01 
-        FROM STOCKPORTFOLIO 
-        WHERE 
-                CLSCD  = 'Y'
+<!-- 자산관리 총 자산, 누적 배당금 -->
+<select id="selectSum01" resultType="Map" parameterType="com.springboot.spring.vo.StockportfolioVO">
+        SELECT /* DetailsMapper.selectSum01 : 자산관리 총 자산, 누적 배당금 */
+           ( SELECT TO_CHAR(SUM(STOCK_QUANTITY * PURCHASE_PRICE), 'FM999,999,999,999.999') FROM STOCKPORTFOLIO WHERE CLSCD  = 'Y') AS SUM01
+          ,( SELECT TO_CHAR(sum(AMOUNT), 'FM999,999,999,999.999') FROM TRANSACTION) AS SUM02
+        FROM dual
+</select>
+
+<!-- 자산관리 개별 배당금 -->
+<select id="selectSum02" resultType="Map" parameterType="com.springboot.spring.vo.StockportfolioVO">
+        SELECT /* DetailsMapper.selectSum01 : 자산관리 총 자산, 누적 배당금 */
+                TB01.STOCK_NAME,TO_CHAR(SUM(TB01.AMOUNT), 'FM999,999,999,999.999')+0 AS EACH_MONEY
+        FROM TRANSACTION TB01, STOCKPORTFOLIO TB02
+        WHERE TB01.STOCK_NAME = TB02.STOCK_NAME
+        	AND TB02.CLSCD  = 'Y'
+        GROUP BY TB01.STOCK_NAME 
+                ORDER BY 1,2 DESC
+</select>
+
+
+<!-- 자산관리 년도별 배당금 추이 -->
+<select id="selectSum03" resultType="Map" parameterType="com.springboot.spring.vo.StockportfolioVO">
+        SELECT 
+                TO_CHAR(TB01.TRNSCDATE , 'YYYY-MM') AS TRNSCDATE ,TO_CHAR(SUM(TB01.AMOUNT), 'FM999,999,999,999.999')+0 AS EACH_MONEY
+        FROM TRANSACTION TB01, STOCKPORTFOLIO TB02
+        WHERE TB01.STOCK_NAME = TB02.STOCK_NAME
+        	AND TB02.CLSCD  = 'Y'
+        GROUP BY TO_CHAR(TB01.TRNSCDATE , 'YYYY-MM') 
+                ORDER BY 1 DESC
 </select>
 
 </mapper>

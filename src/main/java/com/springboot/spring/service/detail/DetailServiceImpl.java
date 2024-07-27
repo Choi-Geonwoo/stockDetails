@@ -1,5 +1,7 @@
 package com.springboot.spring.service.detail;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,10 +106,17 @@ public class DetailServiceImpl implements DetailsService {
         
     }
 
+    //자산관리 총 자산, 누적 배당금, 개별 배당금
     @Override
-    public String selectSum01(StockportfolioDto sDto) {
+    public List<Map> selectSum01(StockportfolioDto sDto) {
+        List<Map> newList = new ArrayList<>();
+        //log.info("1.### : " + detailsMapper.selectSum01(sDto).toString());
+        //log.info("2.### : " + detailsMapper.selectSum02(sDto).toString());
+        newList.add(detailsMapper.selectSum01(sDto));
+        newList.addAll(detailsMapper.selectSum02(sDto));
+        newList.addAll(detailsMapper.selectSum03(sDto));
         // 주식 투자 금액 합계 조회
-        return detailsMapper.selectSum01(sDto);
+        return newList;
     }
     
 }

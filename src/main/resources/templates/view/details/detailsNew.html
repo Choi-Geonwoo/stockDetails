@@ -44,6 +44,14 @@
     </style>
   <script type="text/javascript" th:src="@{/JS/details/details.js}"></script>
   <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
+  <script th:inline="javascript">
+    window.onload = function(){
+            const data = /*[[${sList}]]*/;
+            const sList = /*[[${sumList}]]*/;
+            //  차트
+            myChart001(data, sList);
+    }
+  </script>
 </head>
 <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -88,8 +96,7 @@
                                 총 자산
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${'$' + sum01}" >${sum01}</h5>
-                                <p class="card-text">Current value of all managed assets.</p>
+                                <h5 class="card-title" th:text="${'$ ' + sumList[0].SUM01}" ></h5>
                             </div>
                         </div>
                     </div>
@@ -99,21 +106,21 @@
                                 누적 배당금
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">567</h5>
-                                <p class="card-text">Number of transactions made this month.</p>
+                                <h5 class="card-title" th:text="${'$ ' + sumList[0].SUM02}">567</h5>
+                                <!--<p class="card-text">Number of transactions made this month.</p>-->
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">
                                 투자 종목
                             </div>
                             <div class="card-body">
-                                <canvas id="assetPieChart"></canvas>
+                                <canvas id="sharesPieMyChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -123,7 +130,7 @@
                                 개별 배당금 현황
                             </div>
                             <div class="card-body">
-                                <canvas id="assetBarChart"></canvas>
+                                <canvas id="eachMoneyBarChart"></canvas>
                             </div>
                         </div>
 
@@ -246,6 +253,7 @@
     <script>
         feather.replace();
         
+        /*******
         var pieCtx = document.getElementById('assetPieChart').getContext('2d');
         var assetPieChart = new Chart(pieCtx, {
             type: 'pie',
@@ -265,6 +273,8 @@
                 }
             }
         });
+        
+        *******/
 
         var barCtx = document.getElementById('assetBarChart').getContext('2d');
         var assetBarChart = new Chart(barCtx, {

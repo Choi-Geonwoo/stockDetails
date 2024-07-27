@@ -69,7 +69,7 @@ public class DetailsController {
      model.addAttribute("reDividendCycle", dividendCycle);
      model.addAttribute("selectBox", detailsService.selectBox()); 
      model.addAttribute("sList", detailsService.stockDetailsList(sDto));
-     model.addAttribute("sum01", detailsService.selectSum01(sDto));
+     model.addAttribute("sumList", detailsService.selectSum01(sDto));
      return "view/details/detailsNew";
  }
 

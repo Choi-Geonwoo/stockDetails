@@ -148,6 +148,23 @@ function detailsDelete(button) {
         });
     };
 
+    
+    function myChart001(data, sList){
+        // 주식 수
+        let [sharesArray, sharesName] = sharesList(data);
+        // 주식 수
+        let [sharesArray001, sharesName001] = sharesList001(sList);
+        //console.log(sharesArray001);
+        // 파이 차트
+        pieMyChart(sharesArray, sharesName,"주식 수", "sharesPieMyChart");
+        
+        // 파이 차트
+        barChart001(sharesArray001, sharesName001,"주식 수", "eachMoneyBarChart");
+
+        // 라인 차트
+        //lineChart001(sharesArray001, sharesName001,"주식 수", "eachMoneyLineChart");
+    }
+
     function myChart(data){
         // 주식 수
         let [sharesArray, sharesName] = sharesList(data);
@@ -240,6 +257,74 @@ function detailsDelete(button) {
       return [dataArray,TRNSCDATE];
     }
 
+
+// 막대 차트
+function barChart001(dataArray,TRNSCDATE,label, barMyChart){
+          
+    new Chart(document.getElementById(barMyChart), {
+        type: 'bar',
+        data: {
+            labels: TRNSCDATE,
+            datasets: [{ 
+                label : label,
+                data: dataArray,
+                //label: TRNSCDATE,
+                backgroundColor: chartColorr,
+                borderColor: chartColorr,
+                fill: false
+              }
+            ]
+          },
+        options: {
+          title: {
+            //display: true,
+            //text: 'World population per region (in millions)'
+          }
+        }
+      }); 
+}   
+
+
+// 막대 차트
+function lineChart001(dataArray,TRNSCDATE,label, barMyChart){
+          
+    new Chart(document.getElementById(barMyChart), {
+        type: 'line',
+        data: {
+            labels: TRNSCDATE,
+            datasets: [{ 
+                label : label,
+                data: dataArray,
+                //label: TRNSCDATE,
+                backgroundColor: chartColorr,
+                borderColor: chartColorr,
+                fill: false
+              }
+            ]
+          },
+        options: {
+          title: {
+            //display: true,
+            //text: 'World population per region (in millions)'
+          }
+        }
+      }); 
+}   
+
+    
+    // 주식 수
+    function sharesList001(data){
+        //alert(data.length);
+        const datasets = {};
+        const dataArray = [];
+        const TRNSCDATE = [];
+        for(var key = 0; key < data.length; key++){
+            //console.log(key + " || " +JSON.stringify(data[key]));
+            TRNSCDATE.push(data[key].STOCK_NAME);
+            dataArray.push(data[key].EACH_MONEY);
+        }
+      return [dataArray,TRNSCDATE];
+    }
 
     // 배당금 기준
     function dvdndList(data){
