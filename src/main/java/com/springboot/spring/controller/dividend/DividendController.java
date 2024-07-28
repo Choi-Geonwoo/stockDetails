@@ -58,6 +58,32 @@ public class DividendController {
     }
 
 
+    // 베당 거래 내역
+    @GetMapping("/dividend/dividendListNew")
+    public String detailsNewView(Model model 
+    ,@RequestParam(value = "stockName" ,required=false) String stockName
+    ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate
+    ,@RequestParam(value = "monthSelect" ,required=false) String monthSelect)
+    {
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("stockName", stockName);
+        map.put("trnscdate", trnscdate);
+        map.put("monthSelect", monthSelect);
+        log.info("배당내역");
+
+        //tDto.setStockName(stockName); // 항목멱
+        //tDto.setTrnscdate(trnscdate);     //거래내역
+        model.addAttribute("trnscdate", trnscdate); 
+        model.addAttribute("monthSelect", monthSelect); 
+        model.addAttribute("stockName", stockName); 
+        model.addAttribute("selectBox", dividendService.selectBox()); 
+        model.addAttribute("title", "배당내역");
+        model.addAttribute("dList", dividendService.dividendList(map));
+        return "view/dividend/dividendListNew";
+        //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
+    }
+
     
     // 배당 등록
     @PostMapping("/dividendInsert.do")

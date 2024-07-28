@@ -150,19 +150,20 @@ function detailsDelete(button) {
 
     
     function myChart001(data, sList){
+        //console.log(JSON.stringify(sList));
         // 주식 수
         let [sharesArray, sharesName] = sharesList(data);
         // 주식 수
-        let [sharesArray001, sharesName001] = sharesList001(sList);
+        let [sharesArray001, sharesName001, trnscDate, eachMoney01] = sharesList001(sList);
         //console.log(sharesArray001);
         // 파이 차트
         pieMyChart(sharesArray, sharesName,"주식 수", "sharesPieMyChart");
         
-        // 파이 차트
+        // 막대 차트
         barChart001(sharesArray001, sharesName001,"주식 수", "eachMoneyBarChart");
 
         // 라인 차트
-        //lineChart001(sharesArray001, sharesName001,"주식 수", "eachMoneyLineChart");
+        lineChart002(trnscDate, eachMoney01,"주식 수", "eachMoneyLineChart");
     }
 
     function myChart(data){
@@ -259,57 +260,109 @@ function detailsDelete(button) {
 
 
 // 막대 차트
-function barChart001(dataArray,TRNSCDATE,label, barMyChart){
-          
+function barChart001(dataArray, TRNSCDATE, label, barMyChart) {
+    const newDataArray = dataArray.filter(element => element != null);
+    const newTRNSCDATE = TRNSCDATE.filter(element => element != null);
+
+    // Generate colors for each bar
+    //const backgroundColors = ['#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6610f2', '#e83e8c', '#fd7e14', '#6f42c1', '#20c997', '#fdc107', '#adb5bd'];
+
     new Chart(document.getElementById(barMyChart), {
         type: 'bar',
         data: {
-            labels: TRNSCDATE,
-            datasets: [{ 
-                label : label,
-                data: dataArray,
-                //label: TRNSCDATE,
+            labels: newTRNSCDATE,
+            datasets: [{
+                label: label,
+                data: newDataArray,
                 backgroundColor: chartColorr,
-                borderColor: chartColorr,
-                fill: false
-              }
-            ]
-          },
+            }]
+        },
         options: {
-          title: {
-            //display: true,
-            //text: 'World population per region (in millions)'
-          }
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            }
         }
-      }); 
-}   
+    });
+}
 
 
-// 막대 차트
-function lineChart001(dataArray,TRNSCDATE,label, barMyChart){
-          
+// Line chart function
+function lineChart002(trnscDate, eachMoney01, label, barMyChart) {
+    const newTrnscDate = trnscDate.filter(element => element != null);
+    const newEachMoney01 = eachMoney01.filter(element => element != null);
+
+    // Group data by year
+    const dataByYear = {};
+    newTrnscDate.forEach((date, index) => {
+        const year = date.split('-')[0];
+        const month = date.split('-')[1];
+        if (!dataByYear[year]) {
+            dataByYear[year] = { labels: [], data: [] };
+        }
+        dataByYear[year].labels.push(month);
+        dataByYear[year].data.push(newEachMoney01[index]);
+    });
+
+    // Create datasets dynamically for each year
+    const datasets = Object.keys(dataByYear).map(year => ({
+        label: year,
+        data: dataByYear[year].data,
+        borderColor: getRandomColor(),
+        backgroundColor: getRandomColor(0.2),
+        fill: false
+    }));
+
+    // Configure the chart
     new Chart(document.getElementById(barMyChart), {
         type: 'line',
         data: {
-            labels: TRNSCDATE,
-            datasets: [{ 
-                label : label,
-                data: dataArray,
-                //label: TRNSCDATE,
-                backgroundColor: chartColorr,
-                borderColor: chartColorr,
-                fill: false
-              }
-            ]
-          },
+            labels: Array.from(new Set(newTrnscDate.map(date => date.split('-')[1]))), // Unique months for x-axis
+            datasets: datasets
+        },
         options: {
-          title: {
-            //display: true,
-            //text: 'World population per region (in millions)'
-          }
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+            },
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                x: {
+                    stacked: false,
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    stacked: false,
+                    title: {
+                        display: true,
+                        text: 'Amount'
+                    }
+                }
+            }
         }
-      }); 
-}   
+    });
+}
+
+// Helper function to generate random colors for the lines
+function getRandomColor(opacity = 1) {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
 
     
     // 주식 수
@@ -318,12 +371,16 @@ function lineChart001(dataArray,TRNSCDATE,label, barMyChart){
         const datasets = {};
         const dataArray = [];
         const TRNSCDATE = [];
+        const trnscDate = [];
+        const eachMoney01 = []; //EACH_MONEY01
         for(var key = 0; key < data.length; key++){
             //console.log(key + " || " +JSON.stringify(data[key]));
             TRNSCDATE.push(data[key].STOCK_NAME);
             dataArray.push(data[key].EACH_MONEY);
+            trnscDate.push(data[key].TRNSC_DATE);
+            eachMoney01.push(data[key].EACH_MONEY01);
         }
-      return [dataArray,TRNSCDATE];
+      return [dataArray,TRNSCDATE, trnscDate, eachMoney01];
     }
 
     // 배당금 기준

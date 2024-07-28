@@ -43,7 +43,7 @@
         }
     </style>
   <script type="text/javascript" th:src="@{/JS/details/details.js}"></script>
-  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
+  <!--<script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>-->
   <script th:inline="javascript">
     window.onload = function(){
             const data = /*[[${sList}]]*/;
@@ -139,7 +139,7 @@
                                 자산 추세
                             </div>
                             <div class="card-body">
-                                <canvas id="assetLineChart"></canvas>
+                                <canvas id="eachMoneyLineChart"></canvas>
                             </div>
                         </div>
 
@@ -274,7 +274,6 @@
             }
         });
         
-        *******/
 
         var barCtx = document.getElementById('assetBarChart').getContext('2d');
         var assetBarChart = new Chart(barCtx, {
@@ -295,7 +294,6 @@
                 }
             }
         });
-
         var lineCtx = document.getElementById('assetLineChart').getContext('2d');
         var assetLineChart = new Chart(lineCtx, {
             type: 'line',
@@ -349,6 +347,10 @@
                 }
             }
         });
+        *******/
+
+        
+
     </script>
 </body>
 </html>
