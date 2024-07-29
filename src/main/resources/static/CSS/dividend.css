@@ -6,30 +6,36 @@ table{
     overflow-y: hidden;
     overflow-y: hidden;
     /*overflow-x: auto;*/
-    }
-  tbody {
+}
+
+tbody {
     display:flex;
     overflow-x: auto;
     overflow-y: hidden
     /*overflow-x: auto;*/
-    }
-  th,td{
+}
+
+th,td{
     height: 35px;
     width: 250px;
     display:block;
-    }
+}
 
-    .td_hove:hover {
+.td_hove:hover {
       background-color: #aaaaaa;
-    }
+}
 
-    .td_disable{
+.td_disable{
       pointer-events : none;
-    }
+}
 
 
-    .image3{
+.image3{
       width: 400px;
       height: 250px;
       object-fit: scale-down;
-    }
+}
+
+.th0001 {
+  background-color: red;
+}

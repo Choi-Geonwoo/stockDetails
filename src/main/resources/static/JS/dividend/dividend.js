@@ -84,7 +84,7 @@ function createBarChart(dataArray, months) {
     if(isEmpty(inputAmount)){
       alert("거래금액 입력해주세요.");
       return;
-  }
+    }
     var fileName;
     var stockName = (selectBox.options[selectBox.selectedIndex].value);
     if(!isEmpty(imageFileInput.files[0])){
@@ -104,7 +104,6 @@ function createBarChart(dataArray, months) {
     // 데이터만 수정
     dataTransfer(data, "/dividendInsert.do");
   }
-  
     
 }
 
@@ -132,6 +131,8 @@ function fetchCall(event, exampleModal){
             let image1 = document.getElementById('image1');
             // 바디
             let modalBody = document.getElementById('modal-body');
+            // 파일 이름
+            var modalFileName = exampleModal.querySelector('.modal-fileName');
             spinner.style.display = 'block';  // 표출
             modalBody.style.display = 'none'; // 숨기기
             // 각 키와 값을 분리하여 JSON 객체에 추가합니다.
@@ -176,6 +177,7 @@ function fetchCall(event, exampleModal){
            modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
            modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
            modalDiviend.value = parsedData.transactionDto.dividend; // 배당금
+           modalFileName.textContent = parsedData.transactionDto.stockName; //파일명
            //debugger;
            // // 입력 요소에 날짜 설정
            updateTrnscdate.value = parsedData.transactionDto.trnscdate;

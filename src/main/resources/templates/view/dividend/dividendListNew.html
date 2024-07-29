@@ -1,36 +1,69 @@
-<!--resources/templates/thymeleafEx.html-->
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>배당 거래내역</title>
-  
-  <link rel="stylesheet" type="text/css" th:href="@{/CSS/dividend.css}">
-  <!--부트스트랩-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  >
+    <title>거래내역</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/dividend.css}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+ 
+    <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
+    <style>
+        body {
+            font-size: .875rem;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 48px 0 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+        .sidebar-sticky {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+        }
+        .sidebar .nav-link.active {
+            color: #007bff;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        canvas {
+            height: 300px; /* Set a specific height for charts */
+        }
 
-  <!-- 부트 스트랩 -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-
+    </style>
   <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
   <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
-  <style>
+  
     
-  </style>
-
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  
   <script th:inline="javascript">
-
-  window.onload = function(){
+window.onload = function(){
     const data = /*[[${dList}]]*/;
     const trnscdate = /*[[${trnscdate}]]*/;
     const monthSelect =/*[[${monthSelect}]]*/;
     const stockName = /*[[${stockName}]]*/;
 
     document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
+    console.log(monthSelect);
     dividendList(data, monthSelect);
     trnscdateSelect(trnscdate);
     fu_monthSelect(monthSelect);
@@ -66,138 +99,165 @@
   </script>
 </head>
 <body>
-  
-    
-    <p th:replace="view/layout/top.html :: head"></p>
-  
-  <div class="input-group">
-    <form th:action="@{/dividend/dividendList}" method="get">
-      <div class="input-group">
-          &nbsp;&nbsp;
-          <span class="input-group-text">년월</span>
-          &nbsp;&nbsp;
-        <div class="w-20">
-          <select class="form-select" aria-label="Default select example" name="trnscdate" title="전체"  id="trnscdateSelect">
-            <option value = "">전체</option>
-          </select>
-        </div>
-        &nbsp;&nbsp;
-        <div class="w-20">
-          <select id="monthSelect" name="monthSelect" class="form-select">
-            <option value="">전체</option>
-            <option value="01">1월</option>
-            <option value="02">2월</option>
-            <option value="03">3월</option>
-            <option value="04">4월</option>
-            <option value="05">5월</option>
-            <option value="06">6월</option>
-            <option value="07">7월</option>
-            <option value="08">8월</option>
-            <option value="09">9월</option>
-            <option value="10">10월</option>
-            <option value="11">11월</option>
-            <option value="12">12월</option>
-          </select>
-        </div>
-        &nbsp;&nbsp;
-        <span class="input-group-text">항목</span>
-          &nbsp;&nbsp;
-          <input type="text" name="stockName" th:value="${stockName}"> 
-          &nbsp;&nbsp;
-            <button class="btn btn-outline-secondary" type="submit">검색</button>
-        </form>
-        &nbsp;&nbsp;&nbsp;
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          등록
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">자산관리</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-      </div>
-    &nbsp;&nbsp;&nbsp;
-        
-            <div class="row">
-              <div class="col">
-                <p class="fw-bold" th:if="${!#lists.isEmpty(dList)}" th:text="${'배당 세후 합계(달러) : ' + #aggregates.sum(dList.![
-                    JANUARY
-                  + FEBRUARY
-                  + MARCH
-                  + APRIL
-                  + MAY
-                  + JUNE
-                  + JULY
-                  + AUGUST
-                  + SEPTEMBER
-                  + OCTOBER
-                  + NOVEMBER
-                  + DECEMBER]) * 1.0}">
-                </p>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+           <!--인크루트-->
+          <ul class="nav flex-column" th:replace="view/layout/topNew.html :: head"></ul>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">자산관리</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar"></span>
+                        This week
+                    </button>
+                </div>
             </div>
-  </div>
 
-  
-  <br>
-  <br>
-  <table class="table table-bordered" th:if="${!#lists.isEmpty(dList)}">
-    <thead >
-      <tr >        
-      <!--년도--><th >년도</th>
-      <!--항목--><th>항목</th>
-      <!--1월--> <th>01월</th>
-      <!--2월--> <th>02월</th>
-      <!--3월--> <th>03월</th>
-      <!--4월--> <th>04월</th>
-      <!--5월--> <th>05월</th>
-      <!--6월--> <th>06월</th>
-      <!--7월--> <th>07월</th>
-      <!--8월--> <th>08월</th>
-      <!--9월--> <th>09월</th>
-      <!--10월--><th>10월</th>
-      <!--11월--><th>11월</th>
-      <!--12월--><th>12월</th>
-      <!--합계--><th>합계</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr  th:each="dlist : ${dList}">    
-            <!--년도--><td scope="col"><label th:text="${dlist.TRNSCDATE}"></label></td>
-            <!--항목--><td th:text="${dlist.STOCK_NAME}"></td>
-            <!--1월--> <td class="JANUARY"   th:classappend="${dlist.JANUARY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JANUARY}"></td>
-            <!--2월--> <td class="FEBRUARY"  th:classappend="${dlist.FEBRUARY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.FEBRUARY}"></td>
-            <!--3월--> <td class="MARCH"     th:classappend="${dlist.MARCH eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MARCH}"></td>
-            <!--4월--> <td class="APRIL"     th:classappend="${dlist.APRIL eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.APRIL}"></td>
-            <!--5월--> <td class="MAY"       th:classappend="${dlist.MAY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MAY}"></td>
-            <!--6월--> <td class="JUNE"      th:classappend="${dlist.JUNE eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JUNE}" ></td>
-            <!--7월--> <td class="JULY"      th:classappend="${dlist.JULY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JULY}" ></td>
-            <!--8월--> <td class="AUGUST"    th:classappend="${dlist.AUGUST eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.AUGUST}" ></td>
-            <!--9월--> <td class="SEPTEMBER" th:classappend="${dlist.SEPTEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.SEPTEMBER}" ></td>
-            <!--10월--><td class="OCTOBER"   th:classappend="${dlist.OCTOBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.OCTOBER}" ></td>
-            <!--11월--><td class="NOVEMBER"  th:classappend="${dlist.NOVEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.NOVEMBER}" ></td>
-            <!--12월--><td class="DECEMBER"  th:classappend="${dlist.DECEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.DECEMBER}" ></td>
-            <!--합계--><td th:text="${
-              dlist.JANUARY 
-              + dlist.FEBRUARY
-              + dlist.MARCH
-              + dlist.APRIL
-              + dlist.MAY
-              + dlist.JUNE
-              + dlist.JULY
-              + dlist.AUGUST
-              + dlist.SEPTEMBER
-              + dlist.OCTOBER
-              + dlist.NOVEMBER
-              + dlist.DECEMBER
-            }" ></td>
-      </tr>
-  </tr>
-    </tbody>
-  </table>
+            <div class="row">
+                <div class="col-md-30">
+                    <div class="card">
+                        <div class="card-header">
+                            배당 거래 내역
+                        </div>
+                        <div class="card-body">
+                              <form th:action="@{/dividend/dividendListNew}" method="get">
+                                <div class="input-group">
+                                    &nbsp;&nbsp;
+                                    <span class="input-group-text">년월</span>
+                                    &nbsp;&nbsp;
+                                  <div class="w-20">
+                                    <select class="form-select" aria-label="Default select example" name="trnscdate" title="전체"  id="trnscdateSelect">
+                                      <option value = "">전체</option>
+                                    </select>
+                                  </div>
+                                  &nbsp;&nbsp;
+                                  <div class="w-20">
+                                    <select id="monthSelect" name="monthSelect" class="form-select">
+                                      <option value="">전체</option>
+                                      <option value="01">1월</option>
+                                      <option value="02">2월</option>
+                                      <option value="03">3월</option>
+                                      <option value="04">4월</option>
+                                      <option value="05">5월</option>
+                                      <option value="06">6월</option>
+                                      <option value="07">7월</option>
+                                      <option value="08">8월</option>
+                                      <option value="09">9월</option>
+                                      <option value="10">10월</option>
+                                      <option value="11">11월</option>
+                                      <option value="12">12월</option>
+                                    </select>
+                                  </div>
+                                  &nbsp;&nbsp;
+                                  <span class="input-group-text">항목</span>
+                                    &nbsp;&nbsp;
+                                    <input type="text" name="stockName" th:value="${stockName}"> 
+                                    &nbsp;&nbsp;
+                                      <button class="btn btn-outline-secondary" type="submit">검색</button>
+                            </form>
 
-   <br>
-    <div  th:if="${!#lists.isEmpty(dList)}" class="container">
-      <canvas id="bar_chart"></canvas>
+                            &nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                              등록
+                            </button>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                  <div class="col-md-30">
+                      <div class="card">
+                          <div class="card-header">
+                              투자 종목
+                          </div>
+                          <div class="card-body">
+                            
+                            <table class="table table-bordered" th:if="${!#lists.isEmpty(dList)}">
+                              <thead>
+                                <tr >        
+                                <!--년도--><th style="border:none;">년도</th>
+                                <!--항목--><th style="border:none;">항목</th>
+                                <!--1월--> <th style="border:none;">01월</th>
+                                <!--2월--> <th style="border:none;">02월</th>
+                                <!--3월--> <th style="border:none;">03월</th>
+                                <!--4월--> <th style="border:none;">04월</th>
+                                <!--5월--> <th style="border:none;">05월</th>
+                                <!--6월--> <th style="border:none;">06월</th>
+                                <!--7월--> <th style="border:none;">07월</th>
+                                <!--8월--> <th style="border:none;">08월</th>
+                                <!--9월--> <th style="border:none;">09월</th>
+                                <!--10월--><th style="border:none;">10월</th>
+                                <!--11월--><th style="border:none;">11월</th>
+                                <!--12월--><th style="border:none;">12월</th>
+                                <!--합계--><th style="border:none;">합계</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr  th:each="dlist : ${dList}">    
+                                      <!--년도--><td scope="col"><label th:text="${dlist.TRNSCDATE}"></label></td>
+                                      <!--항목--><td th:text="${dlist.STOCK_NAME}"></td>
+                                      <!--1월--> <td class="JANUARY"   th:classappend="${dlist.JANUARY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JANUARY}"></td>
+                                      <!--2월--> <td class="FEBRUARY"  th:classappend="${dlist.FEBRUARY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.FEBRUARY}"></td>
+                                      <!--3월--> <td class="MARCH"     th:classappend="${dlist.MARCH eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MARCH}"></td>
+                                      <!--4월--> <td class="APRIL"     th:classappend="${dlist.APRIL eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.APRIL}"></td>
+                                      <!--5월--> <td class="MAY"       th:classappend="${dlist.MAY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.MAY}"></td>
+                                      <!--6월--> <td class="JUNE"      th:classappend="${dlist.JUNE eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JUNE}" ></td>
+                                      <!--7월--> <td class="JULY"      th:classappend="${dlist.JULY eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.JULY}" ></td>
+                                      <!--8월--> <td class="AUGUST"    th:classappend="${dlist.AUGUST eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}" th:text="${dlist.AUGUST}" ></td>
+                                      <!--9월--> <td class="SEPTEMBER" th:classappend="${dlist.SEPTEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.SEPTEMBER}" ></td>
+                                      <!--10월--><td class="OCTOBER"   th:classappend="${dlist.OCTOBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.OCTOBER}" ></td>
+                                      <!--11월--><td class="NOVEMBER"  th:classappend="${dlist.NOVEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.NOVEMBER}" ></td>
+                                      <!--12월--><td class="DECEMBER"  th:classappend="${dlist.DECEMBER eq 0} ? td_disable : td_hove" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#updateModal2" th:attr="data-bs-whatever=${dlist}"  th:text="${dlist.DECEMBER}" ></td>
+                                      <!--합계--><td th:text="${
+                                        dlist.JANUARY 
+                                        + dlist.FEBRUARY
+                                        + dlist.MARCH
+                                        + dlist.APRIL
+                                        + dlist.MAY
+                                        + dlist.JUNE
+                                        + dlist.JULY
+                                        + dlist.AUGUST
+                                        + dlist.SEPTEMBER
+                                        + dlist.OCTOBER
+                                        + dlist.NOVEMBER
+                                        + dlist.DECEMBER
+                                      }" ></td>
+                                </tr>
+                            </tr>
+                              </tbody>
+                            </table>
+
+
+                          </div>
+                      </div>
+                  </div>
+                 
+                  </div>
+              </div>
+            </div>
+
+              
+            </main>
+        </div>
     </div>
-    <br>
-    
 
- <!-- 등록 Modal -->
+
+
+    <!-- 등록 Modal -->
  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -321,7 +381,7 @@
                         <div class="col-sm-8">
                           <!--<input type="file" class="form-control" id="updateFile" name="updateFile" onchange="readURL(this, 'image1');"> onchange="toBase64(event);"-->
                           <input type="file" id="updateFile" name="updateFile" onchange="readURL(this, 'image1');" style="display:none;"></input>
-                          <label for="updateFile" class="form-control">업로드</label>
+                          <label for="updateFile" class="form-control modal-fileName">업로드</label>
                         </div>
                       </div>
                       

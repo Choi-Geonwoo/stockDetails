@@ -43,7 +43,7 @@
         }
     </style>
   <script type="text/javascript" th:src="@{/JS/details/details.js}"></script>
-  <!--<script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>-->
+  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
   <script th:inline="javascript">
     window.onload = function(){
             const data = /*[[${sList}]]*/;
@@ -52,6 +52,13 @@
             myChart001(data, sList);
     }
   </script>
+
+  <!-- 엑셀 다운로드 용 SheetJS 라이브러리 추가 -->
+  <!-- Sheet JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+  <!-- FileSaver 사용 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
 </head>
 <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -124,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">
                                 개별 배당금 현황
@@ -136,7 +143,7 @@
 
                         <div class="card">
                             <div class="card-header">
-                                자산 추세
+                                배당금 추세
                             </div>
                             <div class="card-body">
                                 <canvas id="eachMoneyLineChart"></canvas>
@@ -146,8 +153,61 @@
 
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            보유목록
+                        </div>
+                        <div class="card-body">
+                            <form if="myForm" th:action="@{/details/detailsNew}" method="get">
 
-                <h2>보유목록</h2>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">주식</span>
+                                    <select class="form-select w-20" aria-label="Default select example" id="selectBox" name="stockName">
+                                        <option  th:value="allStockName" th:text="전체"></option>
+                                        <th:block th:each="selectBox : ${selectBox}">
+                                          <option name="stockName" th:value="${selectBox.stockName}"
+                                          th:text="${selectBox.stockName}" th:selected="${selectBox.stockName} == ${reStockName}"></option>
+                                        </th:block>
+                                      </select>
+                                      &nbsp;&nbsp;
+                                      <span class="input-group-text" id="inputGroup-sizing-sm2">주기</span>
+                                      <input class="form-control" list="datalistOptions" id="exampleDataList1" name="dividendCycle" th:value="${reDividendCycle}">
+                                      <datalist id="datalistOptions">
+                                        <option value="전체">
+                                        <option value="01,04,07,10">
+                                        <option value="02,05,08,11">
+                                        <option value="03,06,09,12">
+                                        <option value="04,07,10,12">
+                                        <option value="월">
+                                      </datalist>
+                                      &nbsp;&nbsp;
+                                    <button class="btn btn-outline-secondary">검색</button>
+                                      &nbsp;&nbsp;
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        등록
+                                    </button>  
+                                    &nbsp;&nbsp;                                            
+                                    <button type="button" class="btn btn-outline-success" onclick="exportExcel('거래내역_', 'myTable2');"><!--id="excelDownload"-->
+                                        Export
+                                    </button>  
+                                    &nbsp;&nbsp;    
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" onClick="displayCheck(this)">
+                                        <label class="form-check-label" for="inlineCheckbox1">숨기기</label>
+                                    </div>
+                                    &nbsp;  
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" onClick="visibleCheck(this)">
+                                        <label class="form-check-label" for="inlineCheckbox2">감추기</label>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="table-responsive height_scroll">
                   <table id="myTable2" class="table table-bordered w-100">
                     <thead>
