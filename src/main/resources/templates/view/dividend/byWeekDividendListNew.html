@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  >
+    <title>거래내역</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/dividendNew.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/com.css}">
+   
+    <style>
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
+    
+    <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
+  
+  <script th:inline="javascript">
+  window.onload = function(){
+    getTotal();
+    feather.replace();
+  }
+
+  function getTotal(){
+    const table = document.querySelector('#table01');
+    let total  = 0;
+    for(let i = 0; i < table.rows.length; i++)  {
+      if(!isEmpty(table.rows[i].cells[4].innerHTML.replace(/,/g, ""))){
+        total += parseFloat(table.rows[i].cells[4].innerHTML.replace(/,/g, ""))
+      }
+    }
+    document.querySelector('#sumTotal').innerHTML = total.toLocaleString();
+    
+  }
+  </script>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">자산관리</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+           <!--인크루트-->
+          <ul class="nav flex-column" th:replace="view/layout/topNew.html :: head"></ul>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2" th:text="${title}">자산관리</h1>
+<!--
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group mr-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                            <span data-feather="calendar"></span>
+                            This week
+                        </button>
+                    </div>
+-->
+                </div>
+
+              <!-- 바디 시작-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            배당 거래 내역
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/dividend/byWeekDividendListNew}" method="get">
+                                <label for="weekInput">배당 기준일 :</label>
+                                <!-- <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}"> -->
+                                <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${not #strings.isEmpty(startYmd)} ? ${startYmd} : ${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}">
+                                &nbsp;
+                                ~
+                                &nbsp;
+                                <!--<input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">-->
+                                <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${not #strings.isEmpty(endYmd)} ? ${endYmd} : ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">
+                                &nbsp;
+                                <button type="submit" class="btn btn-secondary">검색</button>
+                            </form>
+                        </div><!--"card-body"-->
+                        
+                        
+                    </div><!--card-->
+
+
+                    
+                </div><!--"col-md-2"-->
+
+                
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            배당금($) 
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${!#lists.isEmpty(byWeekList)}" >
+                                <h3  class="card-title" th:text="${'합계 : '+byWeekList[0].TOTAL}"></h3>
+                            </div>
+                        </div><!--"card-body"-->
+                        
+                        
+                    </div><!--card-->
+
+
+                    
+                </div><!--"col-md-6"-->
+
+            </div><!--"row"-->
+
+            <div class="card-body">    
+                <table class="table  table-hover">
+                    <thead style="background-color:#ece7f5">
+                    <tr >        
+                        <th scope="col" class="p-3 text-center">순번</th>
+                        <th scope="col" class="p-3 text-center">배당일</th>
+                        <th scope="col" class="p-3 text-center">주식명</th>
+                        <th scope="col" class="p-3 text-center">배당금</th>
+                        <th scope="col" class="p-3 text-center">금액</th>
+                        <th scope="col" class="p-3 text-center">등록일</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider" id="table01" th:if="${!#lists.isEmpty(byWeekList)}">
+                    <tr  th:each="byWeekList : ${byWeekList}">    
+                            <!----><td class="text-center" th:text="${byWeekList.NO_}"></td>
+                            <!----><td class="text-center" th:text="${byWeekList.TRNSCDATE}"></td>
+                            <!----><td class="text-center" th:text="${byWeekList.STOCK_NAME}"></td>                  
+                            <!----><td class="text-center" th:text="${byWeekList.DIVIDEND}"></td>
+                            <!----><td class="text-center" th:text="${byWeekList.AMOUNT}"></td>
+                            <!----><td class="text-center" th:text="${byWeekList.RGSTDATE}"></td>
+                    </tr>
+                    <!-- 기존 데이터가 10개 미만인 경우에만 더미 데이터 생성 -->
+                    <th:block th:if="${byWeekList.size() &lt; 10}">
+                        <th:block th:each="dummyRow : ${#numbers.sequence(byWeekList.size() + 1, 10)}" th:remove="tag">
+                            <tr>
+                                <td class="text-center" th:text="${pageVo.totalCount + dummyRow - byWeekList.size()}"></td>
+                                <td ></td>
+                                <td ></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </th:block>
+                    </th:block>
+                    </tbody>
+                    <tfoot>
+                    <!----><td></td>
+                    <!----><td>합계 : </td>
+                    <!----><td></td>                  
+                    <!----><td></td>
+                    <!----><td class="text-center"><span id="sumTotal"></span></td>
+                    <!----><td></td>
+                    </tfoot>
+                </table>
+
+                
+
+            <!-- 페이징 처리 -->
+            <nav aria-label="Page navigation example" th:if="${!#lists.isEmpty(byWeekList)}">
+                <ul class="pagination justify-content-center">
+                <!-- 맨 처음 페이지로 이동하는 버튼 -->
+                <li class="page-item">
+                    <span th:if="${pageVo.startPage > 1}">
+                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=1'+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'처음'"></a>
+                    </span>
+                </li>
+                <!-- 이전 블록으로 이동하는 버튼 -->
+                <li class="page-item">
+                    <span th:if="${pageVo.isPrev == true}">
+                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageVo.startPage - 1} + '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'이전'"></a>
+                    </span>
+                </li>
+                <!-- 시퀀스 보여주는 값을 변경. -->
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(pageVo.startPage, pageVo.endPage)}">
+                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageNum}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;${pageNum}&emsp;|"></a>
+                </li>
+                <li class="page-item">
+                <!-- 다음 블록으로 이동하는 버튼 -->
+                <span th:if="${pageVo.isNext == true}">
+                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageVo.endPage + 1}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'다음'"></a>
+                </span>
+                </li>
+                <!-- 맨 뒷 페이지로 이동하는 버튼 -->
+                <li class="page-item">
+                    <span th:if="${pageVo.endPage < pageVo.totalPageCount}">
+                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageVo.totalPageCount}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;끝|"></a>
+                    </span>
+                    <!--<a th:href="@{'/bank/bankList?searchType='+${pageVo.searchType} +'&keyword='+${pageVo.keyword}+'&page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|"></a>-->
+                </li>
+                </ul>
+            </nav>
+            
+            </div><!-- "card-body" -->
+
+              <!-- 바디 끝-->
+            </main>
+        </div>
+
+    </div>
+
+</body>
+</html>

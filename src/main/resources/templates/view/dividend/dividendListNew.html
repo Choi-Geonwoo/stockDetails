@@ -4,56 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  >
     <title>거래내역</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/CSS/dividend.css}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
- 
-    <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
-    <style>
-        body {
-            font-size: .875rem;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 48px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        }
-        .sidebar-sticky {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            height: calc(100vh - 48px);
-            padding-top: .5rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-        .sidebar .nav-link {
-            font-weight: 500;
-            color: #333;
-        }
-        .sidebar .nav-link.active {
-            color: #007bff;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        canvas {
-            height: 300px; /* Set a specific height for charts */
-        }
 
-    </style>
-  <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
-  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
-  
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/dividend.css}">
+    <style>
+      body {
+          font-size: .875rem;
+      }
+      .sidebar {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 100;
+          padding: 48px 0 0;
+          box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+      }
+      .sidebar-sticky {
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          height: calc(100vh - 48px);
+          padding-top: .5rem;
+          overflow-x: hidden;
+          overflow-y: auto;
+      }
+      .sidebar .nav-link {
+          font-weight: 500;
+          color: #333;
+      }
+      .sidebar .nav-link.active {
+          color: #007bff;
+      }
+      .card {
+          margin-bottom: 20px;
+      }
+      canvas {
+          height: 300px; /* Set a specific height for charts */
+      }
+
+  </style>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <script type="text/javascript" th:src="@{/JS/dividend/dividendListNew.js}"></script>
     
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
+    <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
   
   <script th:inline="javascript">
 window.onload = function(){
@@ -63,8 +63,10 @@ window.onload = function(){
     const stockName = /*[[${stockName}]]*/;
 
     document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
-    console.log(monthSelect);
-    dividendList(data, monthSelect);
+    //console.log(monthSelect);
+    //dividendList(data, monthSelect);
+    //  차트
+    myChart001(data);
     trnscdateSelect(trnscdate);
     fu_monthSelect(monthSelect);
 
@@ -79,6 +81,7 @@ window.onload = function(){
     //document.getElementById("col-sm-12").style.display ='none';	
     // 파일 입력 필드를 찾습니다.
     //var fileInput2 = document.getElementById("image1");
+        feather.replace();
   }
  
   function readURL(input, img) {
@@ -114,7 +117,7 @@ window.onload = function(){
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
 
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">자산관리</h1>
+                <h1 class="h2" th:text="${title}">자산관리</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -174,9 +177,9 @@ window.onload = function(){
                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                               등록
                             </button>
-                        </div>
-                    </div>
-                </div>
+                      </div>
+                  </div>
+              </div>
                
                 <div class="row">
                   <div class="col-md-30">
@@ -250,9 +253,26 @@ window.onload = function(){
               </div>
             </div>
 
+            
               
+              <div class="row">
+                <div class="col-md-30">
+                    <div class="card">
+                        <div class="card-header">
+                            배당 거래 내역
+                        </div>
+                        <div class="card-body">
+                          <th:block th:if="${!#lists.isEmpty(dList)}">
+                            <canvas id="bar_chart"></canvas>
+                          </th:block>  
+                        </div>
+                    </div>
+              </div>
+
+              <!-- 바디 끝-->
             </main>
         </div>
+
     </div>
 
 
@@ -400,7 +420,13 @@ window.onload = function(){
                       
             </div>
     </div>
+
+
+
+    
   </div>
+
+
 
 </body>
 </html>

@@ -28,7 +28,7 @@ function dividendList(data, monthSelect) {
     }
       
       const backgroundColor = chartColorr[data.indexOf(item)]; // Assuming chartColorr is defined elsewhere.
-
+      console.log("라벨 : " + label);
       dataArray.push({
           label: label,
           data: dataValues,
@@ -36,6 +36,7 @@ function dividendList(data, monthSelect) {
       });
   }
   console.log(monthToNumber(monthSelect));
+  console.log(dataArray);
   const months = isEmpty(monthSelect) ? ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"] : [`${monthSelect}월`];
 
   createBarChart(dataArray, months);
@@ -47,6 +48,7 @@ function createBarChart(dataArray, months) {
       labels: months,
       datasets: dataArray
   };
+  console.log(chartData);
 
   const myChart = new Chart(chBar, {
       type: 'bar',

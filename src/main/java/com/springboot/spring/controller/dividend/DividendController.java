@@ -185,6 +185,45 @@ public class DividendController {
 
     //yearComparison
 
+    
+    // 주별 베당 거래 내역
+    @GetMapping("/dividend/byWeekDividendListNew")
+    public String byWeekDividendNewView(Model model
+     ,@RequestParam(value = "startYmd" ,required=false) String startYmd 
+     ,@RequestParam(value = "endYmd" ,required=false) String endYmd 
+     ,@RequestParam(value = "page", defaultValue = "1") final int page
+     )
+    {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("startYmd", startYmd);
+        map.put("endYmd", endYmd);
+        map.put("page", page);
+        map.put("rowCount", 10);
+        List<Map> list = dividendService.byWeekDividendList(map);
+        
+        /* ### 페이징 처리 ### */
+        int currentPage = page; // 현재 페이지
+        int totalCount = 0; // 총 게시물 개수
+        if(!list.isEmpty()){
+            totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // 총 게시물 개수
+        }
+        // Pagination 정보를 계산합니다.
+        // PaginationService 객체를 생성합니다.
+        Map<String, Object> paginationMap = paginationService.calculatePagination(totalCount, currentPage);
+
+        /* ### 페이징 처리 ### */
+
+        model.addAttribute("selectBox", dividendService.selectBox()); 
+        model.addAttribute("startYmd", startYmd);
+        model.addAttribute("endYmd", endYmd);
+        model.addAttribute("title", "주별 배당내역");
+        model.addAttribute("byWeekList", list);
+        model.addAttribute("page", page);
+        model.addAttribute("pageVo", paginationMap);
+        
+        return "view/dividend/byWeekDividendListNew";
+    }
 
     // 년도 베당 거래 내역
     @GetMapping("/dividend/yearComparison")

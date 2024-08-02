@@ -1,0 +1,27 @@
+    /* 입력 필드를 더 스타일링하기 위한 CSS */
+    .week-picker {
+        display: flex;
+        align-items: center;
+        font-family: Arial, sans-serif;
+      }
+      label {
+        margin-right: 10px;
+      }
+      input[type="week"] {
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      input[type="week"]:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+      }
+      ._date {
+      /* Apply your desired styles */
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }

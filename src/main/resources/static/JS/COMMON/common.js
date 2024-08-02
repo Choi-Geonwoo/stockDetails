@@ -1,32 +1,32 @@
 function fu_monthSelect(monthValue){
-  // ¿ù ¼±ÅÃ »óÀÚ ¿¤¸®¸ÕÆ® Ã£±â
+  // ì›” ì„ íƒ ìƒì ì—˜ë¦¬ë¨¼íŠ¸ ì°¾ê¸°
   var monthSelect = document.getElementById("monthSelect");
   
-  // ÇöÀç ³¯Â¥¸¦ °¡Á®¿À´Â JavaScript °´Ã¼ »ı¼º
+  // í˜„ì¬ ë‚ ì§œë¥¼ ê°€ì ¸ì˜¤ëŠ” JavaScript ê°ì²´ ìƒì„±
   var currentDate = new Date();
   
-  // ÇöÀç ¿ùÀ» °¡Á®¿À±â (0ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î 1À» ´õÇØÁİ´Ï´Ù)
+  // í˜„ì¬ ì›”ì„ ê°€ì ¸ì˜¤ê¸° (0ë¶€í„° ì‹œì‘í•˜ë¯€ë¡œ 1ì„ ë”í•´ì¤ë‹ˆë‹¤)
   var currentMonth = currentDate.getMonth() + 1;
   
-    // ¿ù ¼±ÅÃ »óÀÚ¿¡¼­ ÇöÀç ¿ù°ú ÀÏÄ¡ÇÏ´Â ¿É¼ÇÀ» ¼±ÅÃÇÕ´Ï´Ù.
+    // ì›” ì„ íƒ ìƒìì—ì„œ í˜„ì¬ ì›”ê³¼ ì¼ì¹˜í•˜ëŠ” ì˜µì…˜ì„ ì„ íƒí•©ë‹ˆë‹¤.
     for (var i = 0; i < monthSelect.options.length; i++) {
       if (monthSelect.options[i].value == monthValue) {
         monthSelect.options[i].selected = true;
-        break; // ¿øÇÏ´Â ¿É¼ÇÀ» Ã£À¸¸é ·çÇÁ Á¾·á
+        break; // ì›í•˜ëŠ” ì˜µì…˜ì„ ì°¾ìœ¼ë©´ ë£¨í”„ ì¢…ë£Œ
       }else if (monthSelect.options[i].value == currentMonth) {
             monthSelect.options[i].selected = true;
-            break; // ¿øÇÏ´Â ¿É¼ÇÀ» Ã£À¸¸é ·çÇÁ Á¾·á
+            break; // ì›í•˜ëŠ” ì˜µì…˜ì„ ì°¾ìœ¼ë©´ ë£¨í”„ ì¢…ë£Œ
         }
     }
   }
 
   
-// Á¶È¸ ³âµµ ¼¿·ºÆ® ¹Ú½º
+// ì¡°íšŒ ë…„ë„ ì…€ë ‰íŠ¸ ë°•ìŠ¤
 function trnscdateSelect(yearmonth){
   const yearSelect = document.getElementById('trnscdateSelect');
   const currentYear = new Date().getFullYear();
-  const startYear = 2020; // ½ÃÀÛ ³âµµ
-  const endYear = currentYear + 10; // ÇöÀç ³âµµ¿¡¼­ 10³â µÚ±îÁö Ç¥½Ã
+  const startYear = 2020; // ì‹œì‘ ë…„ë„
+  const endYear = currentYear + 10; // í˜„ì¬ ë…„ë„ì—ì„œ 10ë…„ ë’¤ê¹Œì§€ í‘œì‹œ
 
   for (let year = startYear; year <= endYear; year++) {
     const option = document.createElement('option');
@@ -34,14 +34,14 @@ function trnscdateSelect(yearmonth){
     option.text = year;
     //console.log("year " + year + " yearmonth : " + yearmonth);
     if(year == yearmonth){
-      option.selected = true; // ÇöÀç ³âµµ¸¦ ±âº» ¼±ÅÃÀ¸·Î ¼³Á¤
+      option.selected = true; // í˜„ì¬ ë…„ë„ë¥¼ ê¸°ë³¸ ì„ íƒìœ¼ë¡œ ì„¤ì •
       yearSelect.value = yearmonth;
       yearSelect.appendChild(option);
     }else{
       yearSelect.appendChild(option);
     }
   }
-  // ÇöÀç ³âµµ¸¦ ±âº»°ªÀ¸·Î ¼³Á¤
+  // í˜„ì¬ ë…„ë„ë¥¼ ê¸°ë³¸ê°’ìœ¼ë¡œ ì„¤ì •
   if(null == yearmonth){
       yearSelect.value = currentYear;
   }
@@ -51,10 +51,10 @@ function trnscdateSelect(yearmonth){
 
 function dateChek(date){
   const val = "/./g";
-  // Á¤±Ô Ç¥Çö½ÄÀ¸·Î ¸ğµç ÃâÇöÀ» °Ë»ö
+  // ì •ê·œ í‘œí˜„ì‹ìœ¼ë¡œ ëª¨ë“  ì¶œí˜„ì„ ê²€ìƒ‰
   const dotCount = (date.match(/\./g) || [0]).length;
   if((1 != dotCount) ){
-    alert("¿À·ù ¹ß»ı");
+    alert("ì˜¤ë¥˜ ë°œìƒ");
     return true;
   }else{
     return false;
@@ -63,8 +63,8 @@ function dateChek(date){
 
 
 /**
-	 * ¹®ÀÚ¿­ÀÌ ºó ¹®ÀÚ¿­ÀÎÁö Ã¼Å©ÇÏ¿© °á°ú°ªÀ» ¸®ÅÏÇÑ´Ù. 
-	 * @param str		: Ã¼Å©ÇÒ ¹®ÀÚ¿­
+	 * ë¬¸ìì—´ì´ ë¹ˆ ë¬¸ìì—´ì¸ì§€ ì²´í¬í•˜ì—¬ ê²°ê³¼ê°’ì„ ë¦¬í„´í•œë‹¤. 
+	 * @param str		: ì²´í¬í•  ë¬¸ìì—´
  **/
 function isEmpty(str){
 		
@@ -87,12 +87,14 @@ function toDay(){
 
 
 /**
-	 * ¿¢¼¿ ´Ù¿î·Îµå 
-	 * @param str		: Ã¼Å©ÇÒ ¹®ÀÚ¿­
+	 * ì—‘ì…€ ë‹¤ìš´ë¡œë“œ 
+	 * @param str		: ì²´í¬í•  ë¬¸ìì—´
  **/
 document.addEventListener('DOMContentLoaded', () => {
   const excelDownload = document.querySelector('#excelDownload');
-  fileName = "°Å·¡³»¿ª";
+  console.log();
+  fileName = "ê±°ë˜ë‚´ì—­";
+  if(excelDownload == null) return;
   excelDownload.addEventListener('click', exportExcel);
 });
 
@@ -107,10 +109,10 @@ function exportExcel(fileName, table_id) {
 
 const excelHandler = {
   getExcelFileName: function (fileName) {
-    return fileName+toDay()+'.xlsx'; // ÆÄÀÏ¸í
+    return fileName+toDay()+'.xlsx'; // íŒŒì¼ëª…
   },
   getSheetName: function () {
-    return 'Table Test Sheet'; // ½ÃÆ®¸í
+    return 'Table Test Sheet'; // ì‹œíŠ¸ëª…
   },
   getExcelData: function (table_id) {
     const table = document.getElementById(table_id);
@@ -137,13 +139,13 @@ const excelHandler = {
 };
 
 function s2ab(s) {
-  const buf = new ArrayBuffer(s.length); // s¸¦ arrayBuffer·Î º¯È¯
-  const view = new Uint8Array(buf); // uint8array »ı¼º
-  for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; // ¿ÁÅİÀ¸·Î º¯È¯
+  const buf = new ArrayBuffer(s.length); // së¥¼ arrayBufferë¡œ ë³€í™˜
+  const view = new Uint8Array(buf); // uint8array ìƒì„±
+  for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; // ì˜¥í…Ÿìœ¼ë¡œ ë³€í™˜
   return buf;
 }
 
-/* Å×ÀÌºí Á¤·Ä */
+/* í…Œì´ë¸” ì •ë ¬ */
 function sortTable(id,n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
   table = document.getElementById(id);
@@ -198,4 +200,5 @@ function sortTable(id,n) {
     }
   }
 }
+
 

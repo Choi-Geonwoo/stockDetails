@@ -6,42 +6,15 @@
     <title>거래내역</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/CSS/details.css}">
-    <style>
-        body {
-            font-size: .875rem;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 48px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        }
-        .sidebar-sticky {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            height: calc(100vh - 48px);
-            padding-top: .5rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-        .sidebar .nav-link {
-            font-weight: 500;
-            color: #333;
-        }
-        .sidebar .nav-link.active {
-            color: #007bff;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        canvas {
-            height: 300px; /* Set a specific height for charts */
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/com.css}">
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+
   <script type="text/javascript" th:src="@{/JS/details/details.js}"></script>
   <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
   <script th:inline="javascript">
@@ -50,6 +23,7 @@
             const sList = /*[[${sumList}]]*/;
             //  차트
             myChart001(data, sList);
+            feather.replace();
     }
   </script>
 
@@ -83,7 +57,7 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">자산관리</h1>
+                    <h1 class="h2" th:text="${title}">자산관리</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -153,7 +127,9 @@
 
                     </div>
                 </div>
-                <div class="col-md-6">
+
+
+                <div class="col-md-13">
                     <div class="card">
                         <div class="card-header">
                             보유목록
@@ -206,211 +182,103 @@
                             </form>
                         </div>
                     </div>
-                </div>
                 
-                <div class="table-responsive height_scroll">
-                  <table id="myTable2" class="table table-bordered w-100">
-                    <thead>
-                        <tr>
-                            <th class="w-10" style="display: none;">순번</th>
-                            <th class=" h6" onclick="sortTable('myTable2',1)">주식명</th>
-                            <th name="paragraph" class=" h6 mw-20" onclick="sortTable('myTable2',2)">주식수</th>
-                            <th name="paragraph" class=" h6 mw-100">배당주기</th>
-                            <th name="paragraph" class=" h6">매입금</th>
-                            <th name="paragraph" class=" h6">배당금</th>
-                            <th name="paragraph" class=" h6">등록일자</th>
-                            <th name="paragraph" class=" h6">구분</th>
-                            <th class=" h6">01월</th>
-                            <th class=" h6">02월</th>
-                            <th class=" h6">03월</th>
-                            <th class=" h6">04월</th>
-                            <th class=" h6">05월</th>
-                            <th class=" h6">06월</th>
-                            <th class=" h6">07월</th>
-                            <th class=" h6">08월</th>
-                            <th class=" h6">09월</th>
-                            <th class=" h6">10월</th>
-                            <th class=" h6">11월</th>
-                            <th class=" h6">12월</th>
-                        </tr>
-                    </thead>
-                    <tbody th:if="${!#lists.isEmpty(sList)}" id="data-table" >
-                    <tr th:each="slist : ${sList}">
-                            <td style="display: none;" ><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
-                            <td >
-                              <!-- <input  class="form-control-plaintext td_disable " type="text" th:value="${slist.stockName}" readonly > -->
-                              <input type="button" class="btn btn-outline-secondary w-100" th:value="${slist.stockName}" th:data-stockname="${slist.stockName}" onclick="showModal(this)">
-                            </td><!--주식명-->
-                            <td name="paragraph"><input class="form-control form-control-sm  w-20" type="text" th:value="${slist.stockQuantity}"></td><!--주식수-->
-                            <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendCycle}"></td><!--배당 주기-->
-                            <td name="paragraph"><input name="purchasePrice" class="form-control form-control-sm" type="text" th:value="${slist.purchasePrice}"></td><!--매입금-->
-                            <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendAmount}"></td><!--배당금-->
-                            <td name="paragraph" class="h6"><input class="form-control-plaintext td_disable" type="text" th:value="${#strings.substring(slist.rgstdate, 0, 10)}" readonly></td><!--등록일자-->
-        
-                            <!-- th:text="${#strings.substring(slist.rgstdate, 0, 8)}" -->
-                            <!-- th:text="${#temporals.format(item.createDt, 'yyyy-MM-dd HH:mm:ss')}" -->
-                            <td name="paragraph">
-                              <div class="btn-group" role="group" aria-label="Basic example">
-                                <button class="btn btn-outline-secondary" onclick="detailsUpdate(this)">수</button>
-                                &nbsp;
-                                <button class="btn btn-outline-danger" onclick="detailsDelete(this);">삭</button>
-                                <input type="hidden">
-                              </div>
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                            <input type="hidden" th:value="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                            <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border"  th:classappend="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                            <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
-                              <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
-                            </td>
-                        </tr>
-        
-                        
-                    </tbody>
-                </table>
+                            <div class="table-responsive height_scroll">
+                            <table id="myTable2" class="table table-bordered w-100">
+                                <thead>
+                                    <tr>
+                                        <th class="w-10" style="display: none;">순번</th>
+                                        <th class=" h6" onclick="sortTable('myTable2',1)">주식명</th>
+                                        <th name="paragraph" class=" h6 mw-20" onclick="sortTable('myTable2',2)">주식수</th>
+                                        <th name="paragraph" class=" h6 mw-100">배당주기</th>
+                                        <th name="paragraph" class=" h6">매입금</th>
+                                        <th name="paragraph" class=" h6">배당금</th>
+                                        <th name="paragraph" class=" h6">등록일자</th>
+                                        <th name="paragraph" class=" h6">구분</th>
+                                        <th class=" h6">01월</th>
+                                        <th class=" h6">02월</th>
+                                        <th class=" h6">03월</th>
+                                        <th class=" h6">04월</th>
+                                        <th class=" h6">05월</th>
+                                        <th class=" h6">06월</th>
+                                        <th class=" h6">07월</th>
+                                        <th class=" h6">08월</th>
+                                        <th class=" h6">09월</th>
+                                        <th class=" h6">10월</th>
+                                        <th class=" h6">11월</th>
+                                        <th class=" h6">12월</th>
+                                    </tr>
+                                </thead>
+                                <tbody th:if="${!#lists.isEmpty(sList)}" id="data-table" >
+                                <tr th:each="slist : ${sList}">
+                                        <td style="display: none;" ><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
+                                        <td >
+                                        <!-- <input  class="form-control-plaintext td_disable " type="text" th:value="${slist.stockName}" readonly > -->
+                                        <input type="button" class="btn btn-outline-secondary w-100" th:value="${slist.stockName}" th:data-stockname="${slist.stockName}" onclick="showModal(this)">
+                                        </td><!--주식명-->
+                                        <td name="paragraph"><input class="form-control form-control-sm  w-20" type="text" th:value="${slist.stockQuantity}"></td><!--주식수-->
+                                        <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendCycle}"></td><!--배당 주기-->
+                                        <td name="paragraph"><input name="purchasePrice" class="form-control form-control-sm" type="text" th:value="${slist.purchasePrice}"></td><!--매입금-->
+                                        <td name="paragraph"><input class="form-control form-control-sm" type="text" th:value="${slist.dividendAmount}"></td><!--배당금-->
+                                        <td name="paragraph" class="h6"><input class="form-control-plaintext td_disable" type="text" th:value="${#strings.substring(slist.rgstdate, 0, 10)}" readonly></td><!--등록일자-->
+                    
+                                        <!-- th:text="${#strings.substring(slist.rgstdate, 0, 8)}" -->
+                                        <!-- th:text="${#temporals.format(item.createDt, 'yyyy-MM-dd HH:mm:ss')}" -->
+                                        <td name="paragraph">
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button class="btn btn-outline-secondary" onclick="detailsUpdate(this)">수</button>
+                                            &nbsp;
+                                            <button class="btn btn-outline-danger" onclick="detailsDelete(this);">삭</button>
+                                            <input type="hidden">
+                                        </div>
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                                        <input type="hidden" th:value="${#strings.contains(slist.dividendCycle,'01')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'02')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'03')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'04')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'05')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'06')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border"  th:classappend="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'07')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'08')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''" >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'09')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'10')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'11')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                        <td class="border" th:classappend="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'bg-warning' : ''"                    >
+                                        <input type="hidden"  th:value="${#strings.contains(slist.dividendCycle,'12')} or ${#strings.contains(slist.dividendCycle,'월')} ? 'O' : ''" >
+                                        </td>
+                                    </tr>
+                    
+                                    
+                                </tbody>
+                            </table>
+                            </div>
                 </div>
             </main>
         </div>
     </div>
 
 
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script>
-        feather.replace();
-        
-        /*******
-        var pieCtx = document.getElementById('assetPieChart').getContext('2d');
-        var assetPieChart = new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Stocks', 'Bonds', 'Real Estate', 'Cash', 'Others'],
-                datasets: [{
-                    data: [40, 20, 20, 15, 5],
-                    backgroundColor: ['#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                }
-            }
-        });
-        
-
-        var barCtx = document.getElementById('assetBarChart').getContext('2d');
-        var assetBarChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Stocks', 'Bonds', 'Real Estate', 'Cash', 'Others'],
-                datasets: [{
-                    data: [40, 20, 20, 15, 5],
-                    backgroundColor: ['#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8'],
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                }
-            }
-        });
-        var lineCtx = document.getElementById('assetLineChart').getContext('2d');
-        var assetLineChart = new Chart(lineCtx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                datasets: [
-                    {
-                        label: 'Asset Value',
-                        data: [1000, 1200, 1300, 1400, 1500, 1600],
-                        borderColor: '#007bff',
-                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                        fill: true,
-                    },
-                    {
-                        label: 'Investment Value',
-                        data: [800, 950, 1100, 1300, 1400, 1550],
-                        borderColor: '#28a745',
-                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                        fill: true,
-                    },
-                    {
-                        label: 'Savings Value',
-                        data: [600, 700, 800, 900, 1000, 1100],
-                        borderColor: '#dc3545',
-                        backgroundColor: 'rgba(220, 53, 69, 0.2)',
-                        fill: true,
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                },
-                interaction: {
-                    intersect: false,
-                },
-                scales: {
-                    x: {
-                        stacked: false,
-                    },
-                    y: {
-                        stacked: false,
-                    }
-                }
-            }
-        });
-        *******/
-
-        
-
-    </script>
 </body>
 </html>
