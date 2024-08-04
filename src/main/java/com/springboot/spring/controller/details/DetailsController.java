@@ -58,8 +58,8 @@ public class DetailsController {
 // 주식 거래 내역 
  @GetMapping("/details/detailsNew")
  public String detailsSearchNewView(Model model
- ,@RequestParam(value = "stockName" ,required=false) String stockName
- ,@RequestParam(value = "dividendCycle" ,required=false) String dividendCycle
+    ,@RequestParam(value = "stockName" ,required=false) String stockName
+    ,@RequestParam(value = "dividendCycle" ,required=false) String dividendCycle
  ){
      StockportfolioDto sDto = new StockportfolioDto();
      sDto.setStockName(stockName);

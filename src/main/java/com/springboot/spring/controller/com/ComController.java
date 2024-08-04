@@ -25,12 +25,13 @@ public class ComController {
     
     // 대분류 조회
     @GetMapping("/com/comonCode")
-    public String detailsView(Model model){
+    public String comonCodeView(Model model){
         log.info("공통코드");
         model.addAttribute("title", "공통코드 관리");
         model.addAttribute("cList", comService.sectionSelect(null));
         return "view/com/comonCode";
     }
+
 
     // 대분류 조회
     @GetMapping("/com/detailsSearch.do")
@@ -53,13 +54,57 @@ public class ComController {
         return "view/com/comonCode";
     }
 
-        // 대분류 수정
-        @PostMapping("/com/comonCodeUpdate.do")
-        public ResponseEntity<Map> comonCodeUpdate(@RequestBody  Map<String, Object> formMap, Model model){
+    // 대분류 수정
+    @PostMapping("/com/comonCodeUpdate.do")
+    public ResponseEntity<Map> comonCodeUpdate(@RequestBody  Map<String, Object> formMap, Model model){
             
-            model.addAttribute("title", "공통코드 관리");
-            //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
-            Map<String, String> reMap = comService.sectionUpdate(formMap);
-            return ResponseEntity.ok(reMap);
-        }
+        model.addAttribute("title", "공통코드 관리");
+        //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
+        Map<String, String> reMap = comService.sectionUpdate(formMap);
+        return ResponseEntity.ok(reMap);
+    }
+
+
+
+    // 대분류 조회
+    @GetMapping("/com/comonCodeNew")
+    public String comonCodeNewView(Model model){
+        log.info("공통코드");
+        model.addAttribute("title", "공통코드 관리");
+        model.addAttribute("cList", comService.sectionSelect(null));
+        return "view/com/comonCodeNew";
+    }
+    // 대분류 조회
+    @GetMapping("/com/comonCodeNewSearch.do")
+    public String comonCodeNewSearch(Model model, @RequestParam Map<String, Object> map){
+        log.info("공통코드 검색 : : : " + map.toString());
+        model.addAttribute("title", "공통코드 관리");
+        model.addAttribute("cList", comService.sectionSelect(map));
+        model.addAttribute("SECTION_NM", String.valueOf(map.get("SECTION_NM")));
+        model.addAttribute("SECTION_CD", String.valueOf(map.get("SECTION_CD")));
+        return "view/com/comonCodeNew";
+    }
+
+
+    // 대분류 등록
+    @PostMapping("/com/comonCodeNewInster.do")
+    //@ResponseBody
+    public String comonCodeNewInster(@RequestParam Map<String, Object> formMap, Model model){
+        log.info("formMap + " + formMap.toString());
+        model.addAttribute("title", "공통코드 관리");
+        model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
+        return "view/com/comonCodeNew";
+    }
+
+
+    // 대분류 수정
+    @PostMapping("/com/comonCodeNewUpdate.do")
+    public ResponseEntity<Map> comonCodeNewUpdate(@RequestBody  Map<String, Object> formMap, Model model){
+            
+        model.addAttribute("title", "공통코드 관리");
+        //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
+        Map<String, String> reMap = comService.sectionUpdate(formMap);
+        return ResponseEntity.ok(reMap);
+    }
+
 }

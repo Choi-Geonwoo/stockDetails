@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"  >
+    <title>거래내역</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/com.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/comonCode.css}">
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+  <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
+  <script type="text/javascript" th:src="@{/JS/COMMON/commCode.js}"></script>
+  <script th:inline="javascript">
+    window.onload = function(){
+            feather.replace();
+            const data = /*[[${cStr}]]*/;
+            switch (data){
+            case 'Y': 
+              alert('성공했습니다.1');
+              location.href = location.href;
+              break; 
+            case 'N':
+              alert('실패했습니다.1');
+              location.href = location.href;
+              break;
+            default:
+              //answer ="stuff"; 
+              break;
+          }
+    }
+  </script>
+
+  <!-- 엑셀 다운로드 용 SheetJS 라이브러리 추가 -->
+  <!-- Sheet JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+  <!-- FileSaver 사용 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/details/detailsNew">자산관리</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+            </li>
+        </ul>
+        -->
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+           <!--인크루트-->
+          <ul class="nav flex-column" th:replace="view/layout/topNew.html :: head"></ul>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2" th:text="${title}">자산관리</h1>
+              </div>
+
+
+          <div class="row">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-header">
+                            공통코드 검색
+                        </div>
+                        <div class="card-body">
+                            
+                          <form class="d-flex" role="search" th:action="@{/com/comonCodeNewSearch.do}"  method="get">
+                            <span class="input-group-text" id="basic-addon3">대분류코드</span>
+                            &emsp;
+                            <input class="form-control w-25 p-20" type="search" id="SECTION_CD" name="SECTION_CD" placeholder="대분류코드" aria-label="Search" th:value="${SECTION_CD}">
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            &emsp;
+                            <span class="input-group-text" id="basic-addon3">대분류명</span>
+                            &emsp;
+                            <input class="form-control w-25 p-20" type="search" id="SECTION_NM" name="SECTION_NM" placeholder="대분류명" aria-label="Search" th:value="${SECTION_NM}">
+                            &emsp;
+                            <button class="btn btn-outline-success" type="submit">검색</button>
+                          </form>
+
+
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+
+          <div class="row">
+              <div class="col-md-10">
+                <div class="card">
+                </div>
+              </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-10">
+              <div class="card">
+
+                <div class="card-header">
+                  조회 결과
+                </div>
+                <div class="card-body">
+                  <table class="table table01 table-hover" id="myTable001">
+                    <thead class="thead01" >
+                      <tr>
+                        <th scope="col" class="th01">선택</th>
+                        <th scope="col" class="th01">순번</th>
+                        <th scope="col" class="th01">대분류 코드</th>
+                        <th scope="col" class="th01">대분류 명</th>
+                        <th scope="col" class="th01">사용여부</th>
+                        <th scope="col" class="th01">구분</th>
+                        <th scope="col" class="th01">등록일시</th>
+                      </tr>
+                    </thead>
+                    <tbody class="tbody01">
+                      <th:block th:if="${!#lists.isEmpty(cList)}" >
+                        <tr th:each="cList, userStat  : ${cList}" onclick="tableCheck001(this, '#myTable01')">
+                          <th>
+                            <input type="checkbox">
+                          </th>
+                          <th scope="col" class="th01">
+                            <p th:text="${cList.NO}"></p>
+                            <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
+                          </th>
+                          <td scope="col" class="td01">
+                            <input class="form-control" type="text" name="SECTION_CD" th:value="${cList.SECTION_CD}"  >
+                          </td>
+                          <td scope="col" class="td01">
+                            <input class="form-control " type="text" name="SECTION_NM" th:value="${cList.SECTION_NM}">
+                          </td>
+                          <td scope="col" class="td01">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:id="${userStat.index}"
+                              th:checked="${cList} and (${cList.USE_YN} == 'Y')">
+                              <label class="form-check-label" th:for="${userStat.index}">
+                                사용여부
+                              </label>
+                            </div>
+                          </td>
+                          <td scope="col" class="td01">
+                            <label for="staticEmail2" class="">
+                              <input type="button" value="수정" onclick="sendRowData001(this)"/>
+                            </label>
+                          </td>
+                          <td scope="col" th:text="${cList.REG_YMD}" class="td01">
+                          </td>
+                        </tr>
+                      <th:block>
+                    </tbody>
+                  </table>  
+                </div>
+              </div>
+            </div>
+          </div>
+          
+            </main>
+        </div>
+    </div>
+
+
+</body>
+</html>

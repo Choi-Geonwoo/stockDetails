@@ -63,12 +63,15 @@ window.onload = function(){
     const stockName = /*[[${stockName}]]*/;
 
     document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
+    
+    feather.replace();
+    trnscdateSelect(trnscdate);
+    fu_monthSelect(monthSelect);
+
     //console.log(monthSelect);
     //dividendList(data, monthSelect);
     //  차트
     myChart001(data);
-    trnscdateSelect(trnscdate);
-    fu_monthSelect(monthSelect);
 
     // 수정 모달찰 호출
     var exampleModal = document.getElementById('updateModal2')
@@ -81,7 +84,6 @@ window.onload = function(){
     //document.getElementById("col-sm-12").style.display ='none';	
     // 파일 입력 필드를 찾습니다.
     //var fileInput2 = document.getElementById("image1");
-        feather.replace();
   }
  
   function readURL(input, img) {

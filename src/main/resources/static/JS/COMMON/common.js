@@ -202,3 +202,25 @@ function sortTable(id,n) {
 }
 
 
+
+function fetch001(url, body){
+      // 서버로 데이터를 전송합니다.
+      fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Success:', JSON.stringify(result));
+        //alert(JSON.stringify(result));
+        alert(result.str);
+        location.href = location.href;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update row.');
+    });
+}

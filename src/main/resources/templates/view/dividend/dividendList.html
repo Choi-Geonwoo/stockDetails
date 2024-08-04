@@ -31,9 +31,11 @@
     const stockName = /*[[${stockName}]]*/;
 
     document.getElementById('inputTrnscdate').value = new Date().toISOString().substring(0, 10);
-    dividendList(data, monthSelect);
+
     trnscdateSelect(trnscdate);
     fu_monthSelect(monthSelect);
+
+    dividendList(data, monthSelect);
 
     // 수정 모달찰 호출
     var exampleModal = document.getElementById('updateModal2')
