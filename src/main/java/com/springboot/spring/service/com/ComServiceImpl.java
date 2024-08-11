@@ -59,28 +59,21 @@ public class ComServiceImpl implements ComService {
                 if(map.isEmpty()){
                     throw new UnsupportedOperationException("Unimplemented method 'is   NULL '");
                 }
-                /******
                 paMap.put("NO",         String.valueOf(map.get("value0")));
                 paMap.put("SECTION_CD", String.valueOf(map.get("value1")));
                 paMap.put("SECTION_NM", null);
                 paMap.put("USE_YN",     String.valueOf(map.get("value3")));
-                ******/
-                paMap.put("NO",         String.valueOf(map.get("value1")));
-                paMap.put("SECTION_CD", String.valueOf(map.get("value2")));
-                paMap.put("SECTION_NM", null);
-                paMap.put("USE_YN",     String.valueOf(map.get("value4")));
-
-                //log.info("paMap + " + paMap.toString());
+                log.info("paMap + " + paMap.toString());
                 
                 List<Map<Object, Object>>  liatMap = comMapper.sectionSelect(paMap);
 
-                if((0 != liatMap.size()) && !(String.valueOf(map.get("value1")).equals(liatMap.get(0).get("NO")))){
+                if((0 != liatMap.size()) && !(String.valueOf(map.get("value0")).equals(liatMap.get(0).get("NO")))){
                     retMap.put("strYn", "N");
                     retMap.put("str", "대분류코드가 중복되었습니다.\n대분류코드 : "+ paMap.get("SECTION_CD")+"");
                     return retMap;
 
                 }
-                paMap.put("SECTION_NM", String.valueOf(map.get("value3")));
+                paMap.put("SECTION_NM", String.valueOf(map.get("value2")));
                 cnt = comMapper.sectionUpdate(paMap);
 
                 if(0 == cnt){
@@ -97,6 +90,27 @@ public class ComServiceImpl implements ComService {
                 throw new UnsupportedOperationException("Unimplemented method 'sectionUpdate 01 '");
                 }
             return retMap;
+    }
+
+
+
+
+    // 중분류 등록
+    @Override
+    public String comonCodeClsfcInster(Map<String, Object> map) {
+        int cnt = 0;
+        String str = "N";
+        Map<String, Object> paMap = new HashMap<>();
+        try {
+            log.info("############################################");
+            log.info(map.toString());
+            log.info("############################################");
+
+        } catch (Exception e) {
+            str="N";
+            throw new UnsupportedOperationException("Unimplemented method 'comonCodeClsfcInster'");
+        }
+        return str;
     }
     
 }

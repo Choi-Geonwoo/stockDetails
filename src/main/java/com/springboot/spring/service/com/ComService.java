@@ -14,4 +14,7 @@ public interface ComService {
     
     // 대분류 수정
     public Map<String, String>  sectionUpdate(Map<String, Object> map);
+    
+    // 중분류 등록
+    public String  comonCodeClsfcInster(Map<String, Object> map);
 }

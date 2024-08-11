@@ -203,10 +203,10 @@ function sortTable(id,n) {
 
 
 
-function fetch001(url, body){
+function fetch001(url, method, body){
       // 서버로 데이터를 전송합니다.
       fetch(url, {
-        method: 'POST',
+        method: method,
         headers: {
             'Content-Type': 'application/json'
         },

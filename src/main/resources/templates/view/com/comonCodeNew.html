@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko" xmlns:th="http//www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
@@ -34,7 +34,9 @@
               //answer ="stuff"; 
               break;
           }
+
     }
+
   </script>
 
   <!-- 엑셀 다운로드 용 SheetJS 라이브러리 추가 -->
@@ -113,13 +115,12 @@
               <div class="card">
 
                 <div class="card-header">
-                  조회 결과
+                  대분류 코드
                 </div>
                 <div class="card-body">
                   <table class="table table01 table-hover" id="myTable001">
                     <thead class="thead01" >
                       <tr>
-                        <th scope="col" class="th01">선택</th>
                         <th scope="col" class="th01">순번</th>
                         <th scope="col" class="th01">대분류 코드</th>
                         <th scope="col" class="th01">대분류 명</th>
@@ -131,9 +132,6 @@
                     <tbody class="tbody01">
                       <th:block th:if="${!#lists.isEmpty(cList)}" >
                         <tr th:each="cList, userStat  : ${cList}" onclick="tableCheck001(this, '#myTable01')">
-                          <th>
-                            <input type="checkbox">
-                          </th>
                           <th scope="col" class="th01">
                             <p th:text="${cList.NO}"></p>
                             <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
@@ -155,7 +153,7 @@
                           </td>
                           <td scope="col" class="td01">
                             <label for="staticEmail2" class="">
-                              <input type="button" value="수정" onclick="sendRowData001(this)"/>
+                              <input type="button" value="수정" class="me-2 btn btn-outline-secondary" onclick="sendRowData001(this)"/>
                             </label>
                           </td>
                           <td scope="col" th:text="${cList.REG_YMD}" class="td01">
@@ -169,6 +167,81 @@
             </div>
           </div>
           
+
+          <!--중분류 시작 -->
+
+          <div class="row">
+            <div class="col-md-10">
+              <div class="card">
+
+                <div class="card-header">
+                  중분류 코드
+                </div>
+                <div class="card-body">
+
+                    <form class="container-fluid justify-content-start">
+                      <button class="btn me-2 btn-outline-success me-2" type="button" data-value="${cList}" onclick="addRow01('#myTable01', this)" >행추가</button>
+                      <button class="btn me-2 btn-outline-secondary me-2" type="button">행삭제</button>
+                      <button class="btn btn-outline-danger" type="button">저장</button>
+                    </form>
+                    <br>
+                      <!-- 중분류 코드 등록-->
+                      <form action="#" th:action="@{/com/comonCodeClsfcInster.do}"  method="post" >
+                        <table class="table" id="myTable01" >
+                          <thead>
+                            <tr>
+                              <th scope="col">순번</th>
+                              <th scope="col">순번</th>
+                              <th scope="col">대분류코드</th>
+                              <th scope="col">중분류코드</th>
+                              <th scope="col">중분류명</th>
+                              <th scope="col">사용여부</th>
+                              <th scope="col">구분</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr >
+                              <th><p>1</p></th>
+                              <th>
+
+                                  <input class="form-check" type="checkbox" value="Y" name="USE_YN">
+
+                              </th>
+                              <td >
+                                <select class="form-select" aria-label="Default select example" name="CATEGORY_CD" title="전체"  id="trnscdateSelect">
+                                  <option value = "">선택</option>
+                                  <th:block th:each="cList : ${cList}" >
+                                    <option  th:value="${cList.SECTION_CD}" th:text="${cList.SECTION_CD}">전체</option>
+                                  </th:block>
+                                </select>
+                              </td>
+                              <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="중분류 코드" ></td>
+                              <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="중분류 명" ></td>
+                              <td>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="Y" name="USE_YN">
+                                  <label class="form-check-label" for="flexCheckDefault">
+                                    사용여부
+                                  </label>
+                                </div>
+                              </td>
+                              <td>
+                                <label for="staticEmail2" class="">
+                                  <button class="btn btn-outline-success" type="submit">수정</button>
+                                </label>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>  
+                      </form> 
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--중분류 종료-->
             </main>
         </div>
     </div>

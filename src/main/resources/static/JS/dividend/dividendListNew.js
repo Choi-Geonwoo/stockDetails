@@ -396,6 +396,42 @@ spinner.style.display = 'none'; 	// 숨기기
 }
 
 
+ // 배당 등록
+ function transactionInsert(){
+  var imageInput = document.getElementById('inputFile');
+  var selectedFile = imageInput.files[0];
+  const inputAmount = document.getElementById('inputAmount').value;
+  const inputDiviend = document.getElementById('inputDiviend').value;
+  const inputTrnscdate = document.querySelector('input[type="date"]');
+  //inputDiviend
+     
+  const imageFileInput = document.getElementById('inputFile');
+  if(isEmpty(inputAmount)){
+    alert("거래금액 입력해주세요.");
+    return;
+  }
+  var fileName;
+  var stockName = (selectBox.options[selectBox.selectedIndex].value);
+  if(!isEmpty(imageFileInput.files[0])){
+    fileName = imageFileInput.files[0].name;
+  }
+  let data = {
+              stockName : stockName,  // 주식명
+              trnscdate : inputTrnscdate.value, //거래일자
+              amount : inputAmount,   // 거래 금액
+              fName : fileName,       // 파일명
+              dividend : inputDiviend  // 배당금
+  }
+    // 이미지 수정하는 경우
+if(!isEmpty(imageFileInput.files[0])){
+  imgFile(selectedFile, data, "/dividendInsert.do");
+}else{
+  // 데이터만 수정
+  dataTransfer(data, "/dividendInsert.do");
+}
+  
+}
+
 
 
 /******

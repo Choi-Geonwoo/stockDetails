@@ -107,4 +107,17 @@ public class ComController {
         return ResponseEntity.ok(reMap);
     }
 
+
+    // 중분류 등록
+    @PostMapping("/com/comonCodeClsfcInster.do")
+    //@ResponseBody
+    public String comonCodeClsfcInster(@RequestParam Map<String, Object> formMap, Model model){
+        log.info("formMap + " + formMap.toString());
+        //model.addAttribute("title", "공통코드 관리");
+        model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
+        return "view/com/comonCodeNew";
+    }
+
+
+
 }
