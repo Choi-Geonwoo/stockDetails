@@ -1,5 +1,7 @@
 package com.springboot.spring.service.com;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.springboot.spring.mapper.com.ComMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import oracle.sql.TIMESTAMP;
 
 /* 공통코드 등록 */
 @Slf4j
@@ -97,20 +100,73 @@ public class ComServiceImpl implements ComService {
 
     // 중분류 등록
     @Override
-    public String comonCodeClsfcInster(Map<String, Object> map) {
+    public Map<String, String> comCodeClsfcInster(List<Map<String, Object>> listMap) {
         int cnt = 0;
         String str = "N";
-        Map<String, Object> paMap = new HashMap<>();
+        Map<String, String> retMap = new HashMap<>();
         try {
-            log.info("############################################");
-            log.info(map.toString());
-            log.info("############################################");
+            for (Map<String,Object> mapData : listMap) {
+                List<Map>  liatMap01 = comMapper.comCodeClsfcSelect(mapData);
+                    if(0 != liatMap01.size() ){
+                        if("Y".equals(liatMap01.get(0).get("CHEK"))
+                            && String.valueOf(mapData.get("CLSFC_NM")).equals(liatMap01.get(0).get("CLSFC_NM"))){
+                            retMap.put("strYn", "F");
+                            retMap.put("str", "중복되었습니다.");
+                            return retMap;
+                        }else{                            
+                            cnt += comMapper.comCodeClsfcUpdate(mapData);
+                        }
+                    }else{
+                        cnt += comMapper.comCodeClsfcInster(mapData);
+                    }
+            }
+            if(listMap.size() == cnt) {
+                retMap.put("strYn", "Y");
+                retMap.put("str", "성공했습니다.");
+            }else{
+                retMap.put("strYn", "N");
+                retMap.put("str", "실패했습니다.");
+            }
 
         } catch (Exception e) {
             str="N";
-            throw new UnsupportedOperationException("Unimplemented method 'comonCodeClsfcInster'");
+            retMap.put("strYn", "F");
+            retMap.put("str", "오류가 발생하였습니다.");
+            throw new UnsupportedOperationException("Unimplemented method 'comCodeClsfcInster'");
         }
-        return str;
+        return retMap;
     }
+
+    // 중분류 코드 조회
+    @Override
+    public List<Map> comCodeClsfcSelect(Map<String, Object> formMap) {
+        List<Map> listMap = new ArrayList<>();
+        List<Map> retListMap = new ArrayList<>();
+        Map retMap = new HashMap<>();
+        Boolean useBl = false;
+        try {
+            listMap = comMapper.comCodeClsfcSelect(formMap);
+            for (int i = 0; i < listMap.size(); i++) {
+                retMap = new HashMap<>();
+                retMap.putAll(listMap.get(i));
+                // 데이터베이스에서 oracle.sql.TIMESTAMP 값을 가져왔다고 가정
+                TIMESTAMP oracleTimestamp = new TIMESTAMP(String.valueOf(listMap.get(i).get("REG_YMD")));
+                // TIMESTAMP를 java.sql.Timestamp로 변환
+                Timestamp timestamp = oracleTimestamp.timestampValue();
+                retMap.put("REG_YMD", timestamp);
+                useBl = "Y".equals(retMap.get("USE_YN"));
+                retMap.put("USE_YN", useBl);
+                retListMap.add(retMap);
+            }
+            log.info("ret : : : : " + retListMap.toString());
+        } catch (Exception e) {
+            retListMap = null;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'comCodeClsfcSelect'");
+        }
+        return retListMap;
+    }
+
     
 }
+

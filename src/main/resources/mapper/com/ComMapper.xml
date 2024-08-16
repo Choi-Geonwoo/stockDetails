@@ -55,4 +55,59 @@
         WHERE NO = #{NO}
 </update>
 
+<select id="comCodeClsfcSelect" parameterType="Map"  resultType="Map">
+                        SELECT /* ComMapper.comCodeClsfcSelect*/
+                                 NO      	/*	'순번';         */
+                                ,SECTION_CD 	/*	'대분류_코드';  */
+                                ,CLSFC_CD 	/*	'중분류_코드';  */
+                                ,CLSFC_NM 	/*	'중분류_명';   	*/
+                                ,USE_YN 	/*	'사용여부';    	*/
+                                ,REG_YMD	/*	'등록일시';    	*/
+                                ,DECODE(USE_YN, #{USE_YN}, 'Y', 'N') AS CHEK 	/*	'사용여부';    	*/
+                        FROM  CLSFC
+                         WHERE      SECTION_CD = #{SECTION_CD}
+                                <if test='CLSFC_CD != null and CLSFC_CD != "" '>
+                                AND CLSFC_CD = #{CLSFC_CD}
+                                </if>
+</select>
+
+<insert id="comCodeClsfcInster"  parameterType="Map">
+                        INSERT  /* ComMapper.comCodeClsfcInster */
+                            INTO CLSFC
+                        (       
+                                 NO      	/*	'순번';      	*/
+                                ,SECTION_CD 	/*	'대분류_코드';  */
+                                ,CLSFC_CD 	/*	'중분류_코드';  */
+                                ,CLSFC_NM 	/*	'중분류_명';   	*/
+                                ,USE_YN 	/*	'사용여부';    	*/
+                                ,REG_YMD	/*	'등록일시';    	*/
+
+                        )
+                        VALUES( 
+                                (
+                                SELECT NVL(MAX(NO)+1, 1) AS NO_01 
+                                        FROM CLSFC
+                                WHERE SECTION_CD = #{SECTION_CD}
+                                ),
+                                #{SECTION_CD},
+                                #{CLSFC_CD},
+                                #{CLSFC_NM},
+                                DECODE(#{USE_YN}, NULL, 'N', #{USE_YN}) ,
+                                SYSDATE 
+                        )
+</insert>
+
+
+<update id="comCodeClsfcUpdate" parameterType="Map">
+       UPDATE   /* ComMapper.comCodeClsfcUpdate */
+                 CLSFC
+        SET      SECTION_CD = #{SECTION_CD}	/*	'대분류_코드';  */
+                ,CLSFC_CD   = #{CLSFC_CD}	/*	'중분류_코드';  */
+                ,CLSFC_NM   = #{CLSFC_NM}	/*	'중분류_명';   	*/
+                ,USE_YN     = #{USE_YN}         /*사용여부*/
+                ,REG_YMD    = sysdate
+        WHERE SECTION_CD = #{SECTION_CD}
+            AND CLSFC_CD = #{CLSFC_CD}
+</update>
+
 </mapper>

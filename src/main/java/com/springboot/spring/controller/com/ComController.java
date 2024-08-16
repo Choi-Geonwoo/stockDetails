@@ -1,5 +1,7 @@
 package com.springboot.spring.controller.com;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,7 @@ public class ComController {
         model.addAttribute("cList", comService.sectionSelect(null));
         return "view/com/comonCodeNew";
     }
+
     // 대분류 조회
     @GetMapping("/com/comonCodeNewSearch.do")
     public String comonCodeNewSearch(Model model, @RequestParam Map<String, Object> map){
@@ -109,15 +112,46 @@ public class ComController {
 
 
     // 중분류 등록
-    @PostMapping("/com/comonCodeClsfcInster.do")
+    @PostMapping("/com/comCodeClsfcInster.do")
     //@ResponseBody
-    public String comonCodeClsfcInster(@RequestParam Map<String, Object> formMap, Model model){
+    public ResponseEntity<Map> comCodeClsfcInster(@RequestBody List<Map<String, Object>> formMap, Model model){
         log.info("formMap + " + formMap.toString());
         //model.addAttribute("title", "공통코드 관리");
-        model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
-        return "view/com/comonCodeNew";
+        //model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
+        Map<String, String> reMap = comService.comCodeClsfcInster(formMap);
+        return ResponseEntity.ok(reMap);
     }
 
+    
+    // 중분류 조회
+    @GetMapping("/com/comCodeClsfcSelect.do")
+    //@ResponseBody
+    //public ResponseEntity<List<Map>> comCodeClsfcSelect(@RequestBody Map<String, Object> formMap, Model model){
+    public ResponseEntity<List<Map>> comCodeClsfcSelect(Model model, @RequestParam("SECTION_CD") String sectionCd){
+        Map<String, Object> formMap = new HashMap<>();
+        formMap.put("SECTION_CD", sectionCd);
+        log.info("formMap + " + formMap.toString());
+        //model.addAttribute("title", "공통코드 관리");
+        //model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
+        List<Map> reMap = comService.comCodeClsfcSelect(formMap);
+        return ResponseEntity.ok(reMap);
+    }
 
+    
+    // 중분류 조회
+    @GetMapping("/com/comCodeClsfcSelect01.do")
+    //@ResponseBody
+    //public ResponseEntity<List<Map>> comCodeClsfcSelect(@RequestBody Map<String, Object> formMap, Model model){
+    public String comCodeClsfcSelect01(Model model,  @RequestParam(value = "SECTION_CD", required = false) String sectionCd){
+        Map<String, Object> formMap = new HashMap<>();
+        formMap.put("SECTION_CD", sectionCd);
+        log.info("formMap + " + formMap.toString());
+        model.addAttribute("title", "공통코드 관리");
+        //model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
+        //model.addAttribute("cList", comService.comCodeClsfcSelect(formMap));
+        model.addAttribute("cList", comService.sectionSelect(null));
+        model.addAttribute("cList01", comService.comCodeClsfcSelect(formMap));
+        return  "view/com/comonCodeNew";
+    }
 
 }
