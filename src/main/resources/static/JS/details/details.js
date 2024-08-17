@@ -499,6 +499,65 @@ function newDetailsInsert2(){
         });
 }
 
+// 등록
+function newDetailsInsert3(){
+    //const inputStockName = document.getElementById('inputStockName').value;
+    const inputStockName = document.getElementById('selectBoxNew').value;
+    const inputStockQuantity = document.getElementById('inputStockQuantity').value;
+    const inputDividendCycle = document.getElementById('inputDividendCycle').value;
+    const inputPurchasePrice = document.getElementById('inputPurchasePrice').value;
+    const inputDividendAmount = document.getElementById('inputDividendAmount').value;
+    alert(inputStockName);
+    if(isEmpty(inputStockName)){
+        alert("주식명 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputStockQuantity)){
+        alert("주식수 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputDividendCycle)){
+        alert("배당주기 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputPurchasePrice)){
+        alert("매입금 입력해주세요.");
+        return;
+    }
+    if(isEmpty(inputDividendAmount)){
+        alert("배당금 입력해주세요.");
+        return;
+    }
+    /*
+    fetch("/detailsInsert.do",
+        {
+            method : "post",
+            headers : {
+                "Content-Type" : "application/json",
+            },
+            body : JSON.stringify({
+                stockName : inputStockName,
+                stockQuantity : inputStockQuantity,
+                dividendCycle : inputDividendCycle,
+                purchasePrice : inputPurchasePrice,
+                dividendAmount : inputDividendAmount
+            }),
+        })
+        .then((response) => {
+            console.log(response.status);
+            if(response.status == 200){
+                alert("등록되었습니다.");
+            }
+        })
+        .then(data => {
+            //alert(data);
+            location.reload();
+        })
+        .catch((error) => {
+            alert("error " + error)
+        });
+    */
+}
 
 function strIndexOf(text){
     var count = 1;

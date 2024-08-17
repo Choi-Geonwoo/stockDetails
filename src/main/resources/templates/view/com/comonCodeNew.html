@@ -64,7 +64,7 @@
                 <div class="col-md-10">
                     <div class="card">
                         <div class="card-header">
-                            공통코드 검색
+                            대분류코드 검색
                         </div>
                         <div class="card-body">
                             
@@ -104,6 +104,8 @@
                   대분류 코드
                 </div>
                 <div class="card-body">
+
+
                   <table class="table table01 table-hover" id="myTable001">
                     <thead class="thead01" >
                       <tr>
@@ -116,14 +118,41 @@
                       </tr>
                     </thead>
                     <tbody class="tbody01">
+
+                    <form action="#" th:action="@{/com/comonCodeNewInster.do}"  method="post" >
+                      <tr>
+                        <td scope="col" class="th01">0</td>
+                        <td scope="col" class="th01">
+                          <input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="대분류 코드" >
+                        </td>
+                        <td scope="col" class="th01">
+                          <input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="대분류 명" >
+                        </td>
+                        <td scope="col" class="th01">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Y"   name="USE_YN">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              사용여부
+                            </label>
+                          </div>
+                        </td>
+                        <td scope="col" class="th01">
+                            <label for="staticEmail2" class="">
+                              <button class="btn btn-outline-success" type="submit">등록</button>
+                            </label>
+                        </td>
+                        <td scope="col" class="th01"></td>
+                      </tr>
+                    </form> 
+
                       <th:block th:if="${!#lists.isEmpty(cList)}" >
                         <!--<tr th:each="cList, userStat  : ${cList}" th:onclick="'tableCheck001(#{cList}, '#myTable01')'">-->
-                          <tr th:each="cList, userStat  : ${cList}" th:onclick="tableCheck002([[${cList.SECTION_CD}]], '#myTable01');">
+                          <tr th:each="cList, userStat  : ${cList}" th:ondblclick="tableCheck002([[${cList.SECTION_CD}]], '#myTable01');">
                           
 
 
                           <th scope="col" class="th01">
-                            <p th:text="${cList.NO}"></p>
+                            <p th:text="${cList.NO_}"></p>
                             <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
                           </th>
                           <td scope="col" class="td01">
@@ -171,7 +200,7 @@
 
                     <form class="container-fluid justify-content-start">
                       <button class="btn me-2 btn-outline-success me-2" type="button"  onclick="addRow01('#myTable01', this)" >행추가</button>
-                      <button class="btn me-2 btn-outline-secondary me-2" type="button">행삭제</button>
+                      <!--<button class="btn me-2 btn-outline-secondary me-2" type="button">행삭제</button>-->
                       <button class="btn btn-outline-danger" type="button" onclick="clsfcInsterInsert();">저장</button>
                     </form>
                     <br>
@@ -180,11 +209,12 @@
                         <table class="table" id="myTable01" >
                           <thead>
                             <tr>
-                              <th scope="col">체크</th>
                               <th scope="col">순번</th>
+                              <th scope="col">체크</th>
                               <th scope="col">대분류코드</th>
                               <th scope="col">중분류코드</th>
                               <th scope="col">중분류명</th>
+                              <th scope="col">정렬순번</th>
                               <th scope="col">사용여부</th>
                               <th scope="col">구분</th>
                             </tr>
@@ -205,6 +235,7 @@
                               </td>
                               <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="중분류 코드" ></td>
                               <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="중분류 명" ></td>
+                              <td><input class="form-control" type="text"  id="ARRAY_NO" name="ARRAY_NO"     placeholder="정렬 순번" ></td>
                               <td>
                                 <div class="form-check">
                                   <input class="form-check-input" type="checkbox" value="Y" name="USE_YN">
@@ -218,9 +249,12 @@
                                   <button class="btn btn-outline-success" type="submit">수정</button>
                                 </label>
                               </td>
+                              <td  >
+                                <input type="text" name="NO" value=""  class="display01"><!---->
+                              </td>
                             </tr>
 
-
+                            <!-- 대분류 클릭 시 중분류 DB 값 조회-->
                             <th:block th:if="${!#lists.isEmpty(cList01)}" >
                                 <tr th:each="cList01, userStat  : ${cList01}" >
                                   <th><p th:text="${userStat.index+2}"></p></th>
@@ -237,6 +271,7 @@
                                   </td>
                                   <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="중분류 코드" th:value="${cList01.CLSFC_CD}"></td>
                                   <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="중분류 명"   th:value="${cList01.CLSFC_NM}"></td>
+                                  <td><input class="form-control" type="text"  id="ARRAY_NO" name="ARRAY_NO" placeholder="정렬 순번"   th:value="${cList01.ARRAY_NO}"></td>
                                   <td>
                                     <div class="form-check">
                                       <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:checked="${cList01.USE_YN}">
@@ -250,6 +285,9 @@
                                       <button class="btn btn-outline-success" type="submit">수정</button>
                                     </label>
                                   </td>  
+                                  <td  >
+                                    <input type="text" name="NO" th:value="${cList01.NO}"  class="display01"><!---->
+                                  </td>
                                 </tr>
                             </th:block>
                           </tbody>

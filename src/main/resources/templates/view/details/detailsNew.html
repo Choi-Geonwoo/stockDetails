@@ -142,8 +142,8 @@
                                     <select class="form-select w-20" aria-label="Default select example" id="selectBox" name="stockName">
                                         <option  th:value="allStockName" th:text="전체"></option>
                                         <th:block th:each="selectBox : ${selectBox}">
-                                          <option name="stockName" th:value="${selectBox.stockName}"
-                                          th:text="${selectBox.stockName}" th:selected="${selectBox.stockName} == ${reStockName}"></option>
+                                          <option name="stockName" th:value="${selectBox.CLSFC_NM}"
+                                          th:text="${selectBox.CLSFC_NM}" th:selected="${selectBox.CLSFC_NM} == ${reStockName}"></option>
                                         </th:block>
                                       </select>
                                       &nbsp;&nbsp;
@@ -279,6 +279,61 @@
         </div>
     </div>
 
+    <!-- 등록 -->
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">주식 등록</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label ">주식명</label>
+                <div class="col-sm-8">
+                  <!--<input type="text" class="form-control" id="inputStockName" th:value="${selectBox}">-->
+                  <select class="form-select w-20" aria-label="Default select example" id="selectBoxNew" name="selectBoxNew">
+                      <option  value="" th:text="선택"></option>
+                      <th:block th:each="selectBox : ${selectBox}">
+                        <option name="stockName" th:value="${selectBox.CLSFC_NM}"
+                        th:text="${selectBox.CLSFC_NM}" ></option>
+                      </th:block>
+                    </select>
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label  class="col-sm-3 col-form-label">주식수</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="inputStockQuantity">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label  class="col-sm-3 col-form-label">배당주기</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="inputDividendCycle">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label  class="col-sm-3 col-form-label">매입금</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="inputPurchasePrice">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label  class="col-sm-3 col-form-label">배당금</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="inputDividendAmount">
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">취소</button>
+          <button type="button" class="btn btn-outline-success" onclick="newDetailsInsert3();">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

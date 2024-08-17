@@ -1,8 +1,8 @@
 
-function myChart001(data){
+function myChart001(data, monthSelect){
   
     // 막대 차트
-    barChart001(data, "bar_chart");
+    barChart001(data, "bar_chart", monthSelect);
     
     // 막대 차트
     //barChart002(data, "bar_chart");
@@ -32,7 +32,8 @@ function myChart001(data){
 
 
 // 막대 차트
-function barChart001(value, barMyChart) {
+function barChart001(value, barMyChart, monthSelect) {
+  console.log(JSON.stringify(monthNumbers));
   var months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
   var stockNames = value.map(stock => stock.STOCK_NAME);
 
@@ -147,120 +148,120 @@ function barChart002(value, barMyChart) {
 
 // 배당 거래 클릭 이벤트 (수정 모달창 호출)
 function fetchCall(event, exampleModal){
-    var className = event.relatedTarget.className.split(' ')[0];
-    var button = event.relatedTarget;
-    var modalTitle = exampleModal.querySelector('.modal-title');
-    var modalBodyStockNameInput = exampleModal.querySelector('.modal-body-stockName input');
-    var modalDiviend = exampleModal.querySelector('.modal-body-Diviend input');
-    var modalBodyAmountInput = exampleModal.querySelector('.modal-body-Amount input');
-    var modalBodyNoInput = exampleModal.querySelector('.modal-body-no input');
-    var modalBodyFNoInput = exampleModal.querySelector('.modal-body-fno input');
-    // 입력 요소 가져오기
-    var updateTrnscdate = document.getElementById('updateTrnscdate');
-    var data = button.getAttribute('data-bs-whatever');
-    // 문자열을 중괄호 {}로 둘러싸고, 각 속성을 큰따옴표 "로 둘러싸는 JSON 형태로 변경해야 합니다.
-    const keyValuePairs  = data.replace('{','').replace('}','').split(',');
-    // 결과 JSON 객체를 저장할 변수를 생성합니다.
-    var dateObj = {};
-    // 스피너
-    let spinner = document.getElementById('spinner');
-    // 이미지
-    let image1 = document.getElementById('image1');
-    // 바디
-    let modalBody = document.getElementById('modal-body');
-    // 파일 이름
-    var modalFileName = exampleModal.querySelector('.modal-fileName');
-    spinner.style.display = 'block';  // 표출
-    modalBody.style.display = 'none'; // 숨기기
-    // 각 키와 값을 분리하여 JSON 객체에 추가합니다.
-    keyValuePairs.forEach(function(pair) {
-      var keyValue = pair.split('=');
-      var key = keyValue[0].trim();
-      var value = keyValue[1];
-      dateObj[key] = value;
-    });
+            var className = event.relatedTarget.className.split(' ')[0];
+            var button = event.relatedTarget;
+            var modalTitle = exampleModal.querySelector('.modal-title');
+            var modalBodyStockNameInput = exampleModal.querySelector('.modal-body-stockName input');
+            var modalDiviend = exampleModal.querySelector('.modal-body-Diviend input');
+            var modalBodyAmountInput = exampleModal.querySelector('.modal-body-Amount input');
+            var modalBodyNoInput = exampleModal.querySelector('.modal-body-no input');
+            var modalBodyFNoInput = exampleModal.querySelector('.modal-body-fno input');
+            // 입력 요소 가져오기
+            var updateTrnscdate = document.getElementById('updateTrnscdate');
+            var data = button.getAttribute('data-bs-whatever');
+            // 문자열을 중괄호 {}로 둘러싸고, 각 속성을 큰따옴표 "로 둘러싸는 JSON 형태로 변경해야 합니다.
+            const keyValuePairs  = data.replace('{','').replace('}','').split(',');
+            // 결과 JSON 객체를 저장할 변수를 생성합니다.
+            var dateObj = {};
+            // 스피너
+            let spinner = document.getElementById('spinner');
+            // 이미지
+            let image1 = document.getElementById('image1');
+            // 바디
+            let modalBody = document.getElementById('modal-body');
+            // 파일 이름
+            var modalFileName = exampleModal.querySelector('.modal-fileName');
+            spinner.style.display = 'block';  // 표출
+            modalBody.style.display = 'none'; // 숨기기
+            // 각 키와 값을 분리하여 JSON 객체에 추가합니다.
+            keyValuePairs.forEach(function(pair) {
+              var keyValue = pair.split('=');
+              var key = keyValue[0].trim();
+              var value = keyValue[1];
+              dateObj[key] = value;
+            });
 
-  // 파라미터를 담을 객체 생성
-  const params = {
-    stockName: dateObj.STOCK_NAME, // 항목명
-    trnscdate: dateObj.TRNSCDATE, // 년도
-    className : className // 클래스명
-  };
-  // 파라미터를 URL 형식으로 인코딩
-  const queryString = new URLSearchParams(params).toString();
-//debugger;
-// Fetch API를 사용하여 GET 요청 보내기
-fetch(`/dividendDtlsInqry.do?${queryString}`)
-.then(response => {
-  if (!response.ok) {
-    throw new Error('네트워크 오류');
-  }
-  return response.text();
-})
-.then(data => {
-  if('' != data){
-  //# JSON 데이터 파싱
-  var parsedData = JSON.parse(data);
-   modalTitle.textContent = '배당 수정 : ' + parsedData.transactionDto.stockName;
-   const el = document.getElementById('updatestockName');  //select box
-   const len = el.options.length; //select box의 option 갯수
-   for (let i=0; i<len; i++){  
-    //select box의 option value가 입력 받은 value의 값과 일치할 경우 selected
-    if(el.options[i].value == parsedData.transactionDto.stockName){
-      el.options[i].selected = true;
-    }
-  } 
-   //modalBodyStockNameInput.value = parsedData.transactionDto.stockName; // 배당 거래내역 주식명
-   modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
-   modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
-   modalDiviend.value = parsedData.transactionDto.dividend; // 배당금
-   modalFileName.textContent = parsedData.transactionDto.stockName; //파일명
-   //debugger;
-   // // 입력 요소에 날짜 설정
-   updateTrnscdate.value = parsedData.transactionDto.trnscdate;
-   if(('' != parsedData.fileDTO ) && (null != parsedData.fileDTO )){
-     // 이미지 출력
-     fu_img(parsedData.fileDTO.reContents);
-     modalBodyFNoInput.value = parsedData.fileDTO.fno;
-   }else{
-      spinner.style.display = 'none';
-      image1.style.display = 'none'; 	//숨기기
-      modalBody.style.display = 'block';  // 표출
-   }    
-  }else{
-    alert('결과가 없습니다.');
-    modalBodyStockNameInput.value = "";
-    modalBodyAmountInput.value = "";
-    updateTrnscdate.value = "";
-    spinner.style.display = 'none';
-    image1.style.display = 'none'; 	
-    exampleModal.hide();
-  }
-})
-.catch(error => {
-  console.error(error);
-  alert("오류가 발생했습니다.");
-  return;
-});
+          // 파라미터를 담을 객체 생성
+          const params = {
+            stockName: dateObj.STOCK_NAME, // 항목명
+            trnscdate: dateObj.TRNSCDATE, // 년도
+            className : className // 클래스명
+          };
+          // 파라미터를 URL 형식으로 인코딩
+          const queryString = new URLSearchParams(params).toString();
+        //debugger;
+        // Fetch API를 사용하여 GET 요청 보내기
+        fetch(`/dividendDtlsInqry.do?${queryString}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('네트워크 오류');
+          }
+          return response.text();
+        })
+        .then(data => {
+          if('' != data){
+          //# JSON 데이터 파싱
+          var parsedData = JSON.parse(data);
+          modalTitle.textContent = '배당 수정 : ' + parsedData.transactionDto.stockName;
+          const el = document.getElementById('updatestockName');  //select box
+          const len = el.options.length; //select box의 option 갯수
+          for (let i=0; i<len; i++){  
+            //select box의 option value가 입력 받은 value의 값과 일치할 경우 selected
+            if(el.options[i].value == parsedData.transactionDto.stockName){
+              el.options[i].selected = true;
+            }
+          } 
+          //modalBodyStockNameInput.value = parsedData.transactionDto.stockName; // 배당 거래내역 주식명
+          modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
+          modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
+          modalDiviend.value = parsedData.transactionDto.dividend; // 배당금
+          modalFileName.textContent = parsedData.transactionDto.stockName; //파일명
+          //debugger;
+          // // 입력 요소에 날짜 설정
+          updateTrnscdate.value = parsedData.transactionDto.trnscdate;
+          if(('' != parsedData.fileDTO ) && (null != parsedData.fileDTO )){
+            // 이미지 출력
+            fu_img(parsedData.fileDTO.reContents);
+            modalBodyFNoInput.value = parsedData.fileDTO.fno;
+          }else{
+              spinner.style.display = 'none';
+              image1.style.display = 'none'; 	//숨기기
+              modalBody.style.display = 'block';  // 표출
+          }    
+          }else{
+            alert('결과가 없습니다.');
+            modalBodyStockNameInput.value = "";
+            modalBodyAmountInput.value = "";
+            updateTrnscdate.value = "";
+            spinner.style.display = 'none';
+            image1.style.display = 'none'; 	
+            exampleModal.hide();
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("오류가 발생했습니다.");
+          return;
+        });
 }
 
 
 
 // 수정 버튼 동작
 function transactionUpdate(){
-let updateTno = document.getElementById('updateTno').value;
-let updateFno = document.getElementById('updateFno').value;
-let updatestockName = document.getElementById('updatestockName').value;
-let updateTrnscdate = document.getElementById('updateTrnscdate').value;
-let updateAmount = document.getElementById('updateAmount').value;
-let updateDiviend = document.getElementById('updateDiviend').value;
+    let updateTno = document.getElementById('updateTno').value;
+    let updateFno = document.getElementById('updateFno').value;
+    let updatestockName = document.getElementById('updatestockName').value;
+    let updateTrnscdate = document.getElementById('updateTrnscdate').value;
+    let updateAmount = document.getElementById('updateAmount').value;
+    let updateDiviend = document.getElementById('updateDiviend').value;
 
-var fileName;
-const updateFile = document.getElementById('updateFile');
-var selectedFile = updateFile.files[0];
-if(!isEmpty(updateFile.files[0])){
-fileName = updateFile.files[0].name;
-}
+    var fileName;
+    const updateFile = document.getElementById('updateFile');
+    var selectedFile = updateFile.files[0];
+    if(!isEmpty(updateFile.files[0])){
+     fileName = updateFile.files[0].name;
+    }
 let data = {
       no : updateTno,           //배당 거래내역 순번
       stockName : updatestockName, // 주식명
@@ -270,57 +271,57 @@ let data = {
       fNo : updateFno,          // 파일 순번
       dividend : updateDiviend   // 배당금
 }
-// 이미지 수정하는 경우
-if(!isEmpty(updateFile.files[0])){
-imgFile(selectedFile, data, "/dividendUpdate.do");
-}else{
-// 데이터 전송
-dataTransfer(data, "/dividendUpdate.do");
-}
+  // 이미지 수정하는 경우
+  if(!isEmpty(updateFile.files[0])){
+    imgFile(selectedFile, data, "/dividendUpdate.do");
+  }else{
+    // 데이터 전송
+    dataTransfer(data, "/dividendUpdate.do");
+  }
 
 }
 
 // 삭제 버튼 동작
 function transactionDelete(){
-let updateTno = document.getElementById('updateTno').value;
+  let updateTno = document.getElementById('updateTno').value;
 
-let data = {
-      no : updateTno //배당 거래내역 순번
-}
-// 데이터 전송
-dataTransfer(data, "/dividendDelete.do");  
+  let data = {
+        no : updateTno //배당 거래내역 순번
+  }
+  // 데이터 전송
+  dataTransfer(data, "/dividendDelete.do");  
 }
 
 // 데이터 전송
-function dataTransfer(data, url){
-// 폼 데이터로 보내줘야 함
-let formData = new FormData();
-formData.append("files", "");
-formData.append("key",  new Blob([JSON.stringify(data)], { type: "application/json" }));
-fetch(url,
-{
-method : "post",
-body : formData,
-})
-.then((response) => {
-//console.log(response.status);
-if(response.status != 200){
-    alert("오류 발생했습니다.");
-}
-return response.json(); // 응답 데이터를 파싱하고 반환
-})
-.then(data => {
-if(-1 != data.retNo){
-alert(data.msg+"되었습니다.");
-location.reload();
-}else{
-alert("오류가 발생되었습니다.");
-location.reload();
-}
-})
-.catch((error) => {
-alert("error " + error);
-}); 
+        function dataTransfer(data, url){
+        // 폼 데이터로 보내줘야 함
+        let formData = new FormData();
+        formData.append("files", "");
+        formData.append("key",  new Blob([JSON.stringify(data)], { type: "application/json" }));
+        fetch(url,
+        {
+          method : "post",
+          body : formData,
+        })
+        .then((response) => {
+        //console.log(response.status);
+        if(response.status != 200){
+            alert("오류 발생했습니다.");
+          }
+        return response.json(); // 응답 데이터를 파싱하고 반환
+        })
+        .then(data => {
+          if(-1 != data.retNo){
+            alert(data.msg+"되었습니다.");
+            location.reload();
+          }else{
+            alert("오류가 발생되었습니다.");
+            location.reload();
+          }
+          })
+        .catch((error) => {
+            alert("error " + error);
+        }); 
 
 }
 
@@ -432,6 +433,15 @@ if(!isEmpty(imageFileInput.files[0])){
   
 }
 
+// 배열 값 가져오기
+function getMonthName(value) {
+  for (let key in months) {
+      if (months[key] === value) {
+          return key;
+      }
+  }
+  return null; // 해당 값이 없는 경우
+}
 
 
 /******

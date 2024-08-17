@@ -23,6 +23,9 @@ public interface ComMapper {
     public List<Map> comCodeClsfcSelect(Map<String, Object> map);
 
     
+    // 중분류코드 조회
+    public List<Map> comCodeClsfcSelect001(Map<String, Object> map);
+
     // 중분류코드 수정
     public int  comCodeClsfcUpdate(Map<String, Object> map);
 }

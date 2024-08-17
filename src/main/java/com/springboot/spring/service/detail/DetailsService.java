@@ -17,6 +17,9 @@ public interface DetailsService {
     
     // 주식명 조회 셀렉트 박스 사용
     public List<StockportfolioVO>  selectBox();
+    
+    // 주식명 조회 셀렉트 박스 사용
+    public List<Map>  selectBox01(String str);
 
     // 주식 거래내역 등록
     public int  detailsInsert(Map<String, Object> map);

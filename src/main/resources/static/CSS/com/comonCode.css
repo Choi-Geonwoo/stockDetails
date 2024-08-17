@@ -35,3 +35,9 @@
  .thead01 {
     width: calc(100% - 1em);
   }
+
+
+
+  .display01 {
+    display: none;
+  }

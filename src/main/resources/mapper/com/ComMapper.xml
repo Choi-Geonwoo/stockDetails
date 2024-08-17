@@ -4,6 +4,7 @@
 <mapper namespace="com.springboot.spring.mapper.com.ComMapper">
 <select id = "sectionSelect"  resultType="Map" parameterType="Map">
         SELECT          /* ComMapper.sectionSelect */
+                        ROWNUM AS NO_,
                         NO,         /*순번*/
                         SECTION_CD, /*대분류코드*/
                         SECTION_NM, /*대분류명*/
@@ -18,7 +19,7 @@
                 <if test='SECTION_NM != null and SECTION_NM != "" '>
                         AND SECTION_NM LIKE '%'|| #{SECTION_NM} ||'%'
                 </if>
-                        order by NO desc
+                        order by 1, SECTION_NM desc
 </select>
 
 
@@ -61,14 +62,22 @@
                                 ,SECTION_CD 	/*	'대분류_코드';  */
                                 ,CLSFC_CD 	/*	'중분류_코드';  */
                                 ,CLSFC_NM 	/*	'중분류_명';   	*/
+                                ,ARRAY_NO 	/*	'정렬_순번';   	*/
                                 ,USE_YN 	/*	'사용여부';    	*/
                                 ,REG_YMD	/*	'등록일시';    	*/
-                                ,DECODE(USE_YN, #{USE_YN}, 'Y', 'N') AS CHEK 	/*	'사용여부';    	*/
                         FROM  CLSFC
                          WHERE      SECTION_CD = #{SECTION_CD}
                                 <if test='CLSFC_CD != null and CLSFC_CD != "" '>
                                 AND CLSFC_CD = #{CLSFC_CD}
                                 </if>
+</select>
+
+
+<select id="comCodeClsfcSelect001" parameterType="Map"  resultType="Map">
+                        /* ComMapper.comCodeClsfcSelect001*/
+                        <include refid="comCodeClsfcSelectNew"></include>
+                        AND USE_YN = 'Y'
+                        ORDER BY TO_NUMBER(ARRAY_NO)
 </select>
 
 <insert id="comCodeClsfcInster"  parameterType="Map">
@@ -79,6 +88,7 @@
                                 ,SECTION_CD 	/*	'대분류_코드';  */
                                 ,CLSFC_CD 	/*	'중분류_코드';  */
                                 ,CLSFC_NM 	/*	'중분류_명';   	*/
+                                ,ARRAY_NO 	/*	'정렬_순번';   	*/
                                 ,USE_YN 	/*	'사용여부';    	*/
                                 ,REG_YMD	/*	'등록일시';    	*/
 
@@ -92,6 +102,7 @@
                                 #{SECTION_CD},
                                 #{CLSFC_CD},
                                 #{CLSFC_NM},
+                                #{ARRAY_NO}, 	
                                 DECODE(#{USE_YN}, NULL, 'N', #{USE_YN}) ,
                                 SYSDATE 
                         )
@@ -104,10 +115,28 @@
         SET      SECTION_CD = #{SECTION_CD}	/*	'대분류_코드';  */
                 ,CLSFC_CD   = #{CLSFC_CD}	/*	'중분류_코드';  */
                 ,CLSFC_NM   = #{CLSFC_NM}	/*	'중분류_명';   	*/
+                ,ARRAY_NO   = #{ARRAY_NO}	/*	'정렬_순번';   	*/
                 ,USE_YN     = #{USE_YN}         /*사용여부*/
                 ,REG_YMD    = sysdate
         WHERE SECTION_CD = #{SECTION_CD}
-            AND CLSFC_CD = #{CLSFC_CD}
+            AND NO = #{NO}
 </update>
+
+    <sql id="comCodeClsfcSelectNew">
+                        SELECT /* ComMapper.comCodeClsfcSelectNew*/
+                                 NO      	/*	'순번';         */
+                                ,SECTION_CD 	/*	'대분류_코드';  */
+                                ,CLSFC_CD 	/*	'중분류_코드';  */
+                                ,CLSFC_NM 	/*	'중분류_명';   	*/
+                                ,ARRAY_NO 	/*	'정렬_순번';   	*/
+                                ,USE_YN 	/*	'사용여부';    	*/
+                                ,REG_YMD	/*	'등록일시';    	*/
+                        FROM  CLSFC
+                         WHERE      SECTION_CD = #{SECTION_CD}
+                                <if test='CLSFC_CD != null and CLSFC_CD != "" '>
+                                AND CLSFC_CD = #{CLSFC_CD}
+                                </if>
+    </sql>
+    
 
 </mapper>

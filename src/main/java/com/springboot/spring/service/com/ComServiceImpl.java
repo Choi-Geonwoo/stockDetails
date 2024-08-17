@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.spring.com.IsNullCheck;
 import com.springboot.spring.mapper.com.ComMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -106,20 +107,52 @@ public class ComServiceImpl implements ComService {
         Map<String, String> retMap = new HashMap<>();
         try {
             for (Map<String,Object> mapData : listMap) {
-                List<Map>  liatMap01 = comMapper.comCodeClsfcSelect(mapData);
-                    if(0 != liatMap01.size() ){
-                        if("Y".equals(liatMap01.get(0).get("CHEK"))
-                            && String.valueOf(mapData.get("CLSFC_NM")).equals(liatMap01.get(0).get("CLSFC_NM"))){
-                            retMap.put("strYn", "F");
-                            retMap.put("str", "중복되었습니다.");
-                            return retMap;
-                        }else{                            
-                            cnt += comMapper.comCodeClsfcUpdate(mapData);
-                        }
-                    }else{
-                        cnt += comMapper.comCodeClsfcInster(mapData);
+                List<Map>  listMap01 = comMapper.comCodeClsfcSelect(mapData);
+                
+                    /*********
+                     * 케이스
+                     * 1. 신규 등록
+                        ㄴ cnt += comMapper.comCodeClsfcInster(mapData);
+                     * 2. 대분류코드, 중분류코드, 중분류코드명, 사용여부 중복 등록
+                     * 3. 대분류코드, 중분류코드 미변경, (중분류코드명 or 사용여부) 변경
+                     *  ㄴ cnt += comMapper.comCodeClsfcUpdate(mapData);
+                     *********/
+                    // 1. 신규 등록
+                    boolean bo01 = (listMap01.size() == 0) && (IsNullCheck.isNull(mapData.get("NO")));
+                    boolean bo02 = false ;
+                    boolean bo03 = false ;
+                    for (Map<String,Object> map01 : listMap01) {
+                        bo02 = (
+                            (map01.get("SECTION_CD").equals(mapData.get("SECTION_CD"))) &&
+                            (map01.get("CLSFC_CD").equals(mapData.get("CLSFC_CD"))) &&
+                            (map01.get("CLSFC_NM").equals(mapData.get("CLSFC_NM"))) &&
+                            (map01.get("USE_YN").equals(mapData.get("USE_YN"))) 
+                        );
+                        bo03 = (
+                            (map01.get("SECTION_CD").equals(mapData.get("SECTION_CD"))) &&
+                            (map01.get("CLSFC_CD").equals(mapData.get("CLSFC_CD"))) &&
+                            (!(map01.get("CLSFC_NM").equals(mapData.get("CLSFC_NM"))) ||
+                             !(map01.get("USE_YN").equals(mapData.get("USE_YN")))
+                            )
+                            );
                     }
-            }
+                    log.info("/*****************************");
+                    log.info(" * bo01 : " + bo01 + " | bo02 : " + bo02 + " | bo03 : " + bo03);
+                    log.info("*****************************/");
+                    if(bo01){
+                        // 1. 신규 등록
+                        cnt += comMapper.comCodeClsfcInster(mapData);
+                    }else if(bo02){
+                        // 2. 대분류코드, 중분류코드, 중분류코드명, 사용여부 중복 등록
+                        retMap.put("strYn", "N");
+                        retMap.put("str", "중복되었습니다.");
+                        return retMap;
+                    }else if(bo03){
+                        // 3. 대분류코드, 중분류코드 미변경, (중분류코드명 or 사용여부) 변경
+                        cnt += comMapper.comCodeClsfcUpdate(mapData);
+                    }
+
+                }
             if(listMap.size() == cnt) {
                 retMap.put("strYn", "Y");
                 retMap.put("str", "성공했습니다.");

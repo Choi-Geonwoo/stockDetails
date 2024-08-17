@@ -216,7 +216,8 @@ function fetch001(url, method, body){
     .then(result => {
         console.log('Success:', JSON.stringify(result));
         //alert(JSON.stringify(result));
-        alert(result.str+ " | " + result.strYn);
+        //alert(result.str+ " | " + result.strYn);
+        alert(result.str);
         if("Y" == result.strYn) location.href = location.href;
     })
     .catch(error => {

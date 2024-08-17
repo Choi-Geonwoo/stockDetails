@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.spring.dto.StockportfolioDto;
+import com.springboot.spring.mapper.com.ComMapper;
 import com.springboot.spring.mapper.details.DetailsMapper;
 import com.springboot.spring.vo.StockportfolioVO;
 
@@ -22,6 +23,8 @@ public class DetailServiceImpl implements DetailsService {
     @Autowired
     private DetailsMapper detailsMapper;
     
+    @Autowired
+    private ComMapper comMapper;
 
     // 주식 거래내역
     @Override
@@ -91,6 +94,15 @@ public class DetailServiceImpl implements DetailsService {
     public List<StockportfolioVO> selectBox() {
         StockportfolioDto sDto = null;
         return detailsMapper.selectBox(sDto);
+    }
+
+    
+    // 주식명 조회 셀렉트 박스 사용
+    @Override
+    public List<Map> selectBox01(String str) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("SECTION_CD", str);
+        return comMapper.comCodeClsfcSelect001(map);
     }
 
     // 주식 상세 조회

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.spring.dto.StockportfolioDto;
+import com.springboot.spring.service.com.ComService;
 import com.springboot.spring.service.detail.DetailsService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class DetailsController {
 
     @Autowired
     private DetailsService detailsService;
+
+    @Autowired
+    private ComService comService;
 
 @GetMapping("/")
     public String detailsView(Model model){
@@ -67,7 +71,7 @@ public class DetailsController {
      model.addAttribute("title", "주식내역");
      model.addAttribute("reStockName", stockName);
      model.addAttribute("reDividendCycle", dividendCycle);
-     model.addAttribute("selectBox", detailsService.selectBox()); 
+     model.addAttribute("selectBox", detailsService.selectBox01("BANK_001")); 
      model.addAttribute("sList", detailsService.stockDetailsList(sDto));
      model.addAttribute("sumList", detailsService.selectSum01(sDto));
      return "view/details/detailsNew";

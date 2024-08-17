@@ -270,7 +270,7 @@ fetch('/com/comonCodeNewUpdate.do', {
     //alert(rowCount);
     let allValues = getAllValues().split(",");
     var row = table.insertRow(rowCount);
-    var cellCount = 7; // Number of cells to create
+    var cellCount = 9; // Number of cells to create
   
     for (var i = 0; i < cellCount; i++) {
         var cell = row.insertCell(i);
@@ -285,7 +285,7 @@ fetch('/com/comonCodeNewUpdate.do', {
             cellContent.type = "checkbox";
             cellContent.name = "user_CheckBox";
             cellContent.className = "form-check";
-        } else if (i >= 2 && i <= 4) {
+        } else if (i >= 2 && i <= 5) {
             cellContent = document.createElement("input");
             cellContent.type = "text";
             cellContent.className = "form-control";
@@ -314,8 +314,12 @@ fetch('/com/comonCodeNewUpdate.do', {
                 cellContent.id = "SECTION_NM_" + rowCount;
                 cellContent.name = "SECTION_NM_" + rowCount;
                 cellContent.placeholder = "중분류 명";
-            }
-        } else if (i === 5) {
+            } else if (i === 5) {
+                cellContent.id = "ARRAY_NO_" + rowCount;
+                cellContent.name = "ARRAY_NO_" + rowCount;
+                cellContent.placeholder = "정렬 순번";
+            } 
+        }else if (i === 6) {
             cellContent = document.createElement("div");
             cellContent.className = "form-check";
   
@@ -331,12 +335,16 @@ fetch('/com/comonCodeNewUpdate.do', {
   
             cellContent.appendChild(checkbox);
             cellContent.appendChild(label);
-        } else if (i === 6) {
+        } else if (i === 7) {
             cellContent = document.createElement("button");
             cellContent.type = "button";
             cellContent.className = "btn btn-outline-success";
             cellContent.textContent = "등록";
             cellContent.addEventListener("click", addRow); // Add listener for dynamically added rows
+        } else if (i === 8) {
+            cellContent = document.createElement("input");
+            cellContent.type = "text";
+            cellContent.className = "display01";
         }
   
         cell.appendChild(cellContent);
@@ -361,7 +369,7 @@ function addRow02(tableId, cList) {
     cList.forEach((item, index) => {
         var row = table.insertRow();
         
-        for (var i = 0; i < 7; i++) {
+        for (var i = 0; i < 8; i++) {
             var cell = row.insertCell(i);
             var cellContent;
             
@@ -405,6 +413,13 @@ function addRow02(tableId, cList) {
                     }
                 }
             } else if (i === 5) {
+                
+                cellContent.id = "ARRAY_NO_" + rowCount;
+                cellContent.name = "ARRAY_NO_" + rowCount;
+                cellContent.placeholder = "정렬 순번";
+                cellContent.value = item.ARRAY_NO;
+
+            } else if (i === 6) {
                 cellContent = document.createElement("div");
                 cellContent.className = "form-check";
                 
@@ -420,7 +435,7 @@ function addRow02(tableId, cList) {
                 
                 cellContent.appendChild(checkbox);
                 cellContent.appendChild(label);
-            } else if (i === 6) {
+            } else if (i === 7) {
                 cellContent = document.createElement("button");
                 cellContent.type = "button";
                 cellContent.className = "btn btn-outline-success";
@@ -453,8 +468,7 @@ function getAllValues() {
 
 // 중분류코드 등록
 function clsfcInsterInsert() {
-			var rowData = [];
-			var tdArr = [];
+			var msg = null;
 			var checkboxes = document.querySelectorAll("input[name=user_CheckBox]:checked");
             var jsonArray 	= new Array();
 			//console.log("갯수  " + checkboxes.length);
@@ -473,19 +487,30 @@ function clsfcInsterInsert() {
 				var CATEGORY_CD = selectedOption;
 				var SECTION_CD = td[3].querySelector("input").value;
 				var SECTION_NM = td[4].querySelector("input").value;
-				var USE_YN = td[5].querySelector("input[name=USE_YN]").checked ? "Y" : "N";
+				var ARRAY_NO = td[5].querySelector("input").value;
+				var USE_YN = td[6].querySelector("input[name=USE_YN]").checked ? "Y" : "N";
+				var NO = td[8].querySelector("input").value;
 				if(isEmpty(CATEGORY_CD)) {
-                    alert("대분류코드 선택 후 저장해주세요. " + CATEGORY_CD); 
+                    //alert("대분류코드 선택 후 저장해주세요. " + CATEGORY_CD); 
+                    msg = "대분류코드 선택 후 저장해주세요. ";
                     return;
                 }
 
                 if(isEmpty(SECTION_CD)){
-                     alert("중분류코드 입력 후 저장해주세요."); 
+                     //alert("중분류코드 입력 후 저장해주세요."); 
+                     msg = "중분류코드 입력 후 저장해주세요.";
                      return;
                 }
 
                 if(isEmpty(SECTION_NM)){ 
-                    alert("중분류코드명 입력 후 저장해주세요."); 
+                    //alert("중분류코드명 입력 후 저장해주세요."); 
+                    msg = "중분류코드명 입력 후 저장해주세요.";
+                    return;
+                }
+                
+                if(isEmpty(ARRAY_NO)){ 
+                    //alert("정렬순번 입력 후 저장해주세요."); 
+                    msg = "정렬순번 입력 후 저장해주세요.";
                     return;
                 }
 
@@ -498,6 +523,8 @@ function clsfcInsterInsert() {
                 jsonObj.CLSFC_CD    = SECTION_CD.replace(" ",""); //중분류코드
                 jsonObj.CLSFC_NM    = SECTION_NM.replace(" ",""); //중분류코드명
                 jsonObj.USE_YN      = USE_YN.replace(" ","");     // 사용여부
+                jsonObj.NO          = NO.replace(" ","");               // 순번
+                jsonObj.ARRAY_NO    = ARRAY_NO.replace(" ","");               // 정렬순번
 				//tdArr.push(selectedOption.length);
                 
                 jsonObj = JSON.stringify(jsonObj);
@@ -508,6 +535,10 @@ function clsfcInsterInsert() {
             //console.log(JSON.stringify(jsonArray));
 			//document.getElementById("ex3_Result1").innerHTML = " * 체크된 Row의 모든 데이터 = " + tdArr.join('');	
 			//document.getElementById("ex3_Result2").innerHTML = tdArr.join('');
-            // 서버로 데이터를 전송합니다.
-            fetch001('/com/comCodeClsfcInster.do', 'POST', jsonArray);	
+            if(isEmpty(msg)){ 
+                // 서버로 데이터를 전송합니다.
+                fetch001('/com/comCodeClsfcInster.do', 'POST', jsonArray);	
+            }else{
+                alert(msg);
+            }
 }

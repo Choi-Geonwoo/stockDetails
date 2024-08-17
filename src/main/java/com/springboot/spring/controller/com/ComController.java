@@ -56,6 +56,7 @@ public class ComController {
         return "view/com/comonCode";
     }
 
+
     // 대분류 수정
     @PostMapping("/com/comonCodeUpdate.do")
     public ResponseEntity<Map> comonCodeUpdate(@RequestBody  Map<String, Object> formMap, Model model){
@@ -96,6 +97,7 @@ public class ComController {
         log.info("formMap + " + formMap.toString());
         model.addAttribute("title", "공통코드 관리");
         model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
+        model.addAttribute("cList", comService.sectionSelect(null));
         return "view/com/comonCodeNew";
     }
 
