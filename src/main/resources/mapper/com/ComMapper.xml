@@ -70,6 +70,7 @@
                                 <if test='CLSFC_CD != null and CLSFC_CD != "" '>
                                 AND CLSFC_CD = #{CLSFC_CD}
                                 </if>
+                        ORDER BY TO_NUMBER(ARRAY_NO)
 </select>
 
 
@@ -95,7 +96,7 @@
                         )
                         VALUES( 
                                 (
-                                SELECT NVL(MAX(NO)+1, 1) AS NO_01 
+                                SELECT NVL(MAX(TO_NUMBER(NO))+1, 1) AS NO_01 
                                         FROM CLSFC
                                 WHERE SECTION_CD = #{SECTION_CD}
                                 ),
@@ -112,8 +113,8 @@
 <update id="comCodeClsfcUpdate" parameterType="Map">
        UPDATE   /* ComMapper.comCodeClsfcUpdate */
                  CLSFC
-        SET      SECTION_CD = #{SECTION_CD}	/*	'대분류_코드';  */
-                ,CLSFC_CD   = #{CLSFC_CD}	/*	'중분류_코드';  */
+        SET      
+                 CLSFC_CD   = #{CLSFC_CD}	/*	'중분류_코드';  */
                 ,CLSFC_NM   = #{CLSFC_NM}	/*	'중분류_명';   	*/
                 ,ARRAY_NO   = #{ARRAY_NO}	/*	'정렬_순번';   	*/
                 ,USE_YN     = #{USE_YN}         /*사용여부*/

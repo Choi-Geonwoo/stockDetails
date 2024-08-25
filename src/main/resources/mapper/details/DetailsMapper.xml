@@ -7,7 +7,8 @@
                 SELECT
                         /* DETAILSMAPPER.STOCKDETAILSLIST */
                         A.NO,
-                        A.STOCK_NAME,
+                        /* A.STOCK_NAME, */
+                        C.CLSFC_NM AS STOCK_NAME,
                         A.STOCK_QUANTITY,
                         A.DIVIDEND_CYCLE,
                         A.PURCHASE_PRICE,
@@ -29,18 +30,22 @@
                                                 ) W 
                                                         WHERE RNK = 1
                         ) B
+                        , CLSFC C
                 WHERE
                         A.CLSCD != 'N'
                         AND A.STOCK_NAME  = B.STOCK_NAME(+) 
+                        AND A.CLSFC_CD = C.CLSFC_CD(+)
+                        AND C.USE_YN ='Y'
+                        AND C.SECTION_CD = 'BANK_001'
                 <if test='stockName != null and stockName != "" '>
-                        AND A.STOCK_NAME = #{stockName}
+                        AND C.CLSFC_NM = #{stockName}
                 </if>
                 <if test='dividendCycle != null and dividendCycle != "" '>
                         AND (A.DIVIDEND_CYCLE like #{dividendCycle} || '%'
                         OR A.DIVIDEND_CYCLE = '월'
                         )
                 </if>
-                        order by A.DIVIDEND_CYCLE
+                        ORDER BY C.CLSFC_NM
 </select>
 
 <select id = "selectBox"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
@@ -109,24 +114,28 @@
 <!-- 주식 상세 조회-->
 <select id = "stockDetailList"  resultType="Map" parameterType="Map" >
               <![CDATA[  SELECT /* DetailsMapper.stockDetailList : 주식 상세 조회 */
-                        A.STOCK_NAME , --주식명
+                        C.CLSFC_NM AS STOCK_NAME , --주식명
                         A.STOCK_QUANTITY, --주식보유수
                         A.PURCHASE_PRICE, --매입금
                         A.STOCK_QUANTITY * A.PURCHASE_PRICE AS PURCHASE_PRICE_SUM, --매입금(합계)
                         SUM(NVL(B.AMOUNT, 0)) AS AMOUNT --배당금(누적)
                 FROM
-                        STOCKPORTFOLIO  A
+                          STOCKPORTFOLIO  A
                         , TRANSACTION B
+                        , CLSFC C
                 WHERE 
                         A.STOCK_NAME  = B.STOCK_NAME(+) 
                         AND A.STOCK_QUANTITY  >  0
-                        AND  A.STOCK_NAME  <> '테스트'
-                        AND A.STOCK_NAME = #{STOCK_NAME}
-                GROUP BY 
-                        A.STOCK_NAME ,
+                        AND A.STOCK_NAME  <> '테스트'
+                        AND A.CLSFC_CD = C.CLSFC_CD(+)
+                        AND C.CLSFC_NM = #{STOCK_NAME}
+                        AND C.USE_YN ='Y'
+                        AND C.SECTION_CD = 'BANK_001'
+                GROUP BY
+                        C.CLSFC_NM ,
                         A.STOCK_QUANTITY,
                         A.PURCHASE_PRICE
-                ORDER BY A.STOCK_NAME 	
+                ORDER BY C.CLSFC_NM 
                  ]]>
 </select>
 

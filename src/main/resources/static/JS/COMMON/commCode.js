@@ -1,7 +1,9 @@
 
 window.onload = function(){
-    addRow(tableId)
+    addRow(tableId);
     //addRow01(tableId, cList)
+
+    
     
 }
 
@@ -119,12 +121,7 @@ function addRow(tableId) {
             checkbox.name = "USE_YN_" + rowCount;
             checkbox.className = "form-check-input";
   
-            var label = document.createElement("label");
-            label.className = "form-check-label";
-            label.textContent = "사용여부";
-  
             cellContent.appendChild(checkbox);
-            cellContent.appendChild(label);
         } else if (i === 5) {
             cellContent = document.createElement("button");
             cellContent.type = "button";
@@ -542,3 +539,13 @@ function clsfcInsterInsert() {
                 alert(msg);
             }
 }
+
+/*
+전체 체크
+*/
+function selectAll(selectAll)  {
+    const checkboxes  = document.getElementsByName('user_CheckBox');
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = selectAll.checked;
+    })
+  };

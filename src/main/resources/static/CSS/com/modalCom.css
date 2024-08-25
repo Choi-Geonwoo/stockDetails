@@ -1,0 +1,64 @@
+
+/* 알림창 스타일 */
+.modal-background01 {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content01 {
+    background: white;
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .modal-title01 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .modal-text01 {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .modal-buttons01 {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .modal-buttons01 button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-buttons01 button:hover {
+    background-color: #2980b9;
+  }
+  
+  .close-btn01 {
+    background-color: #e74c3c;
+  }
+  
+  .close-btn01:hover {
+    background-color: #c0392b;
+  }
+  /* 알림창 스타일 */

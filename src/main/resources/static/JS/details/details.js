@@ -1,7 +1,6 @@
-
+﻿
 
 window.onload = function(){
-   
 }
 
 
@@ -199,8 +198,11 @@ function detailsDelete(button) {
                             label: label, //차트 제목
                             fill: false, // line 형태일 때, 선 안쪽을 채우는지 안채우는지
                             data: y,
+                            //backgroundColor: chartColorr,
+                            //borderColor: chartColorr,
                             backgroundColor: chartColorr,
                             borderColor: chartColorr,
+
                             borderWidth: 1 //경계선 굵기
                         }
                     ]
@@ -274,7 +276,8 @@ function barChart001(dataArray, TRNSCDATE, label, barMyChart) {
             datasets: [{
                 label: label,
                 data: newDataArray,
-                backgroundColor: chartColorr,
+                //backgroundColor: chartColorr,
+                backgroundColor: reChartColorr(),
             }]
         },
         options: {

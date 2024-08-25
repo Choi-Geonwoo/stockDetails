@@ -212,16 +212,105 @@ function fetch001(url, method, body){
         },
         body: JSON.stringify(body)
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();  // JSON으로 변환된 데이터를 반환
+    })
     .then(result => {
         console.log('Success:', JSON.stringify(result));
         //alert(JSON.stringify(result));
         //alert(result.str+ " | " + result.strYn);
-        alert(result.str);
-        if("Y" == result.strYn) location.href = location.href;
+        //alert(result.str);
+        showAlert(JSON.stringify(result)); //
+        
     })
     .catch(error => {
         console.error('Error:', error);
         alert('Failed to update row.');
     });
 }
+
+
+
+function reChartColorr(){
+return reChartColorr = [
+  "rgba(18, 203, 87, 0.6)"
+,"rgba(255, 97, 63, 0.2)"
+,"rgba(74, 128, 255, 0.8)"
+,"rgba(150, 50, 200, 0.4)"
+,"rgba(10, 180, 130, 0.7)"
+,"rgba(88, 40, 120, 0.5)"
+,"rgba(200, 80, 40, 0.3)"
+,"rgba(33, 150, 210, 0.9)"
+,"rgba(255, 175, 0, 0.1)"
+,"rgba(120, 60, 255, 0.6)"
+,"rgba(48, 205, 112, 0.4)"
+,"rgba(180, 20, 65, 0.8)"
+,"rgba(100, 160, 240, 0.7)"
+,"rgba(220, 90, 30, 0.5)"
+,"rgba(5, 190, 175, 0.3)"
+,"rgba(75, 130, 220, 0.9)"
+,"rgba(255, 150, 20, 0.1)"
+,"rgba(130, 80, 190, 0.6)"
+,"rgba(55, 215, 100, 0.4)"
+,"rgba(190, 10, 90, 0.8)"
+,"rgba(80, 140, 250, 0.7)"
+,"rgba(240, 100, 50, 0.5)"
+,"rgba(15, 180, 160, 0.3)"
+,"rgba(85, 125, 230, 0.9)"
+,"rgba(255, 135, 10, 0.1)"
+,"rgba(140, 70, 180, 0.6)"
+,"rgba(35, 220, 125, 0.4)"
+,"rgba(200, 30, 60, 0.8)"
+,"rgba(120, 170, 230, 0.7)"
+,"rgba(230, 110, 20, 0.5)"
+,"rgba(25, 200, 145, 0.3)"
+,"rgba(95, 120, 240, 0.9)"
+,"rgba(255, 120, 0, 0.1)"
+,"rgba(160, 90, 170, 0.6)"
+,"rgba(45, 225, 80, 0.4)"
+,"rgba(210, 40, 50, 0.8)"
+,"rgba(110, 150, 220, 0.7)"
+,"rgba(250, 120, 40, 0.5)"
+,"rgba(35, 210, 150, 0.3)"
+,"rgba(65, 110, 235, 0.9)"  
+  ]
+}
+
+
+
+/*모달창 호출 */
+function showAlert(data) {
+  const modal = document.createElement('div');
+  //# JSON 데이터 파싱
+  var parsedData= JSON.parse(data);     
+  var title = parsedData.strYn == "Y" ? "성공" : "실패";
+  modal.classList.add('modal-background01');
+  modal.innerHTML = `
+      <div class="modal-content01">
+          <div class="modal-title01">
+            <p >`+title+`</p>
+          </div>
+          <div class="modal-text01">${parsedData.str}</div>
+          <div class="modal-buttons01">
+              <button class="close-btn01" onclick="removeModal('`+parsedData.strYn+`')">확인</button>
+          </div>
+      </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function removeModal(USE_YN) {
+  const modal = document.querySelector('.modal-background01');
+  if (modal) {
+      document.body.removeChild(modal);
+      if("Y" == USE_YN) location.href = location.href;
+  }
+}
+
+
+/*모달창 호출 */
+
+

@@ -33,7 +33,8 @@ function myChart001(data, monthSelect){
 
 // 막대 차트
 function barChart001(value, barMyChart, monthSelect) {
-  console.log(JSON.stringify(monthNumbers));
+  
+  //console.log(Number(monthSelect)+" || "+ monthNumbers[index[1]]+" || "+JSON.stringify(monthNumbers));
   var months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
   var stockNames = value.map(stock => stock.STOCK_NAME);
 
@@ -51,7 +52,7 @@ function barChart001(value, barMyChart, monthSelect) {
   var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-          labels: Object.values(monthNumbers),
+          labels: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],//month != null ? Object.values(month) : Object.values(monthNumbers),
           datasets: datasets
       },
       options: {

@@ -84,7 +84,7 @@
                             <form th:action="@{/dividend/byWeekDividendListNew}" method="get">
                                 <label for="weekInput">배당 기준일 :</label>
                                 <!-- <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}"> -->
-                                <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${not #strings.isEmpty(startYmd)} ? ${startYmd} : ${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}">
+                                <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${not #strings.isEmpty(startYmd)} ? ${startYmd} : ${#temporals.format(#temporals.createNow().minusDays(6), 'yyyy-MM-dd')}">
                                 &nbsp;
                                 ~
                                 &nbsp;

@@ -7,6 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/com.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/comonCode.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/modalCom.css}">
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -20,7 +21,6 @@
   <script th:inline="javascript">
     window.onload = function(){
             feather.replace();
-
     }
 
   </script>
@@ -107,7 +107,7 @@
 
 
                   <table class="table table01 table-hover" id="myTable001">
-                    <thead class="thead01" >
+                    <thead >
                       <tr>
                         <th scope="col" class="th01">순번</th>
                         <th scope="col" class="th01">대분류 코드</th>
@@ -117,68 +117,67 @@
                         <th scope="col" class="th01">등록일시</th>
                       </tr>
                     </thead>
-                    <tbody class="tbody01">
-
-                    <form action="#" th:action="@{/com/comonCodeNewInster.do}"  method="post" >
-                      <tr>
-                        <td scope="col" class="th01">0</td>
-                        <td scope="col" class="th01">
-                          <input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="대분류 코드" >
-                        </td>
-                        <td scope="col" class="th01">
-                          <input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="대분류 명" >
-                        </td>
-                        <td scope="col" class="th01">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Y"   name="USE_YN">
-                            <label class="form-check-label" for="flexCheckDefault">
-                              사용여부
-                            </label>
-                          </div>
-                        </td>
-                        <td scope="col" class="th01">
-                            <label for="staticEmail2" class="">
-                              <button class="btn btn-outline-success" type="submit">등록</button>
-                            </label>
-                        </td>
-                        <td scope="col" class="th01"></td>
-                      </tr>
-                    </form> 
-
-                      <th:block th:if="${!#lists.isEmpty(cList)}" >
-                        <!--<tr th:each="cList, userStat  : ${cList}" th:onclick="'tableCheck001(#{cList}, '#myTable01')'">-->
-                          <tr th:each="cList, userStat  : ${cList}" th:ondblclick="tableCheck002([[${cList.SECTION_CD}]], '#myTable01');">
-                          
-
-
-                          <th scope="col" class="th01">
-                            <p th:text="${cList.NO_}"></p>
-                            <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
-                          </th>
-                          <td scope="col" class="td01">
-                            <input class="form-control" type="text" name="SECTION_CD" th:value="${cList.SECTION_CD}"  >
+                    <tbody >
+                      <form action="#" th:action="@{/com/comonCodeNewInster.do}"  method="post" >
+                        <tr>
+                          <th scope="col" class="th01">0</th>
+                          <td scope="col" class="th01">
+                            <input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="대분류 코드" >
                           </td>
-                          <td scope="col" class="td01">
-                            <input class="form-control " type="text" name="SECTION_NM" th:value="${cList.SECTION_NM}">
+                          <td scope="col" class="th01">
+                            <input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="대분류 명" >
                           </td>
-                          <td scope="col" class="td01">
+                          <td scope="col" class="th01">
                             <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:id="${userStat.index}"
-                              th:checked="${cList} and (${cList.USE_YN} == 'Y')">
-                              <label class="form-check-label" th:for="${userStat.index}">
+                              <input class="form-check-input" type="checkbox" value="Y"   name="USE_YN">
+                              <label class="form-check-label" for="flexCheckDefault">
                                 사용여부
                               </label>
                             </div>
                           </td>
-                          <td scope="col" class="td01">
-                            <label for="staticEmail2" class="">
-                              <input type="button" value="수정" class="me-2 btn btn-outline-secondary" onclick="sendRowData001(this)"/>
-                            </label>
+                          <td scope="col" class="th01">
+                              <label for="staticEmail2" class="">
+                                <button class="btn btn-outline-success" type="submit">등록</button>
+                              </label>
                           </td>
-                          <td scope="col" th:text="${cList.REG_YMD}" class="td01">
-                          </td>
+                          <td scope="col" class="th01"></td>
                         </tr>
-                      <th:block>
+                      </form> 
+  
+                        <th:block th:if="${!#lists.isEmpty(cList)}" >
+                          <!--<tr th:each="cList, userStat  : ${cList}" th:onclick="'tableCheck001(#{cList}, '#myTable01')'">-->
+                            <tr th:each="cList, userStat  : ${cList}" th:ondblclick="tableCheck002([[${cList.SECTION_CD}]], '#myTable01');">
+                            
+  
+  
+                            <th scope="col" class="th01">
+                              <p th:text="${cList.NO_}"></p>
+                              <input class="form-control" type="text" name="NO" th:value="${cList.NO}"  style="display: none;">
+                            </th>
+                            <td scope="col" class="td01">
+                              <input class="form-control" type="text" name="SECTION_CD" th:value="${cList.SECTION_CD}"  >
+                            </td>
+                            <td scope="col" class="td01">
+                              <input class="form-control " type="text" name="SECTION_NM" th:value="${cList.SECTION_NM}">
+                            </td>
+                            <td scope="col" class="td01">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:id="${userStat.index}"
+                                th:checked="${cList} and (${cList.USE_YN} == 'Y')">
+                                <label class="form-check-label" th:for="${userStat.index}">
+                                  사용여부
+                                </label>
+                              </div>
+                            </td>
+                            <td scope="col" class="td01">
+                              <label for="staticEmail2" class="">
+                                <input type="button" value="수정" class="me-2 btn btn-outline-secondary" onclick="sendRowData001(this)"/>
+                              </label>
+                            </td>
+                            <td scope="col" th:text="${cList.REG_YMD}" class="td01">
+                            </td>
+                          </tr>
+                        <th:block>
                     </tbody>
                   </table>  
                 </div>
@@ -210,7 +209,10 @@
                           <thead>
                             <tr>
                               <th scope="col">순번</th>
-                              <th scope="col">체크</th>
+                              <th scope="col"><input type='checkbox'
+                                name='CATEGORY_CD' 
+                                value='selectall'
+                                onclick='selectAll(this)'/></th>
                               <th scope="col">대분류코드</th>
                               <th scope="col">중분류코드</th>
                               <th scope="col">중분류명</th>
@@ -239,9 +241,6 @@
                               <td>
                                 <div class="form-check">
                                   <input class="form-check-input" type="checkbox" value="Y" name="USE_YN">
-                                  <label class="form-check-label" for="flexCheckDefault">
-                                    사용여부
-                                  </label>
                                 </div>
                               </td>
                               <td>
@@ -259,7 +258,7 @@
                                 <tr th:each="cList01, userStat  : ${cList01}" >
                                   <th><p th:text="${userStat.index+2}"></p></th>
                                   <th>
-                                      <input class="form-check" type="checkbox" value="Y" name="user_CheckBox">
+                                      <input class="row-checkbox" type="checkbox" name="user_CheckBox">
                                   </th>
                                   <td >
                                     <select class="form-select" aria-label="Default select example" name="CATEGORY_CD" title="전체"  id="trnscdateSelect">
@@ -269,15 +268,12 @@
                                       </th:block>
                                     </select>
                                   </td>
-                                  <td><input class="form-control" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="중분류 코드" th:value="${cList01.CLSFC_CD}"></td>
-                                  <td><input class="form-control" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="중분류 명"   th:value="${cList01.CLSFC_NM}"></td>
-                                  <td><input class="form-control" type="text"  id="ARRAY_NO" name="ARRAY_NO" placeholder="정렬 순번"   th:value="${cList01.ARRAY_NO}"></td>
+                                  <td><input class="form-control form-input001" type="text"  id="SECTION_CD" name="SECTION_CD" placeholder="중분류 코드" th:value="${cList01.CLSFC_CD}"></td>
+                                  <td><input class="form-control form-input001" type="text"  id="SECTION_NM" name="SECTION_NM" placeholder="중분류 명"   th:value="${cList01.CLSFC_NM}"></td>
+                                  <td><input class="form-control form-input001" type="number"  id="ARRAY_NO" name="ARRAY_NO" placeholder="정렬 순번"   th:value="${cList01.ARRAY_NO}"></td>
                                   <td>
                                     <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" value="Y" name="USE_YN" th:checked="${cList01.USE_YN}">
-                                      <label class="form-check-label" for="flexCheckDefault">
-                                        사용여부
-                                      </label>
+                                      <input class="form-check-input form-input001" type="checkbox" value="Y" name="USE_YN" th:checked="${cList01.USE_YN}">
                                     </div>
                                   </td>
                                   <td>
