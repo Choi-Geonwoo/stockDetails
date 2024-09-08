@@ -162,7 +162,7 @@
 
 <!-- 자산관리 년도별 배당금 추이 -->
 <select id="selectSum03" resultType="Map" parameterType="com.springboot.spring.vo.StockportfolioVO">
-        SELECT 
+        SELECT  /* DetailsMapper.selectSum03 : 자산관리 년도별 배당금 추이 */
                 TO_CHAR(TB01.TRNSCDATE , 'YYYY-MM') AS TRNSC_DATE 
                 ,TO_CHAR(SUM(TB01.AMOUNT), 'FM999,999,999,999.999')+0 AS EACH_MONEY01
         FROM TRANSACTION TB01, STOCKPORTFOLIO TB02
@@ -170,6 +170,34 @@
         	AND TB02.CLSCD  = 'Y'
         GROUP BY TO_CHAR(TB01.TRNSCDATE , 'YYYY-MM') 
                 ORDER BY 1
+</select>
+
+<!-- 월별 배당금-->
+<select id="selectSum04" resultType="Map" parameterType="com.springboot.spring.vo.StockportfolioVO">
+                SELECT /* DetailsMapper.selectSum04 : 자산관리 년도별 배당금 추이 */
+                        *
+                FROM (
+                        SELECT 
+                                TO_CHAR(TRNSCDATE, 'MM') AS TRNSCDATE  ,
+                                TO_CHAR(AMOUNT, 'FM999,999,999,999.999') AS AMOUNT_04
+                        FROM TRANSACTION
+                )
+                PIVOT (
+                        SUM(AMOUNT_04) FOR TRNSCDATE IN (
+                                        '01' AS JANUARY,  
+                                        '02' AS FEBRUARY, 
+                                        '03' AS MARCH,    
+                                        '04' AS APRIL,    
+                                        '05' AS MAY,      
+                                        '06' AS JUNE,     
+                                        '07' AS JULY,     
+                                        '08' AS AUGUST,   
+                                        '09' AS SEPTEMBER,
+                                        '10' AS OCTOBER,  
+                                        '11' AS NOVEMBER, 
+                                        '12' AS DECEMBER 
+                                        )
+                )
 </select>
 
 </mapper>

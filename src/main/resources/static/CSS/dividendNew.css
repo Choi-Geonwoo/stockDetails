@@ -25,3 +25,8 @@
       border-radius: 4px;
       font-size: 16px;
     }
+
+/* 손모양 커서 */
+.pointer {
+  cursor: pointer;
+}

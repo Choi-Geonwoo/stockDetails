@@ -1,4 +1,4 @@
-ï»¿package com.springboot.spring.controller.details;
+package com.springboot.spring.controller.details;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +19,8 @@ import com.springboot.spring.service.detail.DetailsService;
 
 import lombok.extern.slf4j.Slf4j;
 
-// ì£¼ì‹  ê±°ë˜ë‚´ì—­
-/* ìë°” ì»´íŒŒì¼ ì˜¤ë¥˜ ë°œìƒì‹œ : java:Clean Java Language Server Workspace */
+// ÁÖ½Ä  °Å·¡³»¿ª
+/* ÀÚ¹Ù ÄÄÆÄÀÏ ¿À·ù ¹ß»ı½Ã : java:Clean Java Language Server Workspace */
 @Slf4j
 @Controller
 public class DetailsController {
@@ -34,14 +34,14 @@ public class DetailsController {
 @GetMapping("/")
     public String detailsView(Model model){
         StockportfolioDto sDto = new StockportfolioDto();
-        log.info("ì£¼ì‹ë‚´ì—­");
-        model.addAttribute("title", "ì£¼ì‹ë‚´ì—­");
+        log.info("ÁÖ½Ä³»¿ª");
+        model.addAttribute("title", "ÁÖ½Ä³»¿ª");
         model.addAttribute("selectBox", detailsService.selectBox()); 
         model.addAttribute("sList", detailsService.stockDetailsList(sDto));
         return "view/details/details";
     }
     
-// ì£¼ì‹ ê±°ë˜ ë‚´ì—­ 
+// ÁÖ½Ä °Å·¡ ³»¿ª 
  @GetMapping("/details/details")
     public String detailsSearchView(Model model
     ,@RequestParam(value = "stockName" ,required=false) String stockName
@@ -50,7 +50,7 @@ public class DetailsController {
         StockportfolioDto sDto = new StockportfolioDto();
         sDto.setStockName(stockName);
         sDto.setDividendCycle(dividendCycle);
-        model.addAttribute("title", "ì£¼ì‹ë‚´ì—­");
+        model.addAttribute("title", "ÁÖ½Ä³»¿ª");
         model.addAttribute("reStockName", stockName);
         model.addAttribute("reDividendCycle", dividendCycle);
         model.addAttribute("selectBox", detailsService.selectBox()); 
@@ -59,7 +59,7 @@ public class DetailsController {
     }
 
     
-// ì£¼ì‹ ê±°ë˜ ë‚´ì—­ 
+// ÁÖ½Ä °Å·¡ ³»¿ª 
  @GetMapping("/details/detailsNew")
  public String detailsSearchNewView(Model model
     ,@RequestParam(value = "stockName" ,required=false) String stockName
@@ -68,7 +68,7 @@ public class DetailsController {
      StockportfolioDto sDto = new StockportfolioDto();
      sDto.setStockName(stockName);
      sDto.setDividendCycle(dividendCycle);
-     model.addAttribute("title", "ì£¼ì‹ë‚´ì—­");
+     model.addAttribute("title", "ÁÖ½Ä³»¿ª");
      model.addAttribute("reStockName", stockName);
      model.addAttribute("reDividendCycle", dividendCycle);
      model.addAttribute("selectBox", detailsService.selectBox01("BANK_001")); 
@@ -78,16 +78,16 @@ public class DetailsController {
  }
 
 
-    // ì£¼ì‹ ë‚´ì—­ ë“±ë¡
+    // ÁÖ½Ä ³»¿ª µî·Ï
     @PostMapping("/detailsInsert.do")
     @ResponseBody
     public String detailsInsert(@RequestBody Map<String, Object> map){
-        //log.info("ì–´ë–¤ê°’ì´ ë‚˜ì˜¤ë‚˜ "+map.toString());
+        //log.info("¾î¶²°ªÀÌ ³ª¿À³ª "+map.toString());
         return String.valueOf(detailsService.detailsInsert(map));
         
     }
 
-    // ì£¼ì‹ ë‚´ì—­ ìˆ˜ì •
+    // ÁÖ½Ä ³»¿ª ¼öÁ¤
     @PostMapping("/detailsUpdate.do")
     @ResponseBody
     public String detailsUpdate(@RequestBody Map<String, Object> map){
@@ -95,14 +95,14 @@ public class DetailsController {
         //return "200";
     }
 
-     // ì£¼ì‹ ì‚­ì œ
+     // ÁÖ½Ä »èÁ¦
     @PostMapping("/detailsDelete.do")
     @ResponseBody
     public String detailsDelete(@RequestBody int registration_order){
         //log.info("registration_order : : : : : : " + registration_order);
         return String.valueOf(detailsService.detailsDelete(registration_order));
     }   
-     // ì£¼ì‹ ìƒì„¸ ì¡°íšŒ
+     // ÁÖ½Ä »ó¼¼ Á¶È¸
      @GetMapping("/stockDetailList.do")
      public ResponseEntity<Map<String, Object>> stockDetailList(@RequestParam String stockName, Model model){
          Map<String, Object> map = new HashMap<>();

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springboot.spring.mapper.yearAlctn.YearAlctnMapper">
+
+
+
+<select id = "yearComparison"  resultType="Map" parameterType="com.springboot.spring.dto.TransactionDto">
+               SELECT /*SQL_ID :  YearAlctnMapper.yearComparison*/
+					DECODE(GROUPING(TO_CHAR(TRNSCDATE, 'YYYY')), 1, '합계', TO_CHAR(TRNSCDATE, 'YYYY')) AS TRNSCDATE,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') ) AS JANUARY,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '02' , AMOUNT, '0') ) AS FEBRUARY,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '03' , AMOUNT, '0') ) AS MARCH,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '04' , AMOUNT, '0') ) AS APRIL,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '05' , AMOUNT, '0') ) AS MAY,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '06' , AMOUNT, '0') ) AS JUNE,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '07' , AMOUNT, '0') ) AS JULY,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '08' , AMOUNT, '0') ) AS AUGUST,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '09' , AMOUNT, '0') ) AS SEPTEMBER,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '10' , AMOUNT, '0') ) AS OCTOBER,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '11' , AMOUNT, '0') ) AS NOVEMBER,
+                    SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) AS DECEMBER,
+                      SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') )
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '02' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '03' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '04' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '05' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '06' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '07' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '08' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '09' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '10' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '11' , AMOUNT, '0') ) 
+                    + SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) 
+                    AS ALL_SUM
+                FROM
+                    TRANSACTION
+                WHERE 1=1
+                GROUP BY ROLLUP(TO_CHAR(TRNSCDATE, 'YYYY'))
+
+</select>
+
+</mapper>

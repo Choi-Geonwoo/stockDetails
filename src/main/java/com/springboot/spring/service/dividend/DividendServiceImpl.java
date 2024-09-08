@@ -20,7 +20,7 @@ import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
 
-// ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ê´€ë ¨ í•¨ìˆ˜
+// ÁÖ½Ä ¹è´ç °Å·¡³»¿ª °ü·Ã ÇÔ¼ö
 @Slf4j
 @Service
 public class DividendServiceImpl implements DividendService {
@@ -35,7 +35,7 @@ public class DividendServiceImpl implements DividendService {
     @Autowired
     private FileMapper fileMapper;
 
-    // ë°°ë‹¹ ë‚´ì—­ ì¡°íšŒ
+    // ¹è´ç ³»¿ª Á¶È¸
     @Override
     public List<Map> dividendList(Map<String, Object> map) { 
         TransactionDto tDto = new TransactionDto();
@@ -44,8 +44,8 @@ public class DividendServiceImpl implements DividendService {
         }else{
             tDto.setStockName(String.valueOf(map.get("stockName")));
         }
-        log.info("ì „ì²´ : ", map);
-        //ë…„ë„ ê³µë°± ì¸ê²½ìš°
+        log.info("ÀüÃ¼ : ", map);
+        //³âµµ °ø¹é ÀÎ°æ¿ì
         
         if(IsNullCheck.isNull(map.get("trnscdate")) && IsNullCheck.isNull(map.get("monthSelect"))){
             tDto.setTrnscdate("");
@@ -64,14 +64,14 @@ public class DividendServiceImpl implements DividendService {
         return dividendMapper.dividendList(tDto);
     }
 
-    // ì£¼ì‹ëª… ì¡°íšŒ ì…€ë ‰íŠ¸ ë°•ìŠ¤ ì‚¬ìš©
+    // ÁÖ½Ä¸í Á¶È¸ ¼¿·ºÆ® ¹Ú½º »ç¿ë
     @Override
     public List<StockportfolioVO> selectBox() {
         StockportfolioDto sDto = null;
         return detailsMaper.selectBox(sDto);
     }
 
- // ë°°ë‹¹ ê±°ë˜ ë‚´ì—­ ë“±ë¡
+ // ¹è´ç °Å·¡ ³»¿ª µî·Ï
     @Override
     public int transactionInsert(Map<String, Object> map, String files) {
         int cnt = -1;
@@ -89,12 +89,12 @@ public class DividendServiceImpl implements DividendService {
             tDTO.setNo(Integer.valueOf(tNo));
             fDto.setTNo(tNo);
             fDto.setFName(String.valueOf(map.get("fName")));
-            // Ã«Â°Â°Ã«Â‹Å¡ Ä™Ä…Â°Ã«ÂÂ˜ ?Â“Ä…Ã«Ä„?
+            // ?¡Æ¡Æ??? ??¡Æ??? ??????
             cnt = dividendMapper.transactionInsert(tDTO);
             if(!IsNullCheck.isNull(files)){
-                log.info("1. ?ÂšÂ”Ä›Ë›? Ä™Â°? : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
+                log.info("1. ????¢­? ?¡Æ? : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
                 fDto.setContents(files.getBytes());
-                // ?ÂÂ´Ã«Å»Â¸Ä›?? ?ÂŒÂŒ?ÂÅº ?Â“Ä…Ã«Ä„?
+                // ??¢¥??¢¬??? ?????? ??????
                 fileMapper.fileInsert(fDto);
             }
             log.info("========== transactionInsert END ===========");
@@ -106,7 +106,7 @@ public class DividendServiceImpl implements DividendService {
         return cnt;
     }
 
-    // ë°°ë‹¹ ê±°ë˜ ìƒì„¸ ë‚´ì—­
+    // ¹è´ç °Å·¡ »ó¼¼ ³»¿ª
     @Override
     public CombinedDTO dividendDtlsInqry(Map<String, Object> map) {
         TransactionDto tList = new TransactionDto();
@@ -134,7 +134,7 @@ public class DividendServiceImpl implements DividendService {
         return cDto;
     }
 
-    // ì£¼ì‹ ë°°ë‹¹ ê±°ë˜ë‚´ì—­ í•¨ìˆ˜
+    // ÁÖ½Ä ¹è´ç °Å·¡³»¿ª ÇÔ¼ö
     @Override
     public int transactionUpdate(Map<String, Object> map, String files) {
         int cnt = -1;
@@ -189,7 +189,7 @@ public class DividendServiceImpl implements DividendService {
         return cnt;
     }
 
-    // ì£¼ë³„ ë°°ë‹¹ ë‚´ì—­ ì¡°íšŒ
+    // ÁÖº° ¹è´ç ³»¿ª Á¶È¸
     @Override
     public List<Map> byWeekDividendList(Map<String, Object> map) { 
         map.put("startYmd", ("null".equals(map.get("startYmd")) ? null :  map.get("startYmd")));
@@ -198,7 +198,7 @@ public class DividendServiceImpl implements DividendService {
     }
 
 
-    //ë…„ë„ ë°°ë‹¹ê¸ˆ
+    //³âµµ ¹è´ç±İ
     @Override
     public List<Map> yearComparison(Map<String, Object> map) {
         try {

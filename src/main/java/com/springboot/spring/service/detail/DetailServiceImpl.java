@@ -124,9 +124,13 @@ public class DetailServiceImpl implements DetailsService {
         List<Map> newList = new ArrayList<>();
         //log.info("1.### : " + detailsMapper.selectSum01(sDto).toString());
         //log.info("2.### : " + detailsMapper.selectSum02(sDto).toString());
-        newList.add(detailsMapper.selectSum01(sDto));
+        newList.addAll(detailsMapper.selectSum01(sDto));
+        newList.addAll(detailsMapper.selectSum04(sDto));
         newList.addAll(detailsMapper.selectSum02(sDto));
         newList.addAll(detailsMapper.selectSum03(sDto));
+        log.info("toString : : : : : : : : : : : : : : : : " );
+        log.info("toString : : : " + newList.toString());
+        log.info("toString : : : : : : : : : : : : : : : : " );
         // 주식 투자 금액 합계 조회
         return newList;
     }

@@ -8,6 +8,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/CSS/details.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/CSS/com/com.css}">
 
+    <!-- 엑셀 다운로드용 js 파일-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -62,7 +65,7 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="downloadExcel('myTable2')">Export</button>
                         </div>
                         <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                             <span data-feather="calendar"></span>
@@ -72,7 +75,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="card">
                             <div class="card-header">
                                 총 자산
@@ -82,7 +85,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <div class="card">
                             <div class="card-header">
                                 누적 배당금
@@ -90,6 +93,50 @@
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${'$ ' + sumList[0].SUM02}">567</h5>
                                 <!--<p class="card-text">Number of transactions made this month.</p>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                월별 배당금
+                            </div>
+                            <div class="card-body">
+                                <!--<h5 class="card-title" th:text="${sumList[1]}">567</h5>-->
+                                <table class="table table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>01월</th>
+                                            <th>02월</th>
+                                            <th>03월</th>
+                                            <th>04월</th>
+                                            <th>05월</th>
+                                            <th>06월</th>
+                                            <th>07월</th>
+                                            <th>08월</th>
+                                            <th>09월</th>
+                                            <th>10월</th>
+                                            <th>11월</th>
+                                            <th>12월</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td th:text="${sumList[1].JANUARY}">01월</td>
+                                            <td th:text="${sumList[1].FEBRUARY}">02월</td>
+                                            <td th:text="${sumList[1].MARCH}">03월</td>
+                                            <td th:text="${sumList[1].APRIL}">04월</td>
+                                            <td th:text="${sumList[1].MAY}">05월</td>
+                                            <td th:text="${sumList[1].JUNE}">06월</td>
+                                            <td th:text="${sumList[1].JULY}">07월</td>
+                                            <td th:text="${sumList[1].AUGUST}">08월</td>
+                                            <td th:text="${sumList[1].SEPTEMBER}">09월</td>
+                                            <td th:text="${sumList[1].OCTOBER}">10월</td>
+                                            <td th:text="${sumList[1].NOVEMBER}">11월</td>
+                                            <td th:text="${sumList[1].DECEMBER}">12월</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -165,7 +212,7 @@
                                         등록
                                     </button>  
                                     &nbsp;&nbsp;                                            
-                                    <button type="button" class="btn btn-outline-success" onclick="exportExcel('거래내역_', 'myTable2');"><!--id="excelDownload"-->
+                                    <button type="button" class="btn btn-outline-success" onclick="exportTableToExcel('거래내역_', 'myTable2');"><!--id="excelDownload"-->
                                         Export
                                     </button>  
                                     &nbsp;&nbsp;    
@@ -212,7 +259,7 @@
                                 </thead>
                                 <tbody th:if="${!#lists.isEmpty(sList)}" id="data-table" >
                                 <tr th:each="slist : ${sList}">
-                                        <td style="display: none;" ><input type="text" th:value="${slist.no}" readonly></td><!--순번-->
+                                        <td style="display: none;" ><input type="text" th:value="${slist.no}"></td><!--순번-->
                                         <td >
                                         <!-- <input  class="form-control-plaintext td_disable " type="text" th:value="${slist.stockName}" readonly > -->
                                         <input type="button" class="btn btn-outline-secondary w-100" th:value="${slist.stockName}" th:data-stockname="${slist.stockName}" onclick="showModal(this)">

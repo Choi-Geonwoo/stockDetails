@@ -139,7 +139,8 @@
 <select id = "yearComparison"  resultType="Map" parameterType="com.springboot.spring.dto.TransactionDto">
 
                SELECT /*SQL_ID :  DividendMapper.yearComparison*/
-					DECODE(GROUPING(TO_CHAR(TRNSCDATE, 'YYYY')), 1, '합계', TO_CHAR(TRNSCDATE, 'YYYY')) AS TRNSCDATE,
+					DECODE(GROUPING(TO_CHAR(TRNSCDATE, 'YYYY')), 1, '합계', 
+                    TO_CHAR(TRNSCDATE, 'YYYY')) AS TRNSCDATE,
                     SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') ) AS JANUARY,
                     SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '02' , AMOUNT, '0') ) AS FEBRUARY,
                     SUM(DECODE(TO_CHAR(TRNSCDATE, 'MM'), '03' , AMOUNT, '0') ) AS MARCH,

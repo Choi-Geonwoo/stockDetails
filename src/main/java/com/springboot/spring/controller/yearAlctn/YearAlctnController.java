@@ -1,4 +1,4 @@
-package com.springboot.spring.controller.yearComparison;
+package com.springboot.spring.controller.yearAlctn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,18 +10,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.springboot.spring.service.dividend.DividendService;
+import com.springboot.spring.service.yearAlctn.YearAlctnService;
 
 import lombok.extern.slf4j.Slf4j;
 
-// ³âµµ ¹è´ç °ü·Ã È­¸é
+// ë…„ë„ ë°°ë‹¹ ê´€ë ¨ í™”ë©´
 @Slf4j
 @Controller
-public class YearComparison {
+public class YearAlctnController {
 
     @Autowired
     public DividendService dividendService;
     
-    // ³âµµ º£´ç °Å·¡ ³»¿ª
+    @Autowired
+    public YearAlctnService yearAlctnService;
+    
+    // ë…„ë„ ë² ë‹¹ ê±°ë˜ ë‚´ì—­
     @GetMapping("/dividend/yearComparison")
     public String yearComparisonView(Model model 
         ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate)
@@ -29,15 +33,15 @@ public class YearComparison {
         
         Map<String, Object> map = new HashMap<>();
         map.put("trnscdate", trnscdate);
-        log.info("¹è´ç³»¿ªºñ±³(³âµµ)");
-        model.addAttribute("title", "¹è´ç³»¿ªºñ±³(³âµµ)");
-        model.addAttribute("dList", dividendService.yearComparison(map));
+        log.info("ë°°ë‹¹ë‚´ì—­ë¹„êµ(ë…„ë„)");
+        model.addAttribute("title", "ë°°ë‹¹ë‚´ì—­ë¹„êµ(ë…„ë„)");
+        model.addAttribute("dList", yearAlctnService.yearComparison(map));
         return "view/dividend/yearComparison";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
 
 
-    // ³âµµ º£´ç °Å·¡ ³»¿ª
+    // ë…„ë„ ë² ë‹¹ ê±°ë˜ ë‚´ì—­
     @GetMapping("/year/yearComparisonNew")
     public String yearComparisonNewView(Model model 
         ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate)
@@ -45,9 +49,9 @@ public class YearComparison {
         
         Map<String, Object> map = new HashMap<>();
         map.put("trnscdate", trnscdate);
-        log.info("¹è´ç³»¿ª(³âµµ)");
-        model.addAttribute("title", "¹è´ç³»¿ª(³âµµ)");
-        model.addAttribute("dList", dividendService.yearComparison(map));
+        log.info("ë°°ë‹¹ë‚´ì—­(ë…„ë„)");
+        model.addAttribute("title", "ë°°ë‹¹ë‚´ì—­(ë…„ë„)");
+        model.addAttribute("dList", yearAlctnService.yearComparison(map));
         return "view/year/yearComparisonNew";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }

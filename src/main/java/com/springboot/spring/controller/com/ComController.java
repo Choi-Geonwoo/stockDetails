@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.springboot.spring.service.com.ComService;
 
 
-// °øÅë ÄÚµå µî·Ï
+// ê³µí†µ ì½”ë“œ ë“±ë¡
 @Slf4j
 @Controller
 public class ComController {
@@ -25,43 +25,43 @@ public class ComController {
     @Autowired
     private ComService comService;
     
-    // ´ëºĞ·ù Á¶È¸
+    // ëŒ€ë¶„ë¥˜ ì¡°íšŒ
     @GetMapping("/com/comonCode")
     public String comonCodeView(Model model){
-        log.info("°øÅëÄÚµå");
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        log.info("ê³µí†µì½”ë“œ");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         model.addAttribute("cList", comService.sectionSelect(null));
         return "view/com/comonCode";
     }
 
 
-    // ´ëºĞ·ù Á¶È¸
+    // ëŒ€ë¶„ë¥˜ ì¡°íšŒ
     @GetMapping("/com/detailsSearch.do")
     public String detailsSearch(Model model, @RequestParam Map<String, Object> map){
-        log.info("°øÅëÄÚµå °Ë»ö : : : " + map.toString());
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        log.info("ê³µí†µì½”ë“œ ê²€ìƒ‰ : : : " + map.toString());
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         model.addAttribute("cList", comService.sectionSelect(map));
         model.addAttribute("SECTION_NM", String.valueOf(map.get("SECTION_NM")));
         model.addAttribute("SECTION_CD", String.valueOf(map.get("SECTION_CD")));
         return "view/com/comonCode";
     }
 
-    // ´ëºĞ·ù µî·Ï
+    // ëŒ€ë¶„ë¥˜ ë“±ë¡
     @PostMapping("/com/comonCodeInster.do")
     //@ResponseBody
     public String comonCodeInster(@RequestParam Map<String, Object> formMap, Model model){
         log.info("formMap + " + formMap.toString());
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
         return "view/com/comonCode";
     }
 
 
-    // ´ëºĞ·ù ¼öÁ¤
+    // ëŒ€ë¶„ë¥˜ ìˆ˜ì •
     @PostMapping("/com/comonCodeUpdate.do")
     public ResponseEntity<Map> comonCodeUpdate(@RequestBody  Map<String, Object> formMap, Model model){
             
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
         Map<String, String> reMap = comService.sectionUpdate(formMap);
         return ResponseEntity.ok(reMap);
@@ -69,20 +69,20 @@ public class ComController {
 
 
 
-    // ´ëºĞ·ù Á¶È¸
+    // ëŒ€ë¶„ë¥˜ ì¡°íšŒ
     @GetMapping("/com/comonCodeNew")
     public String comonCodeNewView(Model model){
-        log.info("°øÅëÄÚµå");
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        log.info("ê³µí†µì½”ë“œ");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         model.addAttribute("cList", comService.sectionSelect(null));
         return "view/com/comonCodeNew";
     }
 
-    // ´ëºĞ·ù Á¶È¸
+    // ëŒ€ë¶„ë¥˜ ì¡°íšŒ
     @GetMapping("/com/comonCodeNewSearch.do")
     public String comonCodeNewSearch(Model model, @RequestParam Map<String, Object> map){
-        log.info("°øÅëÄÚµå °Ë»ö : : : " + map.toString());
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        log.info("ê³µí†µì½”ë“œ ê²€ìƒ‰ : : : " + map.toString());
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         model.addAttribute("cList", comService.sectionSelect(map));
         model.addAttribute("SECTION_NM", String.valueOf(map.get("SECTION_NM")));
         model.addAttribute("SECTION_CD", String.valueOf(map.get("SECTION_CD")));
@@ -90,42 +90,42 @@ public class ComController {
     }
 
 
-    // ´ëºĞ·ù µî·Ï
+    // ëŒ€ë¶„ë¥˜ ë“±ë¡
     @PostMapping("/com/comonCodeNewInster.do")
     //@ResponseBody
     public String comonCodeNewInster(@RequestParam Map<String, Object> formMap, Model model){
         log.info("formMap + " + formMap.toString());
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
         model.addAttribute("cList", comService.sectionSelect(null));
         return "view/com/comonCodeNew";
     }
 
 
-    // ´ëºĞ·ù ¼öÁ¤
+    // ëŒ€ë¶„ë¥˜ ìˆ˜ì •
     @PostMapping("/com/comonCodeNewUpdate.do")
     public ResponseEntity<Map> comonCodeNewUpdate(@RequestBody  Map<String, Object> formMap, Model model){
             
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         //model.addAttribute("cStr", String.valueOf(comService.sectionInsert(formMap)));
         Map<String, String> reMap = comService.sectionUpdate(formMap);
         return ResponseEntity.ok(reMap);
     }
 
 
-    // ÁßºĞ·ù µî·Ï
+    // ì¤‘ë¶„ë¥˜ ë“±ë¡
     @PostMapping("/com/comCodeClsfcInster.do")
     //@ResponseBody
     public ResponseEntity<Map> comCodeClsfcInster(@RequestBody List<Map<String, Object>> formMap, Model model){
         log.info("formMap + " + formMap.toString());
-        //model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        //model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         //model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
         Map<String, String> reMap = comService.comCodeClsfcInster(formMap);
         return ResponseEntity.ok(reMap);
     }
 
     
-    // ÁßºĞ·ù Á¶È¸
+    // ì¤‘ë¶„ë¥˜ ì¡°íšŒ
     @GetMapping("/com/comCodeClsfcSelect.do")
     //@ResponseBody
     //public ResponseEntity<List<Map>> comCodeClsfcSelect(@RequestBody Map<String, Object> formMap, Model model){
@@ -133,14 +133,14 @@ public class ComController {
         Map<String, Object> formMap = new HashMap<>();
         formMap.put("SECTION_CD", sectionCd);
         log.info("formMap + " + formMap.toString());
-        //model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        //model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         //model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
         List<Map> reMap = comService.comCodeClsfcSelect(formMap);
         return ResponseEntity.ok(reMap);
     }
 
     
-    // ÁßºĞ·ù Á¶È¸
+    // ì¤‘ë¶„ë¥˜ ì¡°íšŒ
     @GetMapping("/com/comCodeClsfcSelect01.do")
     //@ResponseBody
     //public ResponseEntity<List<Map>> comCodeClsfcSelect(@RequestBody Map<String, Object> formMap, Model model){
@@ -148,7 +148,7 @@ public class ComController {
         Map<String, Object> formMap = new HashMap<>();
         formMap.put("SECTION_CD", sectionCd);
         log.info("formMap + " + formMap.toString());
-        model.addAttribute("title", "°øÅëÄÚµå °ü¸®");
+        model.addAttribute("title", "ê³µí†µì½”ë“œ ê´€ë¦¬");
         //model.addAttribute("cStr", String.valueOf(comService.comonCodeClsfcInster(formMap)));
         //model.addAttribute("cList", comService.comCodeClsfcSelect(formMap));
         model.addAttribute("cList", comService.sectionSelect(null));

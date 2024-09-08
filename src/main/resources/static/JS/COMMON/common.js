@@ -90,26 +90,9 @@ function toDay(){
 	 * 엑셀 다운로드 
 	 * @param str		: 체크할 문자열
  **/
-document.addEventListener('DOMContentLoaded', () => {
-  const excelDownload = document.querySelector('#excelDownload');
-  console.log();
-  fileName = "거래내역";
-  if(excelDownload == null) return;
-  excelDownload.addEventListener('click', exportExcel);
-});
-
-function exportExcel(fileName, table_id) {
-  const wb = XLSX.utils.book_new();
-  const newWorksheet = excelHandler.getWorksheet(table_id);
-  XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
-
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-  saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), excelHandler.getExcelFileName(fileName));
-}
-
 const excelHandler = {
   getExcelFileName: function (fileName) {
-    return fileName+toDay()+'.xlsx'; // 파일명
+    return fileName + toDay() + '.xlsx'; // 파일명
   },
   getSheetName: function () {
     return 'Table Test Sheet'; // 시트명
@@ -134,9 +117,30 @@ const excelHandler = {
     return data;
   },
   getWorksheet: function (table_id) {
-    return XLSX.utils.aoa_to_sheet(this.getExcelData(table_id));
+    console.log("ret : " + table_id);
+    //return XLSX.utils.aoa_to_sheet(this.getExcelData(table_id));
   }
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  const excelDownload = document.querySelector('#excelDownload');
+  if (!excelDownload) return; // excelDownload 버튼이 없으면 리턴
+
+  const fileName = "거래내역";
+  const tableId = "myTable2"; // 실제 테이블 ID로 변경
+
+  excelDownload.addEventListener('click', () => exportExcel(fileName, tableId));
+});
+
+function exportExcel(fileName, table_id) {
+  const wb = XLSX.utils.book_new();
+  console.log("ret : " + table_id);
+  const newWorksheet = excelHandler.getWorksheet(table_id);
+  XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+  saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), excelHandler.getExcelFileName(fileName));
+}
 
 function s2ab(s) {
   const buf = new ArrayBuffer(s.length); // s를 arrayBuffer로 변환
@@ -144,6 +148,61 @@ function s2ab(s) {
   for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; // 옥텟으로 변환
   return buf;
 }
+
+
+function downloadExcel(tbName, tbId) {
+  var fileName = tbName + toDay() + '.xlsx'; // 파일명
+  const table = document.getElementById(tbId);
+  const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+
+  // 엑셀 파일을 바이너리 형태로 변환
+  const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+
+  // 바이너리 문자열을 ArrayBuffer로 변환하는 함수
+  function s2ab(s) {
+    const buf = new ArrayBuffer(s.length);
+    const view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
+
+  // 엑셀 파일 다운로드
+  saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), fileName+ '.xlsx');
+}
+
+
+function exportTableToExcel(tbName, tbId) {
+  var fileName = tbName + toDay() + '.xlsx'; // 파일명
+  // 테이블 요소를 가져옵니다.
+  const table = document.getElementById(tbId);
+  const wb = XLSX.utils.book_new();
+  
+  // 테이블의 각 행을 가져옵니다.
+  const data = [];
+  const rows = table.querySelectorAll('tbody tr');
+
+  rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      const rowData = Array.from(cells).map(cell => {
+          // 셀 안에 입력 필드가 있는 경우 값 추출
+          const input = cell.querySelector('input');
+          return input ? input.value : cell.textContent;
+      });
+      data.push(rowData);
+  });
+
+  // 첫 번째 행은 헤더로 설정합니다.
+  const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+  data.unshift(headers);
+
+  // 데이터로 워크시트를 생성합니다.
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(wb, ws, 'Table Data');
+  
+  // 워크북을 Excel 파일로 저장합니다.
+  XLSX.writeFile(wb, fileName+'.xlsx');
+}
+
 
 /* 테이블 정렬 */
 function sortTable(id,n) {
@@ -236,47 +295,47 @@ function fetch001(url, method, body){
 
 function reChartColorr(){
 return reChartColorr = [
-  "rgba(18, 203, 87, 0.6)"
-,"rgba(255, 97, 63, 0.2)"
-,"rgba(74, 128, 255, 0.8)"
-,"rgba(150, 50, 200, 0.4)"
-,"rgba(10, 180, 130, 0.7)"
-,"rgba(88, 40, 120, 0.5)"
-,"rgba(200, 80, 40, 0.3)"
-,"rgba(33, 150, 210, 0.9)"
-,"rgba(255, 175, 0, 0.1)"
-,"rgba(120, 60, 255, 0.6)"
-,"rgba(48, 205, 112, 0.4)"
-,"rgba(180, 20, 65, 0.8)"
-,"rgba(100, 160, 240, 0.7)"
-,"rgba(220, 90, 30, 0.5)"
-,"rgba(5, 190, 175, 0.3)"
-,"rgba(75, 130, 220, 0.9)"
-,"rgba(255, 150, 20, 0.1)"
-,"rgba(130, 80, 190, 0.6)"
-,"rgba(55, 215, 100, 0.4)"
-,"rgba(190, 10, 90, 0.8)"
-,"rgba(80, 140, 250, 0.7)"
-,"rgba(240, 100, 50, 0.5)"
-,"rgba(15, 180, 160, 0.3)"
-,"rgba(85, 125, 230, 0.9)"
-,"rgba(255, 135, 10, 0.1)"
-,"rgba(140, 70, 180, 0.6)"
-,"rgba(35, 220, 125, 0.4)"
-,"rgba(200, 30, 60, 0.8)"
-,"rgba(120, 170, 230, 0.7)"
-,"rgba(230, 110, 20, 0.5)"
-,"rgba(25, 200, 145, 0.3)"
-,"rgba(95, 120, 240, 0.9)"
-,"rgba(255, 120, 0, 0.1)"
-,"rgba(160, 90, 170, 0.6)"
-,"rgba(45, 225, 80, 0.4)"
-,"rgba(210, 40, 50, 0.8)"
-,"rgba(110, 150, 220, 0.7)"
-,"rgba(250, 120, 40, 0.5)"
-,"rgba(35, 210, 150, 0.3)"
-,"rgba(65, 110, 235, 0.9)"  
-  ]
+          "rgba(18, 203, 87, 0.6)"
+        ,"rgba(255, 97, 63, 0.2)"
+        ,"rgba(74, 128, 255, 0.8)"
+        ,"rgba(150, 50, 200, 0.4)"
+        ,"rgba(10, 180, 130, 0.7)"
+        ,"rgba(88, 40, 120, 0.5)"
+        ,"rgba(200, 80, 40, 0.3)"
+        ,"rgba(33, 150, 210, 0.9)"
+        ,"rgba(255, 175, 0, 0.1)"
+        ,"rgba(120, 60, 255, 0.6)"
+        ,"rgba(48, 205, 112, 0.4)"
+        ,"rgba(180, 20, 65, 0.8)"
+        ,"rgba(100, 160, 240, 0.7)"
+        ,"rgba(220, 90, 30, 0.5)"
+        ,"rgba(5, 190, 175, 0.3)"
+        ,"rgba(75, 130, 220, 0.9)"
+        ,"rgba(255, 150, 20, 0.1)"
+        ,"rgba(130, 80, 190, 0.6)"
+        ,"rgba(55, 215, 100, 0.4)"
+        ,"rgba(190, 10, 90, 0.8)"
+        ,"rgba(80, 140, 250, 0.7)"
+        ,"rgba(240, 100, 50, 0.5)"
+        ,"rgba(15, 180, 160, 0.3)"
+        ,"rgba(85, 125, 230, 0.9)"
+        ,"rgba(255, 135, 10, 0.1)"
+        ,"rgba(140, 70, 180, 0.6)"
+        ,"rgba(35, 220, 125, 0.4)"
+        ,"rgba(200, 30, 60, 0.8)"
+        ,"rgba(120, 170, 230, 0.7)"
+        ,"rgba(230, 110, 20, 0.5)"
+        ,"rgba(25, 200, 145, 0.3)"
+        ,"rgba(95, 120, 240, 0.9)"
+        ,"rgba(255, 120, 0, 0.1)"
+        ,"rgba(160, 90, 170, 0.6)"
+        ,"rgba(45, 225, 80, 0.4)"
+        ,"rgba(210, 40, 50, 0.8)"
+        ,"rgba(110, 150, 220, 0.7)"
+        ,"rgba(250, 120, 40, 0.5)"
+        ,"rgba(35, 210, 150, 0.3)"
+        ,"rgba(65, 110, 235, 0.9)"  
+          ]
 }
 
 

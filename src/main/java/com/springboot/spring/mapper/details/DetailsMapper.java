@@ -32,11 +32,14 @@ public interface DetailsMapper {
     public Map stockDetailList(Map<String, Object> map);
 
     // 자산관리 총 자산, 누적 배당금
-    public Map selectSum01(StockportfolioDto sDto);
+    public List<Map> selectSum01(StockportfolioDto sDto);
     
     // 자산관리 개별 배당금
     public List<Map> selectSum02(StockportfolioDto sDto);
     
     // 자산관리 배당금 추이
     public List<Map> selectSum03(StockportfolioDto sDto);
+    
+    // 자산관리 월별 배당금 추이
+    public List<Map> selectSum04(StockportfolioDto sDto);
 }

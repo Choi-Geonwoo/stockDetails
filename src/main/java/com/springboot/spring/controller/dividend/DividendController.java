@@ -1,4 +1,4 @@
-ï»¿package com.springboot.spring.controller.dividend;
+package com.springboot.spring.controller.dividend;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +21,7 @@ import com.springboot.spring.service.dividend.DividendService;
 import lombok.extern.slf4j.Slf4j;
 
 
-// ë°°ë‹¹ ê´€ë ¨ í™”ë©´
+// ¹è´ç °ü·Ã È­¸é
 @Slf4j
 @Controller
 public class DividendController {
@@ -31,7 +31,7 @@ public class DividendController {
     
     PaginationService paginationService = new PaginationService();
 
-    // ë² ë‹¹ ê±°ë˜ ë‚´ì—­
+    // º£´ç °Å·¡ ³»¿ª
     @GetMapping("/dividend/dividendList")
     public String detailsView(Model model 
     ,@RequestParam(value = "stockName" ,required=false) String stockName
@@ -43,22 +43,22 @@ public class DividendController {
         map.put("stockName", stockName);
         map.put("trnscdate", trnscdate);
         map.put("monthSelect", monthSelect);
-        log.info("ë°°ë‹¹ë‚´ì—­");
+        log.info("¹è´ç³»¿ª");
 
-        //tDto.setStockName(stockName); // í•­ëª©ë©±
-        //tDto.setTrnscdate(trnscdate);     //ê±°ë˜ë‚´ì—­
+        //tDto.setStockName(stockName); // Ç×¸ñ¸è
+        //tDto.setTrnscdate(trnscdate);     //°Å·¡³»¿ª
         model.addAttribute("trnscdate", trnscdate); 
         model.addAttribute("monthSelect", monthSelect); 
         model.addAttribute("stockName", stockName); 
         model.addAttribute("selectBox", dividendService.selectBox()); 
-        model.addAttribute("title", "ë°°ë‹¹ë‚´ì—­");
+        model.addAttribute("title", "¹è´ç³»¿ª");
         model.addAttribute("dList", dividendService.dividendList(map));
         return "view/dividend/dividendList";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
 
 
-    // ë² ë‹¹ ê±°ë˜ ë‚´ì—­
+    // º£´ç °Å·¡ ³»¿ª
     @GetMapping("/dividend/dividendListNew")
     public String detailsNewView(Model model 
     ,@RequestParam(value = "stockName" ,required=false) String stockName
@@ -70,22 +70,22 @@ public class DividendController {
         map.put("stockName", stockName);
         map.put("trnscdate", trnscdate);
         map.put("monthSelect", monthSelect);
-        log.info("ë°°ë‹¹ë‚´ì—­");
+        log.info("¹è´ç³»¿ª");
 
-        //tDto.setStockName(stockName); // í•­ëª©ë©±
-        //tDto.setTrnscdate(trnscdate);     //ê±°ë˜ë‚´ì—­
+        //tDto.setStockName(stockName); // Ç×¸ñ¸è
+        //tDto.setTrnscdate(trnscdate);     //°Å·¡³»¿ª
         model.addAttribute("trnscdate", trnscdate); 
         model.addAttribute("monthSelect", monthSelect); 
         model.addAttribute("stockName", stockName); 
         model.addAttribute("selectBox", dividendService.selectBox()); 
-        model.addAttribute("title", "ë°°ë‹¹ë‚´ì—­");
+        model.addAttribute("title", "¹è´ç³»¿ª");
         model.addAttribute("dList", dividendService.dividendList(map));
         return "view/dividend/dividendListNew";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
 
     
-    // ë°°ë‹¹ ë“±ë¡
+    // ¹è´ç µî·Ï
     @PostMapping("/dividendInsert.do")
     @ResponseBody
     //public String detailsList(@RequestBody Map<String, Object> map, Model model){
@@ -93,21 +93,21 @@ public class DividendController {
     , @RequestPart(value = "files", required = false) String files){
         Map<String, Object> reMap = new HashMap<>();
         reMap.put("retNo", dividendService.transactionInsert(map, files));
-        reMap.put("msg", "ë“±ë¡");
+        reMap.put("msg", "µî·Ï");
         return ResponseEntity.ok(reMap);
     }
 
-    // ë°°ë‹¹ ìƒì„¸ ë‚´ì—­ í˜¸ì¶œ
+    // ¹è´ç »ó¼¼ ³»¿ª È£Ãâ
     @GetMapping("/dividendDtlsInqry.do")
     public ResponseEntity<CombinedDTO> yourEndpoint(
         @RequestParam String stockName,
         @RequestParam String trnscdate,
         @RequestParam String className
     ) {
-        // íŒŒë¼ë¯¸í„°ë¥¼ ì´ìš©í•œ ì‘ì—… ìˆ˜í–‰
-        // ì˜ˆ: ë°ì´í„°ë² ì´ìŠ¤ì—ì„œ ë°ì´í„°ë¥¼ ê°€ì ¸ì˜¤ê±°ë‚˜ ê³„ì‚° ìˆ˜í–‰
+        // ÆÄ¶ó¹ÌÅÍ¸¦ ÀÌ¿ëÇÑ ÀÛ¾÷ ¼öÇà
+        // ¿¹: µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ µ¥ÀÌÅÍ¸¦ °¡Á®¿À°Å³ª °è»ê ¼öÇà
 
-        // ê²°ê³¼ë¥¼ í´ë¼ì´ì–¸íŠ¸ì— ë°˜í™˜
+        // °á°ú¸¦ Å¬¶óÀÌ¾ğÆ®¿¡ ¹İÈ¯
         Map<String, Object> map = new HashMap<>();
         CombinedDTO cDto = new CombinedDTO();
         map.put("stockName", stockName);
@@ -117,7 +117,7 @@ public class DividendController {
         return ResponseEntity.ok(cDto);
     }
 
-    // ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ìˆ˜ì •
+    // ¹è´ç °Å·¡³»¿ª ¼öÁ¤
     @PostMapping("/dividendUpdate.do")
     @ResponseBody
     public ResponseEntity<Map> dividendUpdate(@RequestPart(value = "key") HashMap map
@@ -125,18 +125,18 @@ public class DividendController {
     ){
         Map<String, Object> reMap = new HashMap<>();
         reMap.put("retNo", dividendService.transactionUpdate(map,files));
-        reMap.put("msg", "ìˆ˜ì •");
+        reMap.put("msg", "¼öÁ¤");
         //return String.valueOf();
         return ResponseEntity.ok(reMap);
     }
 
-    // ë°°ë‹¹ ê±°ë˜ë‚´ì—­ ìˆ˜ì •
+    // ¹è´ç °Å·¡³»¿ª ¼öÁ¤
     @PostMapping("/dividendDelete.do")
     @ResponseBody
     public ResponseEntity<Map> dividendDelete(@RequestPart(value = "key") HashMap map ) throws Exception
     {
         Map<String, Object> reMap = new HashMap<>();
-        reMap.put("msg", "ì‚­ì œ");
+        reMap.put("msg", "»èÁ¦");
         reMap.put("retNo", dividendService.transactionDelete(String.valueOf(map.get("no"))));
         //return String.valueOf();
         return ResponseEntity.ok(reMap);
@@ -144,7 +144,7 @@ public class DividendController {
 
 
     
-    // ì£¼ë³„ ë² ë‹¹ ê±°ë˜ ë‚´ì—­
+    // ÁÖº° º£´ç °Å·¡ ³»¿ª
     @GetMapping("/dividend/byWeekDividendList")
     public String byWeekDividendView(Model model
      ,@RequestParam(value = "startYmd" ,required=false) String startYmd 
@@ -160,22 +160,22 @@ public class DividendController {
         map.put("rowCount", 10);
         List<Map> list = dividendService.byWeekDividendList(map);
         
-        /* ### í˜ì´ì§• ì²˜ë¦¬ ### */
-        int currentPage = page; // í˜„ì¬ í˜ì´ì§€
-        int totalCount = 0; // ì´ ê²Œì‹œë¬¼ ê°œìˆ˜
+        /* ### ÆäÀÌÂ¡ Ã³¸® ### */
+        int currentPage = page; // ÇöÀç ÆäÀÌÁö
+        int totalCount = 0; // ÃÑ °Ô½Ã¹° °³¼ö
         if(!list.isEmpty()){
-            totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // ì´ ê²Œì‹œë¬¼ ê°œìˆ˜
+            totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // ÃÑ °Ô½Ã¹° °³¼ö
         }
-        // Pagination ì •ë³´ë¥¼ ê³„ì‚°í•©ë‹ˆë‹¤.
-        // PaginationService ê°ì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+        // Pagination Á¤º¸¸¦ °è»êÇÕ´Ï´Ù.
+        // PaginationService °´Ã¼¸¦ »ı¼ºÇÕ´Ï´Ù.
         Map<String, Object> paginationMap = paginationService.calculatePagination(totalCount, currentPage);
 
-        /* ### í˜ì´ì§• ì²˜ë¦¬ ### */
+        /* ### ÆäÀÌÂ¡ Ã³¸® ### */
 
         model.addAttribute("selectBox", dividendService.selectBox()); 
         model.addAttribute("startYmd", startYmd);
         model.addAttribute("endYmd", endYmd);
-        model.addAttribute("title", "ì£¼ë³„ ë°°ë‹¹ë‚´ì—­");
+        model.addAttribute("title", "ÁÖº° ¹è´ç³»¿ª");
         model.addAttribute("byWeekList", list);
         model.addAttribute("page", page);
         model.addAttribute("pageVo", paginationMap);
@@ -186,7 +186,7 @@ public class DividendController {
     //yearComparison
 
     
-    // ì£¼ë³„ ë² ë‹¹ ê±°ë˜ ë‚´ì—­
+    // ÁÖº° º£´ç °Å·¡ ³»¿ª
     @GetMapping("/dividend/byWeekDividendListNew")
     public String byWeekDividendNewView(Model model
      ,@RequestParam(value = "startYmd" ,required=false) String startYmd 
@@ -202,22 +202,22 @@ public class DividendController {
         map.put("rowCount", 10);
         List<Map> list = dividendService.byWeekDividendList(map);
         
-        /* ### í˜ì´ì§• ì²˜ë¦¬ ### */
-        int currentPage = page; // í˜„ì¬ í˜ì´ì§€
-        int totalCount = 0; // ì´ ê²Œì‹œë¬¼ ê°œìˆ˜
+        /* ### ÆäÀÌÂ¡ Ã³¸® ### */
+        int currentPage = page; // ÇöÀç ÆäÀÌÁö
+        int totalCount = 0; // ÃÑ °Ô½Ã¹° °³¼ö
         if(!list.isEmpty()){
-            totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // ì´ ê²Œì‹œë¬¼ ê°œìˆ˜
+            totalCount = Integer.parseInt(String.valueOf(list.get(0).get("TOTALPAGES"))); // ÃÑ °Ô½Ã¹° °³¼ö
         }
-        // Pagination ì •ë³´ë¥¼ ê³„ì‚°í•©ë‹ˆë‹¤.
-        // PaginationService ê°ì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+        // Pagination Á¤º¸¸¦ °è»êÇÕ´Ï´Ù.
+        // PaginationService °´Ã¼¸¦ »ı¼ºÇÕ´Ï´Ù.
         Map<String, Object> paginationMap = paginationService.calculatePagination(totalCount, currentPage);
 
-        /* ### í˜ì´ì§• ì²˜ë¦¬ ### */
+        /* ### ÆäÀÌÂ¡ Ã³¸® ### */
 
         model.addAttribute("selectBox", dividendService.selectBox()); 
         model.addAttribute("startYmd", startYmd);
         model.addAttribute("endYmd", endYmd);
-        model.addAttribute("title", "ì£¼ë³„ ë°°ë‹¹ë‚´ì—­");
+        model.addAttribute("title", "ÁÖº° ¹è´ç³»¿ª");
         model.addAttribute("byWeekList", list);
         model.addAttribute("page", page);
         model.addAttribute("pageVo", paginationMap);
