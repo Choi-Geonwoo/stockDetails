@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.springboot.spring.dto.StockportfolioDto;
+import com.springboot.spring.vo.StockportfolioVO;
+
 @Mapper
 public interface ComMapper {
     
@@ -28,4 +31,7 @@ public interface ComMapper {
 
     // 중분류코드 수정
     public int  comCodeClsfcUpdate(Map<String, Object> map);
+    
+    // 주식 종목 조회
+    public List<Map>  selectBox(Map<String, Object> sDto);
 }

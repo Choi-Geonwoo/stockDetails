@@ -14,7 +14,7 @@ import com.springboot.spring.service.yearAlctn.YearAlctnService;
 
 import lombok.extern.slf4j.Slf4j;
 
-// ë…„ë„ ë°°ë‹¹ ê´€ë ¨ í™”ë©´
+// ³âµµ ¹è´ç °ü·Ã È­¸é
 @Slf4j
 @Controller
 public class YearAlctnController {
@@ -25,7 +25,7 @@ public class YearAlctnController {
     @Autowired
     public YearAlctnService yearAlctnService;
     
-    // ë…„ë„ ë² ë‹¹ ê±°ë˜ ë‚´ì—­
+    // ³âµµ º£´ç °Å·¡ ³»¿ª
     @GetMapping("/dividend/yearComparison")
     public String yearComparisonView(Model model 
         ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate)
@@ -33,15 +33,15 @@ public class YearAlctnController {
         
         Map<String, Object> map = new HashMap<>();
         map.put("trnscdate", trnscdate);
-        log.info("ë°°ë‹¹ë‚´ì—­ë¹„êµ(ë…„ë„)");
-        model.addAttribute("title", "ë°°ë‹¹ë‚´ì—­ë¹„êµ(ë…„ë„)");
+        log.info("¹è´ç³»¿ªºñ±³(³âµµ)");
+        model.addAttribute("title", "¹è´ç³»¿ªºñ±³(³âµµ)");
         model.addAttribute("dList", yearAlctnService.yearComparison(map));
         return "view/dividend/yearComparison";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html
     }
 
 
-    // ë…„ë„ ë² ë‹¹ ê±°ë˜ ë‚´ì—­
+    // ³âµµ º£´ç °Å·¡ ³»¿ª
     @GetMapping("/year/yearComparisonNew")
     public String yearComparisonNewView(Model model 
         ,@RequestParam(value = "trnscdate" ,required=false) String trnscdate)
@@ -49,8 +49,8 @@ public class YearAlctnController {
         
         Map<String, Object> map = new HashMap<>();
         map.put("trnscdate", trnscdate);
-        log.info("ë°°ë‹¹ë‚´ì—­(ë…„ë„)");
-        model.addAttribute("title", "ë°°ë‹¹ë‚´ì—­(ë…„ë„)");
+        log.info("¹è´ç³»¿ª(³âµµ)");
+        model.addAttribute("title", "¹è´ç³»¿ª(³âµµ)");
         model.addAttribute("dList", yearAlctnService.yearComparison(map));
         return "view/year/yearComparisonNew";
         //E:\VisualStudio\workspace3\stockDetails\src\main\resources\templates\view\dividend\dividendList.html

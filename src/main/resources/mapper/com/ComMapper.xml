@@ -140,4 +140,18 @@
     </sql>
     
 
+
+<select id = "selectBox"  resultType="Map" parameterType="Map">
+        SELECT /* ComMapper.selectBox*/
+                                 NO      	/*	'순번';         */
+                                ,SECTION_CD 	/*	'대분류_코드';  */
+                                ,CLSFC_CD 	/*	'중분류_코드';  */
+                                ,CLSFC_NM 	/*	'중분류_명';   	*/
+                                ,ARRAY_NO 	/*	'정렬_순번';   	*/
+                                ,USE_YN 	/*	'사용여부';    	*/
+                                ,REG_YMD	/*	'등록일시';    	*/
+                        FROM  CLSFC
+        WHERE SECTION_CD  = #{SECTION_CD}
+</select>
+
 </mapper>

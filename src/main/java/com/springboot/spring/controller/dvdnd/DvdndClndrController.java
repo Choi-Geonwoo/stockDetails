@@ -23,7 +23,7 @@ public class DvdndClndrController {
     
     @GetMapping("/clndr/dvdndClndr")
     public String detailsView(Model model){
-    model.addAttribute("title", "ë°°ë‹¹ ì¼ì •ê´€ë¦¬");
+    model.addAttribute("title", "¹è´ç ÀÏÁ¤°ü¸®");
         return "view/clndr/dvdndClndr";
     }
 

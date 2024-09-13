@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.springboot.spring.mapper.byWeekDividend.ByWeekDividendMapper">
+
+
+<!-- 주별 배당 내역-->
+<select id = "byWeekDividendList"  resultType="Map" parameterType="Map" >
+<!--
+         
+                    SELECT /* DividendMapper.byWeekDividendList */
+                        ROWNUM AS NO,
+                        to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+                        STOCK_NAME,
+                        AMOUNT,
+                        RGSTDATE,
+                        DIVIDEND
+                    FROM TRANSACTION
+                where 1=1
+                <if test='(startYmd != null and startYmd != "" ) and (endYmd != null and endYmd != "" )'>
+                    and TRNSCDATE BETWEEN #{startYmd} and #{endYmd}
+                </if>
+    -->   
+            SELECT
+                *
+            FROM
+                (
+                SELECT
+                    *
+                FROM
+                    (
+                    SELECT
+                        /* DividendMapper.byWeekDividendList */
+                        ROW_NUMBER() OVER ( ORDER BY TRNSCDATE,       STOCK_NAME) AS NO_,
+                        ROW_NUMBER() OVER ( ORDER BY TRNSCDATE,       STOCK_NAME) AS currentPage,
+                        to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+                        STOCK_NAME,
+                        AMOUNT,
+                        RGSTDATE,
+                        DIVIDEND,
+                        COUNT(*) OVER() AS totalPages,
+                        SUM(AMOUNT) OVER() AS TOTAL
+                    FROM
+                        TRANSACTION
+                    WHERE
+                        1 = 1
+                        <if test='(startYmd != null and startYmd != "" ) and (endYmd != null and endYmd != "" )'>
+                            AND TRNSCDATE BETWEEN #{startYmd} AND #{endYmd}
+                        </if>
+                        <if test='("allStockName"  != stockName)'>
+                            AND STOCK_NAME = #{stockName}
+                        </if>
+                        )
+                WHERE
+                    NO_  <![CDATA[ <=  ]]>  (#{page} * #{rowCount})
+                                    )
+                WHERE (((#{page}-1) * #{rowCount}) + 1) <![CDATA[  <=	]]>   NO_
+
+</select>
+
+</mapper>

@@ -19,8 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
 
-    <script type="text/javascript" th:src="@{/JS/dividend/dividend.js}"></script>
-    
+    <script type="text/javascript" th:src="@{/JS/byWeekDividend/byWeekDividend.js}"></script>
     <script type="text/javascript" th:src="@{/JS/COMMON/common.js}"></script>
   
   <script th:inline="javascript">
@@ -81,17 +80,31 @@
                             배당 거래 내역
                         </div>
                         <div class="card-body">
-                            <form th:action="@{/dividend/byWeekDividendListNew}" method="get">
-                                <label for="weekInput">배당 기준일 :</label>
-                                <!-- <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}"> -->
-                                <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${not #strings.isEmpty(startYmd)} ? ${startYmd} : ${#temporals.format(#temporals.createNow().minusDays(6), 'yyyy-MM-dd')}">
-                                &nbsp;
-                                ~
-                                &nbsp;
-                                <!--<input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">-->
-                                <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${not #strings.isEmpty(endYmd)} ? ${endYmd} : ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">
-                                &nbsp;
-                                <button type="submit" class="btn btn-secondary">검색</button>
+                            <form th:action="@{/byWeekDividend/byWeekDividendListNew}" method="get">
+                                <div class="input-group mb-3">
+                                    <label class="fs-4"> 종목 명 :</label>
+                                    
+                                    <div class="w-25">
+                                        <select class="form-select" id="selectBox" name="stockName">
+                                            <option  th:value="allStockName" th:text="전체"></option>
+                                            <th:block th:each="selectBox : ${selectBox}">
+                                            <option name="stockName" th:value="${selectBox.CLSFC_NM}"
+                                            th:text="${selectBox.CLSFC_NM}" th:selected="${selectBox.CLSFC_NM} == ${reStockName}"></option>
+                                            </th:block>
+                                        </select>  
+                                    </div>    
+                                    &nbsp;&nbsp;
+                                        <label class="fs-4">배당 기준일 :</label>
+                                        <!-- <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${#temporals.format(#temporals.createNow().minusDays(7), 'yyyy-MM-dd')}"> -->
+                                        <input type="date" id="startYmd" name="startYmd" class="_date" th:value="${not #strings.isEmpty(startYmd)} ? ${startYmd} : ${#temporals.format(#temporals.createNow().minusDays(6), 'yyyy-MM-dd')}">
+                                        &nbsp;
+                                        ~
+                                        &nbsp;
+                                        <!--<input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">-->
+                                        <input type="date" id="endYmd" name="endYmd"  class="_date"  th:value="${not #strings.isEmpty(endYmd)} ? ${endYmd} : ${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">
+                                        &nbsp; &nbsp;
+                                        <button type="submit" class="btn btn-secondary">검색</button>
+                                </div>               
                             </form>
                         </div><!--"card-body"-->
                         
@@ -139,7 +152,7 @@
                     <tr  th:each="byWeekList : ${byWeekList}">    
                             <!----><td class="text-center" th:text="${byWeekList.NO_}"></td>
                             <!----><td class="text-center" th:text="${byWeekList.TRNSCDATE}"></td>
-                            <!----><td class="text-center pointer" th:text="${byWeekList.STOCK_NAME}"></td>                  
+                            <!----><td class="text-center pointer" th:text="${byWeekList.STOCK_NAME}" th:onclick="popupCall([[${byWeekList.NO_}]]);"></td>                  
                             <!----><td class="text-center" th:text="${byWeekList.DIVIDEND}"></td>
                             <!----><td class="text-center" th:text="${byWeekList.AMOUNT}"></td>
                             <!----><td class="text-center" th:text="${byWeekList.RGSTDATE}"></td>
@@ -176,29 +189,29 @@
                 <!-- 맨 처음 페이지로 이동하는 버튼 -->
                 <li class="page-item">
                     <span th:if="${pageVo.startPage > 1}">
-                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=1'+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'처음'"></a>
+                    <a class="page-link" th:href="@{'/byWeekDividend/byWeekDividendListNew?page=1'+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'처음'"></a>
                     </span>
                 </li>
                 <!-- 이전 블록으로 이동하는 버튼 -->
                 <li class="page-item">
                     <span th:if="${pageVo.isPrev == true}">
-                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageVo.startPage - 1} + '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'이전'"></a>
+                    <a class="page-link" th:href="@{'/byWeekDividend/byWeekDividendListNew?page=' + ${pageVo.startPage - 1} + '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'이전'"></a>
                     </span>
                 </li>
                 <!-- 시퀀스 보여주는 값을 변경. -->
                 <li class="page-item" th:each="pageNum : ${#numbers.sequence(pageVo.startPage, pageVo.endPage)}">
-                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageNum}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;${pageNum}&emsp;|"></a>
+                    <a class="page-link" th:href="@{'/byWeekDividend/byWeekDividendListNew?page=' + ${pageNum}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;${pageNum}&emsp;|"></a>
                 </li>
                 <li class="page-item">
                 <!-- 다음 블록으로 이동하는 버튼 -->
                 <span th:if="${pageVo.isNext == true}">
-                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageVo.endPage + 1}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'다음'"></a>
+                    <a class="page-link" th:href="@{'/byWeekDividend/byWeekDividendListNew?page=' + ${pageVo.endPage + 1}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="'다음'"></a>
                 </span>
                 </li>
                 <!-- 맨 뒷 페이지로 이동하는 버튼 -->
                 <li class="page-item">
                     <span th:if="${pageVo.endPage < pageVo.totalPageCount}">
-                    <a class="page-link" th:href="@{'/dividend/byWeekDividendListNew?page=' + ${pageVo.totalPageCount}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;끝|"></a>
+                    <a class="page-link" th:href="@{'/byWeekDividend/byWeekDividendListNew?page=' + ${pageVo.totalPageCount}+ '&startYmd=' +${startYmd} + '&endYmd=' + ${endYmd}}" th:text="|&emsp;끝|"></a>
                     </span>
                     <!--<a th:href="@{'/bank/bankList?searchType='+${pageVo.searchType} +'&keyword='+${pageVo.keyword}+'&page='+${pageVo.totalPageCount}}" th:text="|&emsp;끝|"></a>-->
                 </li>

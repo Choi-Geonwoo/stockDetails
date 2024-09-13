@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springboot.spring.com.IsNullCheck;
+import com.springboot.spring.dto.StockportfolioDto;
 import com.springboot.spring.mapper.com.ComMapper;
+import com.springboot.spring.vo.StockportfolioVO;
 
 import lombok.extern.slf4j.Slf4j;
 import oracle.sql.TIMESTAMP;
@@ -200,6 +202,11 @@ public class ComServiceImpl implements ComService {
         return retListMap;
     }
 
-    
+        // 주식명 조회 셀렉트 박스 사용
+    @Override
+    public List<Map> selectBox(Map<String, Object> map) {
+        //Map<String, Object> mapDate = map;
+        return comMapper.selectBox(map);
+    }
 }
 

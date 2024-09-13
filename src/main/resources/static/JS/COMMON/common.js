@@ -373,3 +373,15 @@ function removeModal(USE_YN) {
 /*모달창 호출 */
 
 
+
+
+/* PDF 다운로드 용 */
+function fn_PdfDownload() {
+  alert();
+  
+}
+/* PDF 다운로드 용 */
+
+function fn_test(){
+  alert();
+}
