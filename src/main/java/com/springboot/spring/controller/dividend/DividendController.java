@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.spring.com.PaginationService;
 import com.springboot.spring.dto.CombinedDTO;
+import com.springboot.spring.service.com.ComService;
 import com.springboot.spring.service.dividend.DividendService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,9 @@ public class DividendController {
    
     @Autowired
     public DividendService dividendService;
+    
+    @Autowired
+    public ComService comService;
     
     PaginationService paginationService = new PaginationService();
 
@@ -77,7 +81,7 @@ public class DividendController {
         model.addAttribute("trnscdate", trnscdate); 
         model.addAttribute("monthSelect", monthSelect); 
         model.addAttribute("stockName", stockName); 
-        model.addAttribute("selectBox", dividendService.selectBox()); 
+        model.addAttribute("selectBox", comService.selectBox(map)); 
         model.addAttribute("title", "배당내역");
         model.addAttribute("dList", dividendService.dividendList(map));
         return "view/dividend/dividendListNew";

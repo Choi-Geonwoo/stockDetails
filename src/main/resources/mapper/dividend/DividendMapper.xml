@@ -5,7 +5,7 @@
 <!-- 주식 배당 내역-->
 <select id = "dividendList"  resultType="Map" parameterType="com.springboot.spring.dto.TransactionDto" >
                 SELECT /* DividendMapper.dividendList */
-                    STOCK_NAME,
+                    NVL(CLSFC_NM,STOCK_NAME) AS STOCK_NAME,
                     to_char(TRNSCDATE, 'YYYY') AS TRNSCDATE,
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '01' , AMOUNT, '0') ) AS january,
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '02' , AMOUNT, '0') ) AS february,
@@ -21,6 +21,7 @@
                     sum(DECODE(to_char(TRNSCDATE, 'MM'), '12' , AMOUNT, '0') ) AS december
                 FROM
                     TRANSACTION
+                        LEFT JOIN CLSFC B ON ( CLSFC_CD = TIKER AND USE_YN = 'Y')
                 where 1=1
                 <if test='stockName != null and stockName != "" '>
                     and STOCK_NAME like  '%' || #{stockName} || '%'
@@ -28,7 +29,8 @@
                 <if test='trnscdate != null and trnscdate != "" '>
                     and to_char(TRNSCDATE, 'YYYY-MM') LIKE '%'|| #{trnscdate} || '%'
                 </if>
-                GROUP BY 
+                GROUP BY    
+                    CLSFC_NM,
                     STOCK_NAME,
                     to_char(TRNSCDATE, 'YYYY')
                 ORDER BY TRNSCDATE, STOCK_NAME
@@ -91,14 +93,23 @@
             TRNSCDATE,
             STOCK_NAME,
             AMOUNT,
-            DIVIDEND
+            DIVIDEND,
+            TIKER
         )
         VALUES(
             #{no},
             #{trnscdate},
-            #{stockName},
+            (
+                SELECT 
+                    CLSFC_NM 
+                FROM  CLSFC
+                WHERE 1=1 
+                    AND CLSFC_CD =#{tiker}
+                    AND USE_YN = 'Y'
+            ),
             #{amount},
-            #{dividend}
+            #{dividend},
+            #{tiker}
         )
 </insert>
 
@@ -109,13 +120,15 @@
 <!-- 주식 배당 상세 내역-->
 <select id = "dividendDtlsInqry"  resultType="com.springboot.spring.dto.TransactionDto" parameterType="com.springboot.spring.dto.TransactionDto" >
     SELECT  /* DividendMapper.dividendDtlsInqry */
-            NO,
-            A.STOCK_NAME,
-            to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
-            AMOUNT,
-            DIVIDEND
+            A.NO,
+            B.CLSFC_NM AS STOCK_NAME,
+            to_char(A.TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
+            A.AMOUNT,
+            A.DIVIDEND
         FROM TRANSACTION A
-            WHERE  A.STOCK_NAME = #{stockName}
+            LEFT JOIN CLSFC B ON ( B.CLSFC_CD = A.TIKER AND USE_YN = 'Y')
+            WHERE  (A.STOCK_NAME = #{stockName}
+                    OR b.CLSFC_NM =  #{stockName})
                 AND TRNSCDATE BETWEEN TO_DATE(#{trnscdate}, 'yyyy-MM-dd') AND 
                                       LAST_DAY(TO_DATE(#{trnscdate}, 'yyyy-MM-dd'))
 </select>
@@ -123,10 +136,18 @@
 <update id="transactionUpdate" parameterType="com.springboot.spring.dto.TransactionDto">
     UPDATE  /* DividendMapper.transactionUpdate */
         TRANSACTION
-    set   STOCK_NAME =  #{stockName}
+        set   STOCK_NAME =  (
+                                SELECT 
+                                    CLSFC_NM 
+                                FROM  CLSFC
+                                WHERE 1=1 
+                                    AND CLSFC_CD =#{tiker}
+                                    AND USE_YN = 'Y'
+                            )
         , AMOUNT     =  #{amount}
         , TRNSCDATE  =  #{trnscdate}
         , DIVIDEND   =  #{dividend}
+        , TIKER      =  #{tiker}
         , RGSTDATE   =  sysdate
     where no = #{no}
 </update>

@@ -151,7 +151,10 @@
                                 ,USE_YN 	/*	'사용여부';    	*/
                                 ,REG_YMD	/*	'등록일시';    	*/
                         FROM  CLSFC
-        WHERE SECTION_CD  = #{SECTION_CD}
+        WHERE 1=1
+        <if test='SECTION_CD != null and SECTION_CD != "" '>
+                AND SECTION_CD  = #{SECTION_CD}
+        </if>
 </select>
 
 </mapper>

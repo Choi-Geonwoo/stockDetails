@@ -201,35 +201,40 @@ function fetchCall(event, exampleModal){
         })
         .then(data => {
           if('' != data){
-          //# JSON 데이터 파싱
-          var parsedData = JSON.parse(data);
-          modalTitle.textContent = '배당 수정 : ' + parsedData.transactionDto.stockName;
-          const el = document.getElementById('updatestockName');  //select box
-          const len = el.options.length; //select box의 option 갯수
-          for (let i=0; i<len; i++){  
-            //select box의 option value가 입력 받은 value의 값과 일치할 경우 selected
-            if(el.options[i].value == parsedData.transactionDto.stockName){
-              el.options[i].selected = true;
-            }
-          } 
-          //modalBodyStockNameInput.value = parsedData.transactionDto.stockName; // 배당 거래내역 주식명
-          modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
-          modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
-          modalDiviend.value = parsedData.transactionDto.dividend; // 배당금
-          modalFileName.textContent = parsedData.transactionDto.stockName; //파일명
-          //debugger;
-          // // 입력 요소에 날짜 설정
-          updateTrnscdate.value = parsedData.transactionDto.trnscdate;
-          if(('' != parsedData.fileDTO ) && (null != parsedData.fileDTO )){
-            // 이미지 출력
-            fu_img(parsedData.fileDTO.reContents);
-            modalBodyFNoInput.value = parsedData.fileDTO.fno;
+                //# JSON 데이터 파싱
+                var parsedData = JSON.parse(data);
+                modalTitle.textContent = '배당 수정 : ' + parsedData.transactionDto.stockName;
+                const el = document.getElementById('updatestockName');  //select box
+                const len = el.options.length; //select box의 option 갯수
+                for (let i=0; i<len; i++){  
+                  //console.log("5 " + parsedData.transactionDto.stockName);
+                  //console.log("5 " + el.options[i].text);
+                  //select box의 option value가 입력 받은 value의 값과 일치할 경우 selected
+                  if(el.options[i].text == parsedData.transactionDto.stockName){
+                    el.options[i].selected = true;
+                  }
+                } 
+                //modalBodyStockNameInput.value = parsedData.transactionDto.stockName; // 배당 거래내역 주식명
+                modalBodyAmountInput.value = parsedData.transactionDto.amount; // 배당 거래내역 금액
+                modalBodyNoInput.value = parsedData.transactionDto.no; // 배당 거래내역 순번
+                modalDiviend.value = parsedData.transactionDto.dividend; // 배당금
+                modalFileName.textContent = parsedData.transactionDto.stockName; //파일명
+                //debugger;
+                // // 입력 요소에 날짜 설정
+                updateTrnscdate.value = parsedData.transactionDto.trnscdate;
+                if(('' != parsedData.fileDTO ) && (null != parsedData.fileDTO )){
+                  console.log("8-1");
+                  // 이미지 출력
+                  fu_img(parsedData.fileDTO.reContents);
+                  modalBodyFNoInput.value = parsedData.fileDTO.fno;
+                }else{
+                  console.log("8-2");
+                    spinner.style.display = 'none';
+                    image1.style.display = 'none'; 	//숨기기
+                    modalBody.style.display = 'block';  // 표출
+                }    
           }else{
-              spinner.style.display = 'none';
-              image1.style.display = 'none'; 	//숨기기
-              modalBody.style.display = 'block';  // 표출
-          }    
-          }else{
+            console.log("8-3");
             alert('결과가 없습니다.');
             modalBodyStockNameInput.value = "";
             modalBodyAmountInput.value = "";
@@ -241,18 +246,18 @@ function fetchCall(event, exampleModal){
         })
         .catch(error => {
           console.error(error);
-          alert("오류가 발생했습니다.");
+          alert("오류가 발생했습니다. " + error);
           return;
         });
 }
 
-
+//TypeError: Cannot read properties of null (reading 'options')
 
 // 수정 버튼 동작
 function transactionUpdate(){
     let updateTno = document.getElementById('updateTno').value;
     let updateFno = document.getElementById('updateFno').value;
-    let updatestockName = document.getElementById('updatestockName').value;
+    let updatestockCode = document.getElementById('updatestockName').value;
     let updateTrnscdate = document.getElementById('updateTrnscdate').value;
     let updateAmount = document.getElementById('updateAmount').value;
     let updateDiviend = document.getElementById('updateDiviend').value;
@@ -264,20 +269,21 @@ function transactionUpdate(){
      fileName = updateFile.files[0].name;
     }
 let data = {
-      no : updateTno,           //배당 거래내역 순번
-      stockName : updatestockName, // 주식명
+      no        : updateTno,       //배당 거래내역 순번
+      //stockName : updatestockName, // 주식명
+      clsfcCd   : updatestockCode, // 주식 티커
       trnscdate : updateTrnscdate, //거래일자
-      amount : updateAmount,    // 거래 금액
-      fName : fileName,         // 파일명
-      fNo : updateFno,          // 파일 순번
-      dividend : updateDiviend   // 배당금
+      amount    : updateAmount,    // 거래 금액
+      fName     : fileName,        // 파일명
+      fNo       : updateFno,       // 파일 순번
+      dividend  : updateDiviend     // 배당금
 }
   // 이미지 수정하는 경우
   if(!isEmpty(updateFile.files[0])){
-    imgFile(selectedFile, data, "/dividendUpdate.do");
+    //imgFile(selectedFile, data, "/dividendUpdate.do");
   }else{
     // 데이터 전송
-    dataTransfer(data, "/dividendUpdate.do");
+    //dataTransfer(data, "/dividendUpdate.do");
   }
 
 }
@@ -294,7 +300,7 @@ function transactionDelete(){
 }
 
 // 데이터 전송
-        function dataTransfer(data, url){
+function dataTransfer(data, url){
         // 폼 데이터로 보내줘야 함
         let formData = new FormData();
         formData.append("files", "");
@@ -413,12 +419,12 @@ spinner.style.display = 'none'; 	// 숨기기
     return;
   }
   var fileName;
-  var stockName = (selectBox.options[selectBox.selectedIndex].value);
+  var clsfcCd = (selectBox.options[selectBox.selectedIndex].value);
   if(!isEmpty(imageFileInput.files[0])){
     fileName = imageFileInput.files[0].name;
   }
   let data = {
-              stockName : stockName,  // 주식명
+              clsfcCd : clsfcCd,  // 주식티커
               trnscdate : inputTrnscdate.value, //거래일자
               amount : inputAmount,   // 거래 금액
               fName : fileName,       // 파일명

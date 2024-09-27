@@ -293,8 +293,8 @@ window.onload = function(){
               <div class="col-sm-8">
                 <select class="form-select" aria-label="Default select example" id="selectBox">
                   <th:block th:each="selectBox : ${selectBox}">
-	                  <option name="stockName" th:value="${selectBox.stockName}"
-                    th:text="${selectBox.stockName}"></option>
+	                  <option name="stockName" th:value="${selectBox.CLSFC_CD}"
+                    th:text="${selectBox.CLSFC_NM}"></option>
                   </th:block>
                 </select>
               </div>
@@ -373,8 +373,8 @@ window.onload = function(){
                           <div class="col-sm-8">
                             <select class="form-select" aria-label="Default select example" id="updatestockName">
                               <th:block th:each="selectBox : ${selectBox}">
-                                <option name="updatestockName" th:value="${selectBox.stockName}"
-                                th:text="${selectBox.stockName}"></option>
+                                <option name="updatestockName" th:value="${selectBox.CLSFC_CD}"
+                                th:text="${selectBox.CLSFC_NM}"></option>
                               </th:block>
                             </select>
                           </div>

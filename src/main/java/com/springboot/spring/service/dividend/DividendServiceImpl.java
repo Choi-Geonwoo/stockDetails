@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springboot.spring.com.CnvrsData;
 import com.springboot.spring.com.DateRltd;
 import com.springboot.spring.com.IsNullCheck;
 import com.springboot.spring.dto.CombinedDTO;
@@ -80,10 +79,11 @@ public class DividendServiceImpl implements DividendService {
             log.info("========== transactionInsert START ===========");
             TransactionDto tDTO = new TransactionDto();
             FileDTO fDto = new FileDTO();
-            tDTO.setStockName(String.valueOf(map.get("stockName")));
+            //tDTO.setStockName(String.valueOf(map.get("stockName")));
             tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
             tDTO.setAmount(String.valueOf(map.get("amount")));
             tDTO.setDividend(String.valueOf(map.get("dividend")));
+            tDTO.setTiker(String.valueOf(map.get("clsfcCd")));
             tNo = dividendMapper.tNoString(tDTO);
             //tNo ="999";
             tDTO.setNo(Integer.valueOf(tNo));
@@ -92,7 +92,7 @@ public class DividendServiceImpl implements DividendService {
             // ?¡Æ¡Æ??? ??¡Æ??? ??????
             cnt = dividendMapper.transactionInsert(tDTO);
             if(!IsNullCheck.isNull(files)){
-                log.info("1. ????¢­? ?¡Æ? : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
+                log.info("1.  : : : " + fDto.getFName() + " | " + fDto.getFNo() + " | " + fDto.getTNo() + " | " + files.length());
                 fDto.setContents(files.getBytes());
                 // ??¢¥??¢¬??? ?????? ??????
                 fileMapper.fileInsert(fDto);
@@ -144,11 +144,12 @@ public class DividendServiceImpl implements DividendService {
             //log.info("FILE " + files);
             //log.info("mapmapmapmapmapmap " + map.toString());
             TransactionDto tDTO = new TransactionDto();
-            tDTO.setStockName(String.valueOf(map.get("stockName")));
+            //tDTO.setStockName(String.valueOf(map.get("stockName")));
             tDTO.setTrnscdate(String.valueOf(map.get("trnscdate")));
             tDTO.setAmount(String.valueOf(map.get("amount")));
             tDTO.setDividend(String.valueOf(map.get("dividend")));
             tDTO.setNo(Integer.valueOf(String.valueOf(map.get("no"))));
+            tDTO.setTiker(String.valueOf(map.get("clsfcCd")));
             cnt = dividendMapper.transactionUpdate(tDTO);
     
             if (!IsNullCheck.isNull(files)) {
