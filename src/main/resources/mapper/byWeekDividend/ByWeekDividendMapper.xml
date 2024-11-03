@@ -30,7 +30,7 @@
                 FROM
                     (
                     SELECT
-                        /* DividendMapper.byWeekDividendList */
+                        /* ByWeekDividendMapper.byWeekDividendList */
                         ROW_NUMBER() OVER ( ORDER BY TRNSCDATE,       STOCK_NAME) AS NO_,
                         ROW_NUMBER() OVER ( ORDER BY TRNSCDATE,       STOCK_NAME) AS currentPage,
                         to_char(TRNSCDATE, 'YYYY-MM-DD') AS TRNSCDATE,
@@ -47,7 +47,7 @@
                         <if test='(startYmd != null and startYmd != "" ) and (endYmd != null and endYmd != "" )'>
                             AND TRNSCDATE BETWEEN #{startYmd} AND #{endYmd}
                         </if>
-                        <if test='("allStockName"  != stockName)'>
+                        <if test='("null"  != stockName) and ("NULL"  != stockName)(""  != stockName) and "allStockName" != stockName'>
                             AND STOCK_NAME = #{stockName}
                         </if>
                         )

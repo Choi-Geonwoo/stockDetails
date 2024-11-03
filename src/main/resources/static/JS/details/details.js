@@ -510,7 +510,7 @@ function newDetailsInsert3(){
     const inputDividendCycle = document.getElementById('inputDividendCycle').value;
     const inputPurchasePrice = document.getElementById('inputPurchasePrice').value;
     const inputDividendAmount = document.getElementById('inputDividendAmount').value;
-    alert(inputStockName);
+    
     if(isEmpty(inputStockName)){
         alert("주식명 입력해주세요.");
         return;
@@ -531,7 +531,6 @@ function newDetailsInsert3(){
         alert("배당금 입력해주세요.");
         return;
     }
-    /*
     fetch("/detailsInsert.do",
         {
             method : "post",
@@ -559,7 +558,6 @@ function newDetailsInsert3(){
         .catch((error) => {
             alert("error " + error)
         });
-    */
 }
 
 function strIndexOf(text){

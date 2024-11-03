@@ -143,7 +143,7 @@
 
 <select id = "selectBox"  resultType="Map" parameterType="Map">
         SELECT /* ComMapper.selectBox*/
-                                 NO      	/*	'순번';         */
+                                 ROW_NUMBER() OVER ( ORDER BY (CASE WHEN REGEXP_LIKE(CLSFC_CD, '^[0-9]+$') THEN 2 ELSE 1 END), CLSFC_NM) AS NO      	/*	'순번';         */
                                 ,SECTION_CD 	/*	'대분류_코드';  */
                                 ,CLSFC_CD 	/*	'중분류_코드';  */
                                 ,CLSFC_NM 	/*	'중분류_명';   	*/

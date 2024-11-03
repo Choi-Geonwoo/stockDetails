@@ -200,7 +200,7 @@ function exportTableToExcel(tbName, tbId) {
   XLSX.utils.book_append_sheet(wb, ws, 'Table Data');
   
   // 워크북을 Excel 파일로 저장합니다.
-  XLSX.writeFile(wb, fileName+'.xlsx');
+  XLSX.writeFile(wb, fileName);
 }
 
 

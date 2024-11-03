@@ -280,10 +280,10 @@ let data = {
 }
   // 이미지 수정하는 경우
   if(!isEmpty(updateFile.files[0])){
-    //imgFile(selectedFile, data, "/dividendUpdate.do");
+    imgFile(selectedFile, data, "/dividendUpdate.do");
   }else{
     // 데이터 전송
-    //dataTransfer(data, "/dividendUpdate.do");
+    dataTransfer(data, "/dividendUpdate.do");
   }
 
 }
@@ -383,6 +383,7 @@ let formData = new FormData();
 
 // 이미지 출력
 function fu_img(imgData){
+  console.log("imgData " + imgData);
 // 스피너
 let spinner = document.getElementById('spinner');
 // 바디
@@ -397,6 +398,7 @@ var blobData = new Blob([new Uint8Array(byteData)], { type: 'image/jpeg' });
 
 // Blob 데이터를 Blob URL로 변환
 var blobUrl = URL.createObjectURL(blobData);
+console.log("url " + blobUrl);
 modalBody.style.display = 'block'; 	// 표출
 image1.style.display = 'block'; 	// 표출
 imageElement1.src =  blobUrl;

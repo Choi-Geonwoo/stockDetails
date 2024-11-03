@@ -206,6 +206,7 @@ public class ComServiceImpl implements ComService {
     @Override
     public List<Map> selectBox(Map<String, Object> map) {
         //Map<String, Object> mapDate = map;
+        map.put("SECTION_CD" , "BANK_001");
         return comMapper.selectBox(map);
     }
 }

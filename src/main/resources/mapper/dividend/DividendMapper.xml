@@ -31,7 +31,7 @@
                 </if>
                 GROUP BY    
                     CLSFC_NM,
-                    STOCK_NAME,
+                    NVL(CLSFC_NM,STOCK_NAME),
                     to_char(TRNSCDATE, 'YYYY')
                 ORDER BY TRNSCDATE, STOCK_NAME
 </select>

@@ -45,7 +45,7 @@
                         OR A.DIVIDEND_CYCLE = '월'
                         )
                 </if>
-                        ORDER BY C.CLSFC_NM
+                ORDER BY (CASE WHEN REGEXP_LIKE(C.CLSFC_CD, '^[0-9]+$') THEN 2 ELSE 1 END), C.CLSFC_NM
 </select>
 
 <select id = "selectBox"  resultType="com.springboot.spring.vo.StockportfolioVO" parameterType="com.springboot.spring.dto.StockportfolioDto">
